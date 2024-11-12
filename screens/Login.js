@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Login() {
@@ -9,20 +9,23 @@ export default function Login() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Simply Gymnotes</Text>
-      <TextInput
-        style={styles.textInput}
-        maxLength={40}
-        onChangeText={text => onChangeText(text)}
-        value={value}
-        placeholder='Käyttäjätunnus'
-      />
-      <TextInput
-        style={styles.textInput}
-        maxLength={40}
-        onChangeText={text => onChangeText(text)}
-        value={value}
-        placeholder='Salasana'
-      />
+      <View style={styles.textInputContainer}>
+        <TextInput
+          style={styles.textInput}
+          maxLength={40}
+          onChangeText={text => setUsername(text)}
+          value={username}
+          placeholder='Käyttäjätunnus'
+        />
+        <TextInput
+          style={styles.textInput}
+          maxLength={40}
+          onChangeText={text => setPassword(text)}
+          value={password}
+          placeholder='Salasana'
+          secureTextEntry={true}
+        />
+      </View>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {/*TODO*/}}
@@ -41,14 +44,18 @@ export default function Login() {
 
 const styles = StyleSheet.create({
     container: {
-      justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'grey',
       height: '100%'
     },
     header: {
-      fontSize: 36,
-      marginBottom: 30
+      fontSize: 42,
+      marginTop: 120,
+      marginBottom: 120
+    },
+    textInputContainer: {
+      width: '100%',
+      marginBottom: 40,
+      alignItems: 'center'
     },
     textInput: {
       backgroundColor: '#EFF5D5',
@@ -56,16 +63,20 @@ const styles = StyleSheet.create({
       padding: 10,
       borderColor: 'black',
       borderWidth: 2,
-      borderRadius: 10
+      borderRadius: 20,
+      width: '90%',
+      height: 55
     },
     button: {
       backgroundColor: '#B8A90B',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 10,
+      padding: 20,
       borderColor: 'black',
       borderWidth: 2,
-      borderRadius: 10
+      borderRadius: 20,
+      margin: 7,
+      width: '50%'
     },
     buttonText: {
       fontSize: 20
