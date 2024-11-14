@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
     },
     header: {
       fontSize: 42,
-      marginTop: 120,
-      marginBottom: 120
+      marginTop: 60,
+      marginBottom: 60
     },
     textInputContainer: {
       width: '100%',
-      marginBottom: 40,
+      marginBottom: 20,
       alignItems: 'center'
     },
     textInput: {
