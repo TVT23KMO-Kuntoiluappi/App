@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "SimplyGymnotes",
+    "newArchEnabled": true,
     "slug": "SimplyGymnotes",
     "version": "1.0.0",
     "orientation": "portrait",

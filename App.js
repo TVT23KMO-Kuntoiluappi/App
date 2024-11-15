@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Login from './screens/Login';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavBar from './components/NavBar';
+import MyTabs from './components/MyTabs';
+import MyCustomTheme from './components/MyCustomTheme';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,8 +19,11 @@ export default function App(props) {
   return (
     <>
       <PaperProvider>
-        <Login></Login>
-        <NavBar></NavBar>
+        <NavigationContainer theme ={MyCustomTheme} >
+          <MyTabs />
+        </NavigationContainer>
+        {/*<Login></Login>
+        <NavBar></NavBar>*/}
       </PaperProvider>
     </>
   );
