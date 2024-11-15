@@ -1,10 +1,29 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { auth, signInWithEmailAndPassword, getAuth } from "../firebase/Config";
 
-export default function Login() {
+export default function Login({setLogged}) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  const login = () => {
+    // const auth = getAuth()
+
+    signInWithEmailAndPassword(auth, username, password)
+      .then((userCredentials) => {
+        setLogged(true)
+        console.log("toimii täällä")
+      }).catch(error => {
+        if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+          console.log('Invalid credentials')
+        } else if (error.code === 'auth/too-many-requests') {
+          console.log('Too many attempts')
+        } else {
+          console.log(error.code.error.message)
+        }
+      })
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,7 +47,7 @@ export default function Login() {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {/*TODO*/}}
+        onPress={() => {login()}}
       >
          <Text style={styles.buttonText}>Kirjaudu sisään</Text>
       </TouchableOpacity>

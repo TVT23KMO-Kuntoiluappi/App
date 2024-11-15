@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-navigation/bottom-tabs": "^7.0.3",
     "@react-navigation/elements": "^2.0.2",
     "@react-navigation/native": "^7.0.2",
@@ -16,8 +17,10 @@
     "eas-cli": "^13.2.0",
     "expo": "^52.0.6",
     "expo-status-bar": "~1.12.1",
+    "firebase": "^11.0.2",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-dotenv": "^3.4.11",
     "react-native-paper": "^5.12.5",
     "react-native-safe-area-context": "^4.11.0",
     "react-native-screens": "^4.0.0",

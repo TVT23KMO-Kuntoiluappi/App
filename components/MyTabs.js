@@ -95,19 +95,23 @@ function MyTabs() {
       screenOptions={{ headerShown: true }} // Jos haluaa otsikon ylhäältä pois, niin tähän false
     >
       <Tab.Screen name="Login" component={Login} />
-      {/*<Tab.Screen name="Register" component={Register} />*/}
+      <Tab.Screen name="Register" component={Register} />
       <Tab.Screen name="Workout" component={Workout} />
-      {/*<Tab.Screen name="MovementBank" component={MovementBank} />*/}
+      <Tab.Screen name="MovementBank" component={MovementBank} />
       {/*<Tab.Screen name="WorkoutBank" component={WorkoutBank} />*/}
       <Tab.Screen name="Gallery" component={Gallery} />
-      <Tab.Screen name="Userpage" component={UserPage} />
-      {/*<Tab.Screen name="Usersettings" component={UserSettings} />*/}
+      {/*<Tab.Screen name="Userpage" component={UserPage} />*/}
+      <Tab.Screen name="Usersettings" component={UserSettings} />
     </Tab.Navigator>
   );
 }
 
-// ^^Poista kommentit jos haluaa editointivaiheessa päästä navigoimaan sivulle
+// Register ja Usersetting Jaakolle
+// Workout Tanelille
+// Gallery Juholle
+// MovementBank Antrelle
 
+// ^^Poista kommentit jos haluaa editointivaiheessa päästä navigoimaan sivulle
 const styles = StyleSheet.create({
     bottomNav: {
         flexDirection: "row",

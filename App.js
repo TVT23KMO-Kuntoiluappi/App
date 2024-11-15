@@ -14,9 +14,10 @@ import MyCustomTheme from './components/MyCustomTheme';
 const Stack = createNativeStackNavigator();
 
 export default function App(props) {
+  const [logged, setLogged] = useState(false)
 
-
-  return (
+  if (logged) {
+    return (
     <>
       <PaperProvider>
         <NavigationContainer theme ={MyCustomTheme} >
@@ -27,6 +28,9 @@ export default function App(props) {
       </PaperProvider>
     </>
   );
+} else {
+  return <Login setLogged={setLogged} />;
+}
 }
 
 const styles = StyleSheet.create({
