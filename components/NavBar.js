@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { Appbar } from 'react-native-paper'
+import { Appbar, useTheme } from 'react-native-paper'
 
 export default function NavBar(props) {
-
+  const { colors, spacing } = useTheme()
   return (
     <Appbar style={styles.container}>
             <Appbar.Action icon="archive" onPress={() => {}} />

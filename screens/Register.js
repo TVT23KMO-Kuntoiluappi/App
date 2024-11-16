@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import { auth, createUserWithEmailAndPassword } from "../firebase/Config";
+import { useTheme } from 'react-native-paper';
 
 export default function Register() {
   const [fname, setFname] = useState("")
@@ -8,6 +9,7 @@ export default function Register() {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { colors, spacing } = useTheme()
 
   const handleRegister = () => {
     createUserWithEmailAndPassword(auth, email, password)

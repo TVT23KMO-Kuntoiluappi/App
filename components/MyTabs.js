@@ -15,7 +15,7 @@ import WorkoutBank from '../screens/WorkoutBank'
 const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
-  const { colors } = useTheme();
+  const { colors, spacing } = useTheme()
 
   return (
     <View style={[styles.bottomNav, {backgroundColor: colors.card}]}>

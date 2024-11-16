@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTheme } from 'react-native-paper';
 import { auth, signInWithEmailAndPassword, getAuth } from "../firebase/Config";
 
 export default function Login({setLogged}) {
+  const { colors, spacing } = useTheme()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
