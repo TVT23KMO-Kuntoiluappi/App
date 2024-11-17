@@ -15,7 +15,7 @@ import WorkoutBank from '../screens/WorkoutBank'
 const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
-  const { colors } = useTheme();
+  const { colors, spacing } = useTheme()
 
   return (
     <View style={[styles.bottomNav, {backgroundColor: colors.card}]}>
@@ -92,7 +92,7 @@ function MyTabs() {
   return (
     <Tab.Navigator
       tabBar={(props) => <MyTabBar {...props} />}
-      screenOptions={{ headerShown: true }} // Jos haluaa otsikon ylhäältä pois, niin tähän false
+      screenOptions={{ headerShown: false }} // Jos haluaa otsikon ylhäältä pois, niin tähän false
     >
       <Tab.Screen name="Login" component={Login} />
       <Tab.Screen name="Register" component={Register} />
@@ -101,7 +101,7 @@ function MyTabs() {
       {/*<Tab.Screen name="WorkoutBank" component={WorkoutBank} />*/}
       <Tab.Screen name="Gallery" component={Gallery} />
       {/*<Tab.Screen name="Userpage" component={UserPage} />*/}
-      <Tab.Screen name="Asetukset" component={UserSettings} />
+      <Tab.Screen name="Usersettings" component={UserSettings} options={{headerShown: true}}/>
     </Tab.Navigator>
   );
 }

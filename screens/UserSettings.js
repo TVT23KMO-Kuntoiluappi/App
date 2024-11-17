@@ -1,9 +1,14 @@
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { useTheme } from 'react-native-paper';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Image } from 'expo-image'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTheme } from 'react-native-paper';
 
 export default function UserSettings() {
+  const { colors, spacing } = useTheme()
   const [fname, setFname] = useState("")
   const [lname, setLname] = useState("")
   const [username, setUsername] = useState("")
