@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { useTheme,  } from '@react-navigation/native';
+import { useTheme, } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,14 +11,32 @@ import MovementBank from '../screens/MovementBank'
 import Register from '../screens/Register'
 import UserSettings from '../screens/UserSettings'
 import WorkoutBank from '../screens/WorkoutBank'
+import { getUserPicture } from '../firebase/Config';
+import { useEffect, useState } from 'react';
+import { Image } from 'expo-image';
 
 const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
   const { colors, spacing } = useTheme()
+  const [profilePic, setProfilePic] = useState(null)
+
+  const fetchProfilePicture = async () => {
+    try {
+      const profPic = await getUserPicture();
+      console.log('Profile Picture URI:', profPic)
+      setProfilePic(profPic);
+    } catch (error) {
+      console.error('Error fetching profile picture:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfilePicture();
+  }, []);
 
   return (
-    <View style={[styles.bottomNav, {backgroundColor: colors.card}]}>
+    <View style={[styles.bottomNav, { backgroundColor: colors.card }]}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -44,7 +62,7 @@ function MyTabBar({ state, descriptors, navigation }) {
 
         // Tämä varalla, jos haluaa jonkun eritoiminnon longpressillä
         const onLongPress = () => {
-            console.log("pitkäpainallus")
+          console.log("pitkäpainallus")
           navigation.emit({
             type: 'tabLongPress',
             target: route.key,
@@ -54,7 +72,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         let iconName;
         switch (route.name) {
           case 'Login':
-            iconName = 'login'; 
+            iconName = 'login';
             break;
           case 'Workout':
             iconName = 'dumbbell';
@@ -77,12 +95,38 @@ function MyTabBar({ state, descriptors, navigation }) {
             onLongPress={onLongPress}
             style={styles.navButton}
           >
-            <Icon name={iconName} size={24} color={isFocused ? colors.primary : colors.text} />
-            <Text style={[styles.navButtonText, {color: isFocused ? colors.primary : colors.text}]}>
+            {route.name === 'Asetukset' ? (
+              <Image
+                source={
+                  profilePic
+                    ? { uri: profilePic }
+                    : require('../screens/images/default-profpic.png')
+                }
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                }}
+              />
+
+            ) : (
+              <Icon
+                name={iconName}
+                size={24}
+                color={isFocused ? colors.primary : colors.text}
+              />
+            )}
+            <Text
+              style={[
+                styles.navButtonText,
+                { color: isFocused ? colors.primary : colors.text },
+              ]}
+            >
               {label}
             </Text>
           </PlatformPressable>
         );
+
       })}
     </View>
   );
@@ -101,7 +145,7 @@ function MyTabs() {
       {/*<Tab.Screen name="WorkoutBank" component={WorkoutBank} />*/}
       <Tab.Screen name="Gallery" component={Gallery} />
       {/*<Tab.Screen name="Userpage" component={UserPage} />*/}
-      <Tab.Screen name="Usersettings" component={UserSettings} options={{headerShown: true}}/>
+      <Tab.Screen name="Asetukset" component={UserSettings} options={{ headerShown: true }} />
     </Tab.Navigator>
   );
 }
@@ -113,18 +157,18 @@ function MyTabs() {
 
 // ^^Poista kommentit jos haluaa editointivaiheessa päästä navigoimaan sivulle
 const styles = StyleSheet.create({
-    bottomNav: {
-        flexDirection: "row",
-        padding: 8
-    },
-    navButton: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    navButtonText: {
-        
-    }
+  bottomNav: {
+    flexDirection: "row",
+    padding: 8
+  },
+  navButton: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  navButtonText: {
+
+  }
 })
 
 export default MyTabs

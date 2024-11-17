@@ -4,10 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTheme } from 'react-native-paper';
 import { auth, signInWithEmailAndPassword, getAuth } from "../firebase/Config";
 
-export default function Login({setLogged}) {
+export default function Login({setLogged, navigation}) {
   const { colors, spacing } = useTheme()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('testi@testi.fi')
+  const [password, setPassword] = useState('testing')
 
   const login = () => {
     // const auth = getAuth()

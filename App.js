@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './screens/Login';
 import MyTabs from './components/MyTabs';
 import MyCustomTheme, { spacing } from './components/MyCustomTheme';
+import Register from './screens/Register';
 const { LightTheme, DarkTheme } = MyCustomTheme;
 
 const Stack = createNativeStackNavigator();
