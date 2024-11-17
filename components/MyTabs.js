@@ -101,7 +101,7 @@ function MyTabs() {
       {/*<Tab.Screen name="WorkoutBank" component={WorkoutBank} />*/}
       <Tab.Screen name="Gallery" component={Gallery} />
       {/*<Tab.Screen name="Userpage" component={UserPage} />*/}
-      <Tab.Screen name="Usersettings" component={UserSettings} />
+      <Tab.Screen name="Asetukset" component={UserSettings} />
     </Tab.Navigator>
   );
 }

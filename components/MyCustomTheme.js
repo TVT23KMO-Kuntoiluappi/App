@@ -5,7 +5,7 @@ const MyCustomTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: 'blue',
-    background: '#EFF5D5',
+    background: '#ffffff',
     card: '#B8A90B',
     text: '#333333',
   },

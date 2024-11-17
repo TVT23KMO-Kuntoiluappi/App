@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { auth, signInWithEmailAndPassword, getAuth } from "../firebase/Config";
 
-export default function Login({setLogged}) {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+export default function Login({setLogged, navigation}) {
+  const [username, setUsername] = useState('testi@testi.fi')
+  const [password, setPassword] = useState('testing')
 
   const login = () => {
     // const auth = getAuth()
@@ -53,7 +53,7 @@ export default function Login({setLogged}) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {/*TODO*/}}
+        onPress={() => {navigation.navigate("Register")}}
       >
          <Text style={styles.buttonText}>Rekisteröidy</Text>
       </TouchableOpacity>
