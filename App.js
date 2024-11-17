@@ -9,7 +9,8 @@ import Login from './screens/Login';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavBar from './components/NavBar';
 import MyTabs from './components/MyTabs';
-import { LightTheme, DarkTheme } from './components/MyCustomTheme';
+import MyCustomTheme, { spacing } from './components/MyCustomTheme';
+const { LightTheme, DarkTheme } = MyCustomTheme;
 
 const Stack = createNativeStackNavigator();
 
