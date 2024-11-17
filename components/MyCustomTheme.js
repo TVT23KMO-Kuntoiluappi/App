@@ -17,6 +17,8 @@ const LightTheme = {
     background: '#EFF5D5',
     card: '#B8A90B',
     text: '#333333',
+    surface: '#EFF5D5',
+    surfaceVariant: '#EFF5D5',
   },
   spacing,
 };
@@ -35,7 +37,7 @@ const DarkTheme = {
   spacing,  
 };
 
-export default { LightTheme, DarkTheme };
+export default { LightTheme, DarkTheme, spacing };
 
 /* :
 
