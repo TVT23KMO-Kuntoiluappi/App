@@ -14,7 +14,7 @@ const LightTheme = {
     ...NavigationDefaultTheme.colors,
     ...PaperDefaultTheme.colors,
     primary: 'blue',
-    background: '#EFF5D5',
+    background: '#ffffff',
     card: '#B8A90B',
     text: '#333333',
     surface: '#EFF5D5',

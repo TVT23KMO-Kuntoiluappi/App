@@ -67,7 +67,7 @@ export default function Register() {
           maxLength={40}
           onChangeText={(text) => setPassword(text)}
           value={password}
-          placeholder="Sähköposti uudelleen"
+          placeholder="Salasana"
           secureTextEntry={true}
         />
       </View>

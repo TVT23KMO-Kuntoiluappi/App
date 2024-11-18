@@ -4,12 +4,10 @@ import { useState, useMemo } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Login from './screens/Login';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import NavBar from './components/NavBar';
 import MyTabs from './components/MyTabs';
 import MyCustomTheme, { spacing } from './components/MyCustomTheme';
+import Register from './screens/Register';
 const { LightTheme, DarkTheme } = MyCustomTheme;
 
 const Stack = createNativeStackNavigator();
@@ -20,21 +18,23 @@ export default function App(props) {
 
   const theme = useMemo(() => (isDark ? DarkTheme : LightTheme), [isDark])
 
-  if (logged) {
     return (
-    <>
       <PaperProvider theme={theme}>
         <NavigationContainer theme ={theme} >
+        {logged ? ( 
           <MyTabs />
-        </NavigationContainer>
-        {/*<Login></Login>
-        <NavBar></NavBar>*/}
-      </PaperProvider>
-    </>
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen name="Login">
+              {({ navigation }) => <Login setLogged={setLogged} navigation={navigation} />}
+            </Stack.Screen>
+
+            <Stack.Screen name="Register" component={Register} />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </PaperProvider>
   );
-} else {
-  return <Login setLogged={setLogged} />;
-}
 }
 
 const styles = StyleSheet.create({
