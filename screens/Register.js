@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { auth, createUserWithEmailAndPassword } from "../firebase/Config";
 import { useTheme } from 'react-native-paper';
@@ -9,32 +9,45 @@ export default function Register() {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { colors, spacing } = useTheme()
+  const { colors, spacing } = useTheme();
 
   const handleRegister = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("User created:", user);
-        setFname("")
-        setLname("")
-        setUsername("")
-        setEmail("")
-        setPassword("")
+
+        // Show success alert
+        Alert.alert(
+          "Rekisteröityminen onnistui",
+          `Tervetuloa, ${fname || "Käyttäjä"}!`,
+          [{ text: "OK" }]
+        );
+
+        // Reset form fields
+        setFname("");
+        setLname("");
+        setUsername("");
+        setEmail("");
+        setPassword("");
       })
       .catch((error) => {
         console.error("Error during registration:", error.code, error.message);
+
+        // Show error alert
+        Alert.alert(
+          "Rekisteröityminen epäonnistui",
+          error.message,
+          [{ text: "OK" }]
+        );
       });
   };
 
-
-  // Toistaseksi sähköposti ja salasana rekisteröityy Firebase Authenticationiin. 
-  // Nimi, Sukunimi ja käyttäjätunnus täytyy laittaa esim firestoreen vielä.
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Luo tunnus</Text>
       <View style={styles.textInputContainer}>
-      <TextInput
+        <TextInput
           style={styles.textInput}
           maxLength={40}
           onChangeText={(text) => setFname(text)}
@@ -117,4 +130,4 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20
   }
-})
+});

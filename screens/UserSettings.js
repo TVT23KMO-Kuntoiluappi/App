@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { Image } from 'expo-image'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme, FAB, IconButton } from 'react-native-paper';
@@ -23,6 +23,16 @@ export default function UserSettings() {
   const [loading, setLoading] = useState(true)
   const [images, setImages] = useState([]);
   const [profilePic, setProfilePic] = useState(null)
+  const [fnameEditable, setFnameEditable] = useState(false);
+  const [lnameEditable, setLnameEditable] = useState(false);
+  const [usernameEditable, setUsernameEditable] = useState(false)
+  const [emailEditable, setEmailEditable] = useState(false)
+  const [weightEditable, setWeightEditable] = useState(false)
+  const [heightEditable, setHeightEditable] = useState(false)
+  const [oneRepMax, setOneRepMax] = useState([])
+  const [showRep, setShowRep] = useState(false)
+  const [liike, setLiike] = useState("")
+  const [massa, setMassa] = useState("")
 
   const fetchProfilePicture = async () => {
     try {
@@ -31,11 +41,11 @@ export default function UserSettings() {
     } catch (error) {
       console.error('Error fetching profile picture:', error);
     }
-  };
+  }
 
   useEffect(() => {
-    fetchProfilePicture();
-  }, []);
+    fetchProfilePicture()
+  }, [])
 
   const handlePickImage = async () => {
     setLoading(true)
@@ -85,117 +95,214 @@ export default function UserSettings() {
     fetchProfilePicture()
   }
 
+  const addMaxRep = () => {
+    const maxRepJSON = {
+      move: liike,
+      mass: massa
+    }
+    setOneRepMax((prevMax) => [...prevMax, maxRepJSON])
+    setLiike("")
+    setMassa("")
+    console.log(oneRepMax)
+  }
+
   return (
     <SafeAreaView style={styles({ colors, spacing }).container}>
-      <View style={styles({ colors, spacing }).changeProfpic}>
-        <Image
-          source={
-            profilePic
-              ? { uri: profilePic }
-              : require('./images/default-profpic.png')
+      <ScrollView contentContainerStyle={styles({ colors, spacing }).containerScroll}>
+        <View style={styles({ colors, spacing }).changeProfpic}>
+          <Image
+            source={
+              profilePic
+                ? { uri: profilePic }
+                : require('./images/default-profpic.png')
+            }
+            style={{ width: 100, height: 100, borderRadius: 50 }}
+          />
+
+          {cameraOrLoad ? <TouchableOpacity style={styles({ colors, spacing }).button} onPress={() => setCameraOrLoad(!cameraOrLoad)}>
+            <Text>Vaihda profiilikuva</Text>
+          </TouchableOpacity> :
+            <>
+              <View style={styles({ colors, spacing }).fabContainer}>
+                <FAB
+                  icon="camera"
+                  style={styles({ colors, spacing }).fab}
+                  onPress={() => { setCameraOrLoad(!cameraOrLoad); handleTakePhoto() }}
+                  theme={{ colors: { primary: colors.primary } }}
+                />
+                <FAB
+                  icon="image-plus"
+                  style={styles({ colors, spacing }).fab}
+                  onPress={() => { setCameraOrLoad(!cameraOrLoad); handlePickImage() }}
+                  theme={{ colors: { primary: colors.primary } }}
+                />
+              </View>
+            </>
           }
-          style={{ width: 100, height: 100, borderRadius: 50 }}
-        />
-
-        {cameraOrLoad ? <TouchableOpacity style={styles({ colors, spacing }).button} onPress={() => setCameraOrLoad(!cameraOrLoad)}>
-          <Text>Vaihda profiilikuva</Text>
-        </TouchableOpacity> :
-          <>
-            <View style={styles({ colors, spacing }).fabContainer}>
-              <FAB
-                icon="camera"
-                style={styles({ colors, spacing }).fab}
-                onPress={() => { setCameraOrLoad(!cameraOrLoad); handleTakePhoto() }}
-                theme={{ colors: { primary: colors.primary } }}
-              />
-              <FAB
-                icon="image-plus"
-                style={styles({ colors, spacing }).fab}
-                onPress={() => { setCameraOrLoad(!cameraOrLoad); handlePickImage() }}
-                theme={{ colors: { primary: colors.primary } }}
-              />
-            </View>
-          </>
-        }
-      </View>
-      <TouchableOpacity style={styles({ colors, spacing }).button} onPress={() => setEdit(!edit)}>
-        <Text style={styles({ colors, spacing }).buttonText}>{edit ? "Näytä tiedot" : "Muokkaa tietoja"}</Text>
-      </TouchableOpacity>
-      {edit ? <View style={styles({ colors, spacing }).editProfile}>
-        <View style={styles({ colors, spacing }).editLine}>
-          <TextInput
-            style={styles({ colors, spacing }).textInput}
-            maxLength={40}
-            onChangeText={(text) => setFname(text)}
-            value={fname}
-            placeholder="etunimi"
-          />
-          <TextInput
-            style={styles({ colors, spacing }).textInput}
-            maxLength={40}
-            onChangeText={(text) => setLname(text)}
-            value={lname}
-            placeholder="sukunimi"
-          />
         </View>
-        <View style={styles({ colors, spacing }).editLine}>
-          <TextInput
-            style={styles({ colors, spacing }).textInput}
-            maxLength={40}
-            onChangeText={(text) => setUsername(text)}
-            value={username}
-            placeholder="käyttäjätunnus"
-          />
-          <TextInput
-            style={styles({ colors, spacing }).textInput}
-            maxLength={40}
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-            placeholder="sähköposti"
-          />
-        </View>
-        <View style={styles({ colors, spacing }).editLine}>
-          <TextInput
-            style={styles({ colors, spacing }).textInput}
-            maxLength={40}
-            onChangeText={(text) => setWeight(text)}
-            value={weight}
-            placeholder="paino"
-          />
-          <TextInput
-            style={styles({ colors, spacing }).textInput}
-            maxLength={40}
-            onChangeText={(text) => setHeight(text)}
-            value={height}
-            placeholder="pituus"
-          />
-        </View>
-        <TouchableOpacity style={styles({ colors, spacing }).button}>
-          <Text style={styles({ colors, spacing }).buttonText}>Tallenna</Text>
+        <TouchableOpacity
+          style={styles({ colors, spacing }).editProfile}
+          onLongPress={() => {
+            setFnameEditable(false);
+            setLnameEditable(false);
+            setUsernameEditable(false);
+            setEmailEditable(false);
+            setWeightEditable(false);
+            setHeightEditable(false);
+          }}
+        >
+          <View style={styles({ colors, spacing }).info}>
+            {fnameEditable ? (
+              <View style={styles({ colors, spacing }).inputContainer}>
+                <Text style={styles({ colors, spacing }).label}>Muokkaa etunimeä</Text>
+                <TextInput
+                  style={styles({ colors, spacing }).textInput}
+                  maxLength={40}
+                  onChangeText={(text) => setFname(text)}
+                  value={fname}
+                  onBlur={() => setFnameEditable(false)}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity style={styles({ colors, spacing }).text} onPress={() => setFnameEditable(true)}>
+                <Text style={styles({ colors, spacing }).label}>Etunimi</Text>
+                <Text style={{ textAlign: "center" }}>{fname || "etunimi"}</Text>
+              </TouchableOpacity>
+            )}
+            {lnameEditable ? (
+              <View style={styles({ colors, spacing }).inputContainer}>
+                <Text style={styles({ colors, spacing }).label}>Muokkaa sukunimeä</Text>
+                <TextInput
+                  style={styles({ colors, spacing }).textInput}
+                  maxLength={40}
+                  onChangeText={(text) => setLname(text)}
+                  value={lname}
+                  onBlur={() => setLnameEditable(false)}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity style={styles({ colors, spacing }).text} onPress={() => setLnameEditable(true)}>
+                <Text style={styles({ colors, spacing }).label}>Sukunimi</Text>
+                <Text style={{ textAlign: "center" }}>{lname || "sukunimi"}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={styles({ colors, spacing }).info}>
+            {usernameEditable ? (
+              <View style={styles({ colors, spacing }).inputContainer}>
+                <Text style={styles({ colors, spacing }).label}>Muokkaa käyttäjätunnusta</Text>
+                <TextInput
+                  style={styles({ colors, spacing }).textInput}
+                  maxLength={40}
+                  onChangeText={(text) => setUsername(text)}
+                  value={username}
+                  onBlur={() => setUsernameEditable(false)}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity style={styles({ colors, spacing }).text} onPress={() => setUsernameEditable(true)}>
+                <Text style={styles({ colors, spacing }).label}>Käyttäjätunnus</Text>
+                <Text style={{ textAlign: "center" }}>{username || "Käyttäjätunnus"}</Text>
+              </TouchableOpacity>
+            )}
+            {emailEditable ? (
+              <View style={styles({ colors, spacing }).inputContainer}>
+                <Text style={styles({ colors, spacing }).label}>Muokkaa sähköpostia</Text>
+                <TextInput
+                  style={styles({ colors, spacing }).textInput}
+                  maxLength={40}
+                  onChangeText={(text) => setEmail(text)}
+                  value={email}
+                  onBlur={() => setEmailEditable(false)}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity style={styles({ colors, spacing }).text} onPress={() => setEmailEditable(true)}>
+                <Text style={styles({ colors, spacing }).label}>Sähköposti</Text>
+                <Text style={{ textAlign: "center" }}>{email || "Sähköposti"}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={styles({ colors, spacing }).info}>
+            {weightEditable ? (
+              <View style={styles({ colors, spacing }).inputContainer}>
+                <Text style={styles({ colors, spacing }).label}>Muokkaa painoa</Text>
+                <TextInput
+                  style={styles({ colors, spacing }).textInput}
+                  maxLength={40}
+                  onChangeText={(text) => setWeight(text)}
+                  value={weight}
+                  onBlur={() => setWeightEditable(false)}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity style={styles({ colors, spacing }).text} onPress={() => setWeightEditable(true)}>
+                <Text style={styles({ colors, spacing }).label}>Paino</Text>
+                <Text style={{ textAlign: "center" }}>{weight || "100 kg"}</Text>
+              </TouchableOpacity>
+            )}
+            {heightEditable ? (
+              <View style={styles({ colors, spacing }).inputContainer}>
+                <Text style={styles({ colors, spacing }).label}>Muokkaa pituutta</Text>
+                <TextInput
+                  style={styles({ colors, spacing }).textInput}
+                  maxLength={40}
+                  onChangeText={(text) => setHeight(text)}
+                  value={height}
+                  onBlur={() => setHeightEditable(false)}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity style={styles({ colors, spacing }).text} onPress={() => setHeightEditable(true)}>
+                <Text style={styles({ colors, spacing }).label}>Pituus</Text>
+                <Text style={{ textAlign: "center" }}>{height || "180 cm"}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </TouchableOpacity>
-      </View> :
-        <View style={styles({ colors, spacing }).profileInfo}>
-          <Text>Nimi: etunimi sukunimi</Text>
-          <Text>Käyttäjätunnus: defaultusername</Text>
-          <Text>sähköposti: testi@testi</Text>
-          <Text>paino: 100 kg pituus: 180 cm</Text>
-        </View>}
-      <View style={styles({ colors, spacing }).addOneRepMax}>
-        <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
-          <Text>Lisää "One rep Max"</Text>
-          <TouchableOpacity>
-            <Icon name='help-circle' size={24} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
-          <TouchableOpacity>
-            <Icon name='plus' size={24} />
-          </TouchableOpacity>
-          <Text>Lisää liike</Text>
-        </View>
 
-      </View>
+        <View style={styles({ colors, spacing }).addOneRepMax}>
+          <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
+            <Text>Lisää "One rep Max"</Text>
+            <TouchableOpacity>
+              <Icon name='help-circle' size={24} />
+            </TouchableOpacity>
+          </View>
+          {oneRepMax.length > 0 &&
+            oneRepMax.map((item, index) => (
+              <View key={index} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+                <Text>{item.move}</Text>
+                <TouchableOpacity>
+                  <Text>{item.mass} kg</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
 
+          {showRep &&
+            <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: "space-around", margin: 8 }}>
+              <TextInput
+                placeholder='lisää liike'
+                style={[styles({ colors, spacing }).textInput, { backgroundColor: '#ffffff', width: '45%', borderRadius: spacing.medium, borderColor: "black", borderWidth: 2 }]}
+                maxLength={40}
+                onChangeText={(text) => setLiike(text)}
+                value={liike}
+              />
+              <TextInput
+                placeholder='liikkeen massa'
+                style={[styles({ colors, spacing }).textInput, { backgroundColor: '#ffffff', width: '45%', borderRadius: spacing.medium, borderColor: "black", borderWidth: 2 }]}
+                maxLength={40}
+                onChangeText={(text) => setMassa(text)}
+                value={massa}
+              />
+            </View>}
+          <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
+            <TouchableOpacity onPress={() => setShowRep(!showRep)} onLongPress={() => addMaxRep()}>
+              {!showRep ? <Icon name='plus' size={24} /> : <Icon name='plus' size={40} />}
+            </TouchableOpacity>
+            <Text>Lisää liike</Text>
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -208,6 +315,11 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     flexDirection: 'column',
     alignItems: "center",
     justifyContent: "flex-start"
+  },
+  containerScroll: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
   presonalSettings: {
     alignItems: 'center',
@@ -232,22 +344,53 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
   editProfile: {
     margin: 5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: '90%'
   },
   editLine: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: "space-around"
   },
+  info: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: "space-around"
+  },
+  inputContainer: {
+    position: "relative",
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 20,
+    margin: 5,
+    width: '45%',
+  },
+  label: {
+    position: "absolute",
+    top: -7,
+    left: 20,
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 5,
+    fontSize: 10,
+    color: "#888",
+  },
   textInput: {
-    backgroundColor: '#ffffff',
+    height: 50,
+    fontSize: 16,
+    padding: 5,
+    textAlign: "center",
+    color: "black",
+  },
+  text: {
+    alignItems: "center",
+    justifyContent: "center",
     margin: 5,
     padding: 5,
-    borderColor: 'black',
-    width: '45%',
     borderWidth: 2,
+    borderColor: "black",
     borderRadius: 20,
-    height: 55
+    width: "45%",
+    height: 50,
   },
   profileDetails: {
     width: '100%',

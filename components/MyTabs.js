@@ -138,10 +138,10 @@ function MyTabs() {
       tabBar={(props) => <MyTabBar {...props} />}
       screenOptions={{ headerShown: false }} // Jos haluaa otsikon ylhäältä pois, niin tähän false
     >
-      <Tab.Screen name="Login" component={Login} />
-      <Tab.Screen name="Register" component={Register} />
+{    /*  <Tab.Screen name="Login" component={Login} />
+      <Tab.Screen name="Register" component={Register} />*/}
       <Tab.Screen name="Workout" component={Workout} />
-      <Tab.Screen name="MovementBank" component={MovementBank} />
+      <Tab.Screen name="Movement" component={MovementBank} />
       {/*<Tab.Screen name="WorkoutBank" component={WorkoutBank} />*/}
       <Tab.Screen name="Gallery" component={Gallery} />
       {/*<Tab.Screen name="Userpage" component={UserPage} />*/}
