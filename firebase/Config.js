@@ -13,6 +13,7 @@ import {
   setDoc,
   getDoc,
   deleteDoc,
+  updateDoc
 } from "firebase/firestore"
 import {
   initializeAuth,
@@ -20,6 +21,8 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  updateProfile,
+  updateEmail
 } from "firebase/auth"
 import {
   getStorage,
@@ -165,4 +168,7 @@ export {
   listAll,
   deleteObject,
   getMetadata,
+  updateProfile,
+  updateDoc,
+  updateEmail
 }

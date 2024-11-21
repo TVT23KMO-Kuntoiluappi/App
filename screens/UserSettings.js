@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { Image } from 'expo-image'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme, FAB, IconButton } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker'
-import { uploadUserPicture, getUserPicture } from '../firebase/Config';
+import { uploadUserPicture, getUserPicture, getDoc, doc, firestore, updateDoc, updateProfile, updateEmail } from '../firebase/Config';
 import { auth, storage } from '../firebase/Config';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
-
 
 export default function UserSettings() {
   const { colors, spacing } = useTheme()
@@ -34,6 +33,75 @@ export default function UserSettings() {
   const [liike, setLiike] = useState("")
   const [massa, setMassa] = useState("")
 
+  const getUserData = async () => {
+    try {
+      const userId = auth.currentUser.uid; 
+      const docRef = doc(firestore, `users/${userId}/omattiedot/perustiedot`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("Dokumentti haettu:", docSnap.data());
+        const userData = docSnap.data();
+        setFname(userData.firstName || "");
+        setLname(userData.lastName || "");
+        setUsername(userData.username || "");
+        setWeight(userData.weight || "");
+        setHeight(userData.height || "");
+        setEmail(auth.currentUser.email || "")
+      } else {
+        console.log("Dokumenttia ei löytynyt!");
+      }
+    } catch (error) {
+      console.error("Virhe käyttäjätietojen hakemisessa:", error);
+    }
+  };
+
+  const updateUserData = async (userDetails) => {
+    const userId = auth.currentUser.uid; 
+    const docRef = doc(firestore, `users/${userId}/omattiedot/perustiedot`);
+    try {
+      await updateDoc(docRef, userDetails);
+      console.log("Päivitys onnistui!");
+      Alert.alert(
+        "Tietojen päivitys onnistui!",
+        `Jatketaan`,
+        [{ text: "OK" }]
+      );
+    } catch (error) {
+      console.error("Virhe päivityksessä:", error);
+      Alert.alert(
+        "Tietojen päivitys onnistui!",
+        `Jatketaan`,
+        [{ text: "OK" }]
+      );
+    }
+  }
+
+  const updateUserDetails = async (newDisplayName, newEmail) => {
+    try {
+      const user = auth.currentUser;
+  
+      if (user) {
+        // Päivitä displayName
+        if (newDisplayName) {
+          await updateProfile(user, {
+            displayName: newDisplayName,
+          });
+          console.log("Username päivitetty myös auth:", newDisplayName);
+        }
+  
+        // Päivitä sähköposti
+        if (newEmail) {
+          await updateEmail(user, newEmail);
+          console.log("Sähköposti päivitetty myös auth:", newEmail);
+        }
+      } else {
+        console.log("Käyttäjää ei ole kirjautunut sisään.");
+      }
+    } catch (error) {
+      console.log("Virhe päivitettäessä käyttäjätietoja:", error.message);
+    }
+  };
+  
   const fetchProfilePicture = async () => {
     try {
       const profPic = await getUserPicture();
@@ -45,6 +113,7 @@ export default function UserSettings() {
 
   useEffect(() => {
     fetchProfilePicture()
+    getUserData()
   }, [])
 
   const handlePickImage = async () => {
@@ -104,6 +173,22 @@ export default function UserSettings() {
     setLiike("")
     setMassa("")
     console.log(oneRepMax)
+  }
+
+  const userUpdate = () => {
+    try {
+      updateUserData({
+        firstName: fname,
+        lastName: lname,
+        username: username,
+        height: height,
+        weight: weight,
+      });
+      updateUserDetails(username, email)
+    } catch (error) {
+      console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
+      throw new Error("Tietojen lisääminen epäonnistui.");
+    }
   }
 
   return (
@@ -260,7 +345,12 @@ export default function UserSettings() {
             )}
           </View>
         </TouchableOpacity>
-
+        {(fnameEditable || lnameEditable || emailEditable || usernameEditable || weightEditable || heightEditable)
+          && 
+        <TouchableOpacity style = {styles({ colors, spacing }).button} onPress = {()=> userUpdate()}>
+          <Text>Päivitä tiedot</Text>  
+        </TouchableOpacity>
+        }
         <View style={styles({ colors, spacing }).addOneRepMax}>
           <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
             <Text>Lisää "One rep Max"</Text>
