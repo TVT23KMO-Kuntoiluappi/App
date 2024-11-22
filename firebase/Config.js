@@ -13,7 +13,7 @@ import {
   setDoc,
   getDoc,
   deleteDoc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore"
 import {
   initializeAuth,
@@ -170,5 +170,5 @@ export {
   getMetadata,
   updateProfile,
   updateDoc,
-  updateEmail
+  updateEmail,
 }

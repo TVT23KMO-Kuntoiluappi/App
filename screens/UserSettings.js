@@ -4,9 +4,11 @@ import { Image } from 'expo-image'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme, FAB, IconButton } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker'
-import { uploadUserPicture, getUserPicture, getDoc, doc, firestore, updateDoc, updateProfile, updateEmail } from '../firebase/Config';
+import { uploadUserPicture, getUserPicture, getDoc, doc, firestore, updateDoc, updateProfile, updateEmail, setDoc, collection } from '../firebase/Config';
 import { auth, storage } from '../firebase/Config';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import Ionicons from '@expo/vector-icons/Ionicons'
+import OneRepMaxInfo from '../components/OneRepMaxInfo';
 
 export default function UserSettings() {
   const { colors, spacing } = useTheme()
@@ -30,8 +32,10 @@ export default function UserSettings() {
   const [heightEditable, setHeightEditable] = useState(false)
   const [oneRepMax, setOneRepMax] = useState([])
   const [showRep, setShowRep] = useState(false)
+  const [updateMaxList, setUpdateMaxList] = useState(false)
   const [liike, setLiike] = useState("")
   const [massa, setMassa] = useState("")
+  const [modalVisible, setModalVisible] = useState(false);
 
   const getUserData = async () => {
     try {
@@ -54,6 +58,23 @@ export default function UserSettings() {
       console.error("Virhe käyttäjätietojen hakemisessa:", error);
     }
   };
+
+  const getOneRepMax = async () => {
+    try {
+      const userId = auth.currentUser.uid
+      const docRef = doc(firestore, `users/${userId}/omattiedot/nostomaksimit`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()){
+        console.log("Dokumentti haettu:", docSnap.data());
+        const userData = docSnap.data();
+        setOneRepMax(userData.oneRepMaxList)
+      } else {
+        console.log("Dokumenttia ei löytynyt")
+      }
+    } catch (error) {
+      console.log("virhe nostomaksimien hakemisessa: ", error)
+    }
+  }
 
   const updateUserData = async (userDetails) => {
     const userId = auth.currentUser.uid; 
@@ -81,7 +102,6 @@ export default function UserSettings() {
       const user = auth.currentUser;
   
       if (user) {
-        // Päivitä displayName
         if (newDisplayName) {
           await updateProfile(user, {
             displayName: newDisplayName,
@@ -89,7 +109,6 @@ export default function UserSettings() {
           console.log("Username päivitetty myös auth:", newDisplayName);
         }
   
-        // Päivitä sähköposti
         if (newEmail) {
           await updateEmail(user, newEmail);
           console.log("Sähköposti päivitetty myös auth:", newEmail);
@@ -114,6 +133,7 @@ export default function UserSettings() {
   useEffect(() => {
     fetchProfilePicture()
     getUserData()
+    getOneRepMax()
   }, [])
 
   const handlePickImage = async () => {
@@ -164,15 +184,92 @@ export default function UserSettings() {
     fetchProfilePicture()
   }
 
-  const addMaxRep = () => {
-    const maxRepJSON = {
-      move: liike,
-      mass: massa
+  async function addUserDetails(userDetails) {
+    const userDetailsRef = doc(collection(firestore, `users/${auth.currentUser.uid}/omattiedot`), "nostomaksimit");
+    try {
+      await setDoc(userDetailsRef, userDetails);
+      console.log("MAxRep lisäys onnistui");
+      Alert.alert(
+        "Maksimitoistojen lisäys",
+        `Tilastojen päivitys onnistui`,
+        [{ text: "OK" }]
+      );
+    } catch (error) {
+      console.error("Virhe tietojen lisäämisessä:", error);
+      Alert.alert(
+        "Maksimitoistojen lisäys",
+        `Päivitys epäonnistui jostain syystä...`,
+        [{ text: "OK" }]
+      );
     }
-    setOneRepMax((prevMax) => [...prevMax, maxRepJSON])
-    setLiike("")
-    setMassa("")
-    console.log(oneRepMax)
+  }
+
+  const addMaxRep = () => {
+    if (liike.length > 0 && massa.length > 0) {
+      const maxRepJSON = {
+        move: liike,
+        mass: massa
+      }
+      const updatedMax = [...oneRepMax, maxRepJSON]
+      setOneRepMax(updatedMax)
+      setLiike("")
+      setMassa("")
+      addUserDetails({oneRepMaxList: updatedMax})
+      console.log(updatedMax)
+    } else {
+      Alert.alert(
+        "HOX!",
+        `Älä lisää tyhjiä tilastoja`,
+        [{ text: "OK" }]
+      );
+    }
+   
+  }
+
+  const changeKilos = (index, change) => {
+    setUpdateMaxList(true)
+    const tempList = [...oneRepMax]
+    let tempMass = parseFloat(tempList[index].mass)
+  
+    if (change === "add") { 
+      tempMass += 1.25
+    } else if (change === "subtract") {
+      tempMass -= 1.25
+    }
+  
+    tempList[index].mass = tempMass.toString()
+    setOneRepMax(tempList)
+  }
+  
+  const deleteMaxRep = (index) => {
+    Alert.alert(
+      "Vahvista poistaminen",
+      "Haluatko varmasti poistaa tämän maksimin?",
+      [
+        {
+          text: "Peruuta",
+          onPress: () => console.log("Poistaminen peruttu"),
+          style: "cancel",
+        },
+        {
+          text: "Poista",
+          onPress: () => {
+            setUpdateMaxList(true);
+            const tempList = [...oneRepMax];
+            tempList.splice(index, 1);
+            setOneRepMax(tempList);
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+  
+
+  const maxRepUpdate = () => {
+    addUserDetails({oneRepMaxList: oneRepMax})
+    setUpdateMaxList(false)
   }
 
   const userUpdate = () => {
@@ -187,7 +284,7 @@ export default function UserSettings() {
       updateUserDetails(username, email)
     } catch (error) {
       console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
-      throw new Error("Tietojen lisääminen epäonnistui.");
+      throw new Error("Tietojen lisääminen epäonnistui.")
     }
   }
 
@@ -355,44 +452,74 @@ export default function UserSettings() {
           <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
             <Text>Lisää "One rep Max"</Text>
             <TouchableOpacity>
-              <Icon name='help-circle' size={24} />
+              <Icon name='help-circle' size={24} onPress={()=>setModalVisible(true)}/>
             </TouchableOpacity>
           </View>
           {oneRepMax.length > 0 &&
             oneRepMax.map((item, index) => (
-              <View key={index} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+              <View key={index} style={styles({colors,spacing}).oneRepMaxs}>
+                <TouchableOpacity onPress = {() => deleteMaxRep(index)}>
+                  <Ionicons name="trash" size={24} />
+                </TouchableOpacity>
                 <Text>{item.move}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>changeKilos(index, "subtract")}>
+                  <Icon name='minus' size={24} />
+                </TouchableOpacity>
                   <Text>{item.mass} kg</Text>
+                <TouchableOpacity onPress={()=>changeKilos(index, "add")}>
+                  <Icon name='plus' size={24} />
                 </TouchableOpacity>
               </View>
             ))}
 
           {showRep &&
-            <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: "space-around", margin: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: "space-around", margin: 8, wifth: "100%" }}>
               <TextInput
                 placeholder='lisää liike'
-                style={[styles({ colors, spacing }).textInput, { backgroundColor: '#ffffff', width: '45%', borderRadius: spacing.medium, borderColor: "black", borderWidth: 2 }]}
+                style={[styles({ colors, spacing }).oneRepMaxInputs]}
                 maxLength={40}
                 onChangeText={(text) => setLiike(text)}
                 value={liike}
               />
               <TextInput
                 placeholder='liikkeen massa'
-                style={[styles({ colors, spacing }).textInput, { backgroundColor: '#ffffff', width: '45%', borderRadius: spacing.medium, borderColor: "black", borderWidth: 2 }]}
+                style={[styles({ colors, spacing }).oneRepMaxInputs]}
                 maxLength={40}
                 onChangeText={(text) => setMassa(text)}
                 value={massa}
               />
             </View>}
           <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
-            <TouchableOpacity onPress={() => setShowRep(!showRep)} onLongPress={() => addMaxRep()}>
-              {!showRep ? <Icon name='plus' size={24} /> : <Icon name='plus' size={40} />}
+            <TouchableOpacity onLongPress={() => addMaxRep()}>
+              {!showRep ?             
+              <FAB
+              style={styles({ spacing }).addNewSet}
+              icon="plus"
+              size="small"
+              onPress={() => setShowRep(!showRep)}
+            /> : 
+            <FAB
+            style={styles({ spacing }).addNewSet}
+            icon="minus"
+            size="small"
+            onPress={() => setShowRep(!showRep)}
+          />
+          }
             </TouchableOpacity>
-            <Text>Lisää liike</Text>
+            <TouchableOpacity style = {[styles({ colors, spacing }).button, {padding: 8, width: "33%"}]} onPress = {() => addMaxRep()}>
+              <Text>Lisää liike</Text>
+            </TouchableOpacity>
+            {updateMaxList && 
+            <TouchableOpacity 
+            style = {[styles({ colors, spacing }).button, {padding: 8, width: "33%", backgroundColor: "red"}]}
+            onPress = {() => maxRepUpdate()}
+            >
+              <Text>Päivitä</Text>
+            </TouchableOpacity> }
           </View>
         </View>
       </ScrollView>
+      <OneRepMaxInfo modalVisible={modalVisible} setModalVisible={setModalVisible}/>
     </SafeAreaView>
   );
 }
@@ -511,9 +638,12 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center"
   },
   oneRepMaxHeadline: {
     flexDirection: 'row',
+    width: "90%",
     justifyContent: 'space-evenly',
     alignItems: 'center',
     margin: 8
@@ -528,5 +658,36 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
   },
   fab: {
     elevation: 2,
-  }
+  }, 
+  oneRepMaxs: {
+    flexDirection: "row", 
+    alignItems: "center", 
+    justifyContent: "space-around",
+    borderBottomWidth: 1,
+    borderBottomColor: "black",
+    padding: 8,
+    width: "90%"
+  },
+  oneRepMaxInputs: {
+    height: 50,
+    fontSize: 16,
+    padding: 8,
+    textAlign: "center",
+    color: "black",
+    backgroundColor: '#ffffff', 
+    width: '45%', 
+    borderRadius: spacing.medium, 
+    borderColor: "black", 
+    borderWidth: 2
+  },
+  addNewSet: {
+    height: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: spacing.small,
+    borderColor: "black",
+    backgroundColor: "#B8A90B",
+    borderWidth: 1,
+    borderRadius: 0,
+  },
 });
