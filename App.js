@@ -8,6 +8,7 @@ import Login from './screens/Login';
 import MyTabs from './components/MyTabs';
 import MyCustomTheme, { spacing } from './components/MyCustomTheme';
 import Register from './screens/Register';
+import Workout from './screens/Workout';
 const { LightTheme, DarkTheme } = MyCustomTheme;
 
 const Stack = createNativeStackNavigator();
@@ -28,8 +29,10 @@ export default function App(props) {
             <Stack.Screen name="Login">
               {({ navigation }) => <Login setLogged={setLogged} navigation={navigation} />}
             </Stack.Screen>
-
-            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Register">
+              {(props) => <Register {...props} setLogged={setLogged} />}
+            </Stack.Screen>
+            <Stack.Screen name="Workout" component={Workout} />
           </Stack.Navigator>
         )}
       </NavigationContainer>
