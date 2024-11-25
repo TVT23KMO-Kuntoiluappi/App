@@ -124,7 +124,7 @@ export const uploadUserPicture = async (uri) => {
 export const getUserPicture = async () => {
   try {
     if (!auth.currentUser) {
-      throw new Error('Authentication required')
+      throw new Error('Authentication required hööö')
     }
 
     const path = `users/${auth.currentUser.uid}/profile/avatar`

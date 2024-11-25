@@ -56,7 +56,7 @@ export default function AddBox({
                 }
               value={movementName}
               placeholder="Liikkeen nimi"
-              fontSize='20'
+              fontSize={20}
             />
             {/*<FAB style={styles({ spacing }).fab} icon="pencil" size="small" />*/}
             <FAB
