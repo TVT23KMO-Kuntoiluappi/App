@@ -550,7 +550,7 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     justifyContent: "space-evenly",
     marginBottom: 20,
     flexDirection: 'row',
-    margin: 16
+    marginTop: 20
   },
   profileImage: {
     width: 100,
