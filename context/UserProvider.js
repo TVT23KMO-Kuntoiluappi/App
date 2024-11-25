@@ -74,7 +74,7 @@ export default function UserProvider({ children }) {
     try {
       const profPic = await getUserPicture();
       setProfilePic(
-        profPic || require("../screens/images/default-profpic.png")
+        profPic
       );
     } catch (error) {
       console.error("Error fetching profile picture:", error);

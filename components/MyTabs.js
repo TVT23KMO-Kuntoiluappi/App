@@ -20,7 +20,7 @@ const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
   const { colors, spacing } = useTheme()
-  const {profilePic, setProfilePic} = useUser()
+  const {profilePic, setProfilePic, username } = useUser()
 
   return (
     <View style={[styles.bottomNav, { backgroundColor: colors.card }]}>
@@ -32,6 +32,11 @@ function MyTabBar({ state, descriptors, navigation }) {
             : options.title !== undefined
               ? options.title
               : route.name;
+
+        // tarvitaan siihen, että reagoi tapBraButton = null, jotta Asetukset ei näy
+        if (options.tabBarButton) {
+          return options.tabBarButton();
+        }
 
         const isFocused = state.index === index;
 
@@ -82,7 +87,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             onLongPress={onLongPress}
             style={styles.navButton}
           >
-            {route.name === 'Asetukset' ? (
+            {route.name === 'Userpage' ? (
               <Image
                 source={
                   profilePic
@@ -99,7 +104,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             ) : (
               <Icon
                 name={iconName}
-                size={24}
+                size={40}
                 color={isFocused ? colors.primary : colors.text}
               />
             )}
@@ -109,7 +114,7 @@ function MyTabBar({ state, descriptors, navigation }) {
                 { color: isFocused ? colors.primary : colors.text },
               ]}
             >
-              {label}
+              {route.name === 'Userpage' ? username : label}
             </Text>
           </PlatformPressable>
         );
@@ -131,8 +136,8 @@ function MyTabs() {
       <Tab.Screen name="Movement" component={MovementBank} />
       {/*<Tab.Screen name="WorkoutBank" component={WorkoutBank} />*/}
       <Tab.Screen name="Gallery" component={Gallery} />
-      {/*<Tab.Screen name="Userpage" component={UserPage} />*/}
-      <Tab.Screen name="Asetukset" component={UserSettings} options={{ headerShown: true }} />
+      <Tab.Screen name= "Userpage" component={UserPage} />
+      <Tab.Screen name="Asetukset" component={UserSettings} options={{ headerShown: true, tabBarButton: () => null }} />
     </Tab.Navigator>
   );
 }
