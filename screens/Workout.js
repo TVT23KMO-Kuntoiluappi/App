@@ -6,13 +6,15 @@ import {
   TouchableOpacity,
   FlatList,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AddSet from "../components/AddSet";
 import AddBox from "../components/AddBox";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
+import moment from 'moment-timezone';
+
 
 export default function Workout(props) {
   const { spacing } = useTheme();
@@ -28,6 +30,10 @@ export default function Workout(props) {
     },
   ]);
   const [selectedId, setSelectedId] = useState(null);
+
+  const suomenAika = moment()
+    .tz("Europe/Helsinki")
+    .format("YYYY-MM-DD HH:mm:ss");
 
   //Lisää uusi liikeboxi
   const addBox = () => {
@@ -55,6 +61,57 @@ export default function Workout(props) {
           : movement
       )
     );
+  };
+
+  async function addWorkout(userId, workoutDetails) {
+    const workoutId = suomenAika.replace(/[^a-zA-Z0-9]/g, ':');
+    
+    const userDetailsRef = doc(collection(firestore, `users/${userId}/tallennetuttreenit`), workoutId);
+    try {
+      const workoutData = {
+        movements: workoutDetails,
+        timestamp: suomenAika,
+        workoutName: workoutName
+      }
+
+      await setDoc(userDetailsRef, workoutData);
+      console.log("Treeni lisätty onnistuneesti!");
+    } catch (error) {
+      console.error("Virhe treenin lisäämisessä:", error);
+    }
+  }
+
+  const handleSave = async () => {
+    try {
+      const userId = auth.currentUser.uid
+      try {
+        await addWorkout(userId, data);
+      } catch (error) {
+        console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
+        throw new Error("Tietojen lisääminen epäonnistui.");
+      }
+
+      Alert.alert(
+        "Tallennus onnistui!",
+        "Hienoa!",
+        [{ text: "OK" }]
+      );
+      // Tyhjennä lomakekentät
+      setMovementName("");
+      setWorkoutName("");
+      setData([
+        {
+          id: 1,
+          movementName: "",
+          sets: [{ id: 1, weight: "", reps: "" }],
+        },
+      ]);
+    } catch (error) {
+      console.log("Error saving workout:", error.message);
+
+      // Näytä virheviesti käyttäjälle
+      Alert.alert("Tallennus epäonnistui", error.message, [{ text: "OK" }]);
+    }
   };
 
   return (
@@ -95,9 +152,9 @@ export default function Workout(props) {
           onPress={addBox}
         />
       </View>
-      {/*<TouchableOpacity style={styles({ spacing }).saveButton}>
+      <TouchableOpacity style={styles({ spacing }).saveButton} onPress={handleSave}>
         <Text style={styles({ spacing }).saveButtonText}>Tallenna</Text>
-      </TouchableOpacity>*/}
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -180,10 +237,10 @@ const styles = ({ spacing }) =>
     },
     saveButton: {
       position: "absolute",
-      bottom: 40,
+      bottom: 20,
       borderWidth: 2,
       borderColor: "black",
-      padding: spacing.large,
+      padding: spacing.medium,
       borderRadius: 50,
       backgroundColor: "#B8A90B",
     },

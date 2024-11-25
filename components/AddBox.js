@@ -45,7 +45,7 @@ export default function AddBox({
           <View style={styles({ spacing }).workoutMovementName}>
             <TextInput
               style={styles({ spacing }).text}
-              maxLength={20}
+              maxLength={40}
               onChangeText={(text) => 
                 setData((prevData) => 
                   prevData.map((item) =>
@@ -56,8 +56,9 @@ export default function AddBox({
                 }
               value={movementName}
               placeholder="Liikkeen nimi"
+              fontSize='20'
             />
-            <FAB style={styles({ spacing }).fab} icon="pencil" size="small" />
+            {/*<FAB style={styles({ spacing }).fab} icon="pencil" size="small" />*/}
             <FAB
               style={styles({ spacing }).fab2}
               icon="trending-up"
@@ -137,11 +138,12 @@ const styles = ({ spacing }) =>
       borderRadius: 20,
     },
     workoutMovementName: {
-      width: "95%",
+      width: "100%",
       flexDirection: "row",
+      justifyContent: 'space-between',
       borderBottomColor: "black",
       borderBottomWidth: 0.5,
-      padding: 5,
+      padding: 2,
     },
     setBox: {
       flexDirection: "row",
