@@ -173,7 +173,7 @@ const styles = ({ spacing }) =>
       backgroundColor: "#B8A90B",
     },
     saveButtonText: {
-      fontSize: 24//spacing.large.toString(),
+      fontSize: 24
     },
     addNewSetView: {
       flexDirection: "row",

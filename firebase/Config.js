@@ -114,8 +114,7 @@ export const uploadUserPicture = async (uri) => {
     }
     
     await uploadBytes(storageRef, blob, metadata)
-    const url = await getDownloadURL(storageRef)
-    
+    return await getDownloadURL(storageRef)
   } catch (error) {
     throw error
   }
