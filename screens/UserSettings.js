@@ -550,7 +550,8 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: "space-evenly",
     marginBottom: 20,
-    marginTop: 20,
+    flexDirection: 'row',
+    marginTop: 20
   },
   profileImage: {
     width: 100,
