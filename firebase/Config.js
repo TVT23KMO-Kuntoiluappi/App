@@ -13,6 +13,7 @@ import {
   setDoc,
   getDoc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore"
 import {
   initializeAuth,
@@ -20,6 +21,8 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  updateProfile,
+  updateEmail
 } from "firebase/auth"
 import {
   getStorage,
@@ -40,7 +43,7 @@ import {
 } from "@env"
 
 const firebaseConfig = {
-  apiKey: API_KEY,
+  apiKey: /*process.env.*/API_KEY,
   authDomain: AUTH_DOMAIN,
   projectId: PROJECT_ID,
   storageBucket: STORAGE_BUCKET,
@@ -165,4 +168,7 @@ export {
   listAll,
   deleteObject,
   getMetadata,
+  updateProfile,
+  updateDoc,
+  updateEmail,
 }
