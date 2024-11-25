@@ -14,26 +14,13 @@ import WorkoutBank from '../screens/WorkoutBank'
 import { getUserPicture } from '../firebase/Config';
 import { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
+import { useUser } from '../context/UseUser';
 
 const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
   const { colors, spacing } = useTheme()
-  const [profilePic, setProfilePic] = useState(null)
-
-  const fetchProfilePicture = async () => {
-    try {
-      const profPic = await getUserPicture();
-      console.log('Profile Picture URI:', profPic)
-      setProfilePic(profPic);
-    } catch (error) {
-      console.error('Error fetching profile picture:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProfilePicture();
-  }, []);
+  const {profilePic, setProfilePic} = useUser()
 
   return (
     <View style={[styles.bottomNav, { backgroundColor: colors.card }]}>

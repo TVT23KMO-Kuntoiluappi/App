@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Pressable,
-  Alert,
+  Alert
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -14,21 +14,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AddBox from "../components/AddBox";
 import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
 import moment from 'moment-timezone';
-
+import NavBar from "../components/NavBar";
+import { useUser } from "../context/UseUser";
 
 export default function Workout(props) {
   const { spacing } = useTheme();
-  const [workoutName, setWorkoutName] = useState("");
-  const [movementName, setMovementName] = useState("");
-  const [weights, setWeights] = useState("");
-  const [reps, seReps] = useState("");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      movementName: "",
-      sets: [{ id: 1, weight: "", reps: "" }],
-    },
-  ]);
+  const { workoutName, setWorkoutName, data, setData,
+    movementName, setMovementName
+   } = useUser()
   const [selectedId, setSelectedId] = useState(null);
 
   const suomenAika = moment()

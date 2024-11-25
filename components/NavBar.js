@@ -1,6 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import React from 'react'
 import { Appbar, useTheme } from 'react-native-paper'
+
+const screenHeight = Dimensions.get("window").height
+const navbarHeight = screenHeight * 0.1
 
 export default function NavBar(props) {
   const { colors, spacing } = useTheme()
@@ -24,7 +27,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         position: 'absolute',
-        height: '10%',
+        height: navbarHeight,
         borderColor: 'grey',
         borderWidth: 1,
         backgroundColor: '#EFF5D5'

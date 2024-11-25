@@ -9,72 +9,31 @@ import { auth, storage } from '../firebase/Config';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import Ionicons from '@expo/vector-icons/Ionicons'
 import OneRepMaxInfo from '../components/OneRepMaxInfo';
+import { useUser } from '../context/UseUser';
 
 export default function UserSettings() {
+  const { fname, setFname, lname, setLname, 
+    username, setUsername, email, setEmail, 
+    password, setPassword, weight, setWeight, 
+    height, setHeight, profilePic, setProfilePic,
+    oneRepMax, setOneRepMax } = useUser()
+
   const { colors, spacing } = useTheme()
-  const [fname, setFname] = useState("")
-  const [lname, setLname] = useState("")
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [weight, setWeight] = useState("")
-  const [height, setHeight] = useState("")
   const [edit, setEdit] = useState(false)
   const [cameraOrLoad, setCameraOrLoad] = useState(true)
   const [loading, setLoading] = useState(true)
   const [images, setImages] = useState([]);
-  const [profilePic, setProfilePic] = useState(null)
   const [fnameEditable, setFnameEditable] = useState(false);
   const [lnameEditable, setLnameEditable] = useState(false);
   const [usernameEditable, setUsernameEditable] = useState(false)
   const [emailEditable, setEmailEditable] = useState(false)
   const [weightEditable, setWeightEditable] = useState(false)
   const [heightEditable, setHeightEditable] = useState(false)
-  const [oneRepMax, setOneRepMax] = useState([])
   const [showRep, setShowRep] = useState(false)
   const [updateMaxList, setUpdateMaxList] = useState(false)
   const [liike, setLiike] = useState("")
   const [massa, setMassa] = useState("")
   const [modalVisible, setModalVisible] = useState(false);
-
-  const getUserData = async () => {
-    try {
-      const userId = auth.currentUser.uid; 
-      const docRef = doc(firestore, `users/${userId}/omattiedot/perustiedot`);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log("Dokumentti haettu:", docSnap.data());
-        const userData = docSnap.data();
-        setFname(userData.firstName || "");
-        setLname(userData.lastName || "");
-        setUsername(userData.username || "");
-        setWeight(userData.weight || "");
-        setHeight(userData.height || "");
-        setEmail(auth.currentUser.email || "")
-      } else {
-        console.log("Dokumenttia ei löytynyt!");
-      }
-    } catch (error) {
-      console.error("Virhe käyttäjätietojen hakemisessa:", error);
-    }
-  };
-
-  const getOneRepMax = async () => {
-    try {
-      const userId = auth.currentUser.uid
-      const docRef = doc(firestore, `users/${userId}/omattiedot/nostomaksimit`);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()){
-        console.log("Dokumentti haettu:", docSnap.data());
-        const userData = docSnap.data();
-        setOneRepMax(userData.oneRepMaxList)
-      } else {
-        console.log("Dokumenttia ei löytynyt")
-      }
-    } catch (error) {
-      console.log("virhe nostomaksimien hakemisessa: ", error)
-    }
-  }
 
   const updateUserData = async (userDetails) => {
     const userId = auth.currentUser.uid; 
@@ -120,7 +79,7 @@ export default function UserSettings() {
       console.log("Virhe päivitettäessä käyttäjätietoja:", error.message);
     }
   };
-  
+
   const fetchProfilePicture = async () => {
     try {
       const profPic = await getUserPicture();
@@ -129,13 +88,7 @@ export default function UserSettings() {
       console.error('Error fetching profile picture:', error);
     }
   }
-
-  useEffect(() => {
-    fetchProfilePicture()
-    getUserData()
-    getOneRepMax()
-  }, [])
-
+  
   const handlePickImage = async () => {
     setLoading(true)
     try {
