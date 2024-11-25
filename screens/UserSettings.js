@@ -531,12 +531,12 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     height: '100%',
     flexDirection: 'column',
     alignItems: "center",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   containerScroll: {
     flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   presonalSettings: {
     alignItems: 'center',
@@ -546,11 +546,11 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
   },
   changeProfpic: {
     width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: "space-evenly",
     marginBottom: 20,
-    flexDirection: 'row',
-    margin: 16
+    marginTop: 20,
   },
   profileImage: {
     width: 100,
@@ -559,15 +559,15 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     marginBottom: 10,
   },
   editProfile: {
-    margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '90%'
+    width: '100%'
   },
   editLine: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    
   },
   info: {
     flexDirection: 'row',
@@ -631,7 +631,7 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
   },
   addOneRepMax: {
     borderRadius: 8,
-    width: "90%",
+    width: "95%",
     backgroundColor: '#EFF5D5',
     margin: 5,
     padding: 5,
@@ -639,7 +639,7 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   oneRepMaxHeadline: {
     flexDirection: 'row',
