@@ -15,26 +15,26 @@ import MyCustomTheme from "../components/MyCustomTheme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AddSet from "./AddSet";
 
-export default function AddBox({
-  movementName,
-  setData,
-  movement,
-}) {
+export default function AddBox({ movementName, setData, movement }) {
   const { spacing } = useTheme();
 
   const addRow = () => {
     setData((prevData) =>
-      prevData.map((item) => 
-        item.id === movement.id? {
-        ...item,
-        sets: [
-          ...item.sets,
-          {
-            id: item.sets.length + 1, weight: '', reps: ''
-          }
-        ],
-      } : item
-    )
+      prevData.map((item) =>
+        item.id === movement.id
+          ? {
+              ...item,
+              sets: [
+                ...item.sets,
+                {
+                  id: item.sets.length + 1,
+                  weight: "",
+                  reps: "",
+                },
+              ],
+            }
+          : item
+      )
     );
   };
 
@@ -46,14 +46,15 @@ export default function AddBox({
             <TextInput
               style={styles({ spacing }).text}
               maxLength={40}
-              onChangeText={(text) => 
-                setData((prevData) => 
+              onChangeText={(text) =>
+                setData((prevData) =>
                   prevData.map((item) =>
                     item.id === movement.id
-                      ? {...item, movementName: text }
-                    : item)
+                      ? { ...item, movementName: text }
+                      : item
                   )
-                }
+                )
+              }
               value={movementName}
               placeholder="Liikkeen nimi"
               fontSize={20}
@@ -74,11 +75,7 @@ export default function AddBox({
             keyExtractor={(item) => `${movement.id}-set-${item.id}`}
             extraData={movement.sets}
             renderItem={({ item }) => (
-              <AddSet
-                set={item}
-                movementId={movement.id}
-                setData={setData}
-              />
+              <AddSet set={item} movementId={movement.id} setData={setData} />
             )}
           />
           <View style={styles({ spacing }).addNewSetView}>
@@ -140,7 +137,7 @@ const styles = ({ spacing }) =>
     workoutMovementName: {
       width: "100%",
       flexDirection: "row",
-      justifyContent: 'space-between',
+      justifyContent: "space-between",
       borderBottomColor: "black",
       borderBottomWidth: 0.5,
       padding: 2,
@@ -176,7 +173,7 @@ const styles = ({ spacing }) =>
       backgroundColor: "#B8A90B",
     },
     saveButtonText: {
-      fontSize: spacing.large,
+      fontSize: 24
     },
     addNewSetView: {
       flexDirection: "row",

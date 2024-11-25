@@ -238,6 +238,6 @@ const styles = ({ spacing }) =>
       backgroundColor: "#B8A90B",
     },
     saveButtonText: {
-      fontSize: spacing.large,
+      fontSize: 20,
     },
   });

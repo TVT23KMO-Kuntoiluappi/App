@@ -10,6 +10,7 @@ import { Image } from 'expo-image'
 import GalleryHeader from '../components/GalleryHeader'
 import GalleryMenu from '../components/GalleryMenu'
 import GalleryImage from '../components/GalleryImage'
+import Loading from '../components/Loading'
 
 export default function Gallery() {
   const { fname, lname, username, weight, height, profilePic } = useUser()
@@ -155,7 +156,7 @@ export default function Gallery() {
   }
 
   const handleDeleteImage = async (path) => {
-    setIsDeleting(true)
+    setLoading(true)
     try {
       const imageRef = ref(storage, path)
       await deleteObject(imageRef)
@@ -164,7 +165,7 @@ export default function Gallery() {
     } catch (error) {
       console.error('Delete failed:', error)
     } finally {
-      setIsDeleting(false)
+      setLoading(false)
     }
   }
 
@@ -316,6 +317,7 @@ export default function Gallery() {
         onDelete={handleDeleteImage}
         isDeleting={isDeleting}
       />
+      {loading && <Loading />}
     </SafeAreaView>
   )
 }
