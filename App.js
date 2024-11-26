@@ -9,6 +9,7 @@ import MyTabs from './components/MyTabs';
 import MyCustomTheme, { spacing } from './components/MyCustomTheme';
 import Register from './screens/Register';
 import Workout from './screens/Workout';
+import UserProvider from './context/UserProvider';
 const { LightTheme, DarkTheme } = MyCustomTheme;
 
 const Stack = createNativeStackNavigator();
@@ -19,24 +20,26 @@ export default function App(props) {
 
   const theme = useMemo(() => (isDark ? DarkTheme : LightTheme), [isDark])
 
-    return (
+  return (
+    <UserProvider>
       <PaperProvider theme={theme}>
-        <NavigationContainer theme ={theme} >
-        {logged ? ( 
-          <MyTabs />
-        ) : (
-          <Stack.Navigator>
-            <Stack.Screen name="Login">
-              {({ navigation }) => <Login setLogged={setLogged} navigation={navigation} />}
-            </Stack.Screen>
-            <Stack.Screen name="Register">
-              {(props) => <Register {...props} setLogged={setLogged} />}
-            </Stack.Screen>
-            <Stack.Screen name="Workout" component={Workout} />
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
-    </PaperProvider>
+        <NavigationContainer theme={theme} >
+          {logged ? (
+            <MyTabs />
+          ) : (
+            <Stack.Navigator>
+              <Stack.Screen name="Login">
+                {({ navigation }) => <Login setLogged={setLogged} navigation={navigation} />}
+              </Stack.Screen>
+              <Stack.Screen name="Register">
+                {(props) => <Register {...props} setLogged={setLogged} />}
+              </Stack.Screen>
+              <Stack.Screen name="Workout" component={Workout} />
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
+      </PaperProvider>
+    </UserProvider>
   );
 }
 

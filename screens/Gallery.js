@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { StyleSheet, View, Animated, StatusBar, FlatList, Modal, Pressable, ActivityIndicator } from 'react-native'
 import { useTheme, IconButton, FAB } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useUser } from '../context/UseUser'
 import { auth, storage, ref, uploadBytes, getDownloadURL, deleteObject, listAll, getMetadata } from '../firebase/Config'
 import * as ImagePicker from 'expo-image-picker'
 import { Image } from 'expo-image'
@@ -9,8 +10,10 @@ import { Image } from 'expo-image'
 import GalleryHeader from '../components/GalleryHeader'
 import GalleryMenu from '../components/GalleryMenu'
 import GalleryImage from '../components/GalleryImage'
+import Loading from '../components/Loading'
 
 export default function Gallery() {
+  const { fname, lname, username, weight, height, profilePic } = useUser()
   const { colors, spacing } = useTheme()
   const [loading, setLoading] = useState(true)
   const [images, setImages] = useState([])
@@ -153,7 +156,7 @@ export default function Gallery() {
   }
 
   const handleDeleteImage = async (path) => {
-    setIsDeleting(true)
+    setLoading(true)
     try {
       const imageRef = ref(storage, path)
       await deleteObject(imageRef)
@@ -162,7 +165,7 @@ export default function Gallery() {
     } catch (error) {
       console.error('Delete failed:', error)
     } finally {
-      setIsDeleting(false)
+      setLoading(false)
     }
   }
 
@@ -314,6 +317,7 @@ export default function Gallery() {
         onDelete={handleDeleteImage}
         isDeleting={isDeleting}
       />
+      {loading && <Loading />}
     </SafeAreaView>
   )
 }

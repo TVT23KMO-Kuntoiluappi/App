@@ -16,7 +16,6 @@ export default function Register({setLogged}) {
   const { colors, spacing } = useTheme();
   const [pwLength, setPwLength] = useState(false)
 
-
   // Laittaa users collectioniin userId:llä omattiedot-lansioon
   async function addUserDetails(userId, userDetails) {
     const userDetailsRef = doc(collection(firestore, `users/${userId}/omattiedot`), "perustiedot");
