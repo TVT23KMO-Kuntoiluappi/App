@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   FlatList,
   Pressable,
+  Dimensions,
   Alert,
   KeyboardAvoidingView,
-  Dimensions
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -16,10 +16,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AddBox from "../components/AddBox";
 import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
 import moment from 'moment-timezone';
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 import NavBar from "../components/NavBar";
 import { useUser } from "../context/UseUser";
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export default function Workout(props) {
   const { spacing } = useTheme();
