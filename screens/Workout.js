@@ -7,11 +7,17 @@ import {
   FlatList,
   Pressable,
 <<<<<<< HEAD
+<<<<<<< HEAD
   Alert,
   KeyboardAvoidingView,
   Dimensions
 =======
   Alert
+>>>>>>> main
+=======
+  Alert,
+  KeyboardAvoidingView,
+  Dimensions
 >>>>>>> main
 } from "react-native";
 import React, { useState } from "react";
@@ -21,9 +27,16 @@ import AddBox from "../components/AddBox";
 import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
 import moment from 'moment-timezone';
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 =======
+import NavBar from "../components/NavBar";
+import { useUser } from "../context/UseUser";
+>>>>>>> main
+=======
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 import NavBar from "../components/NavBar";
 import { useUser } from "../context/UseUser";
 >>>>>>> main

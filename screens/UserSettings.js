@@ -515,6 +515,7 @@ export default function UserSettings() {
                   <Ionicons name="trash" size={24} />
                 </TouchableOpacity>
                 <Text>{item.move}</Text>
+                <View style = {{flexDirection: "row", width: "50%", justifyContent: "space-between"}}>
                 <TouchableOpacity
                   onPress={() => changeKilos(index, "subtract")}
                 >
@@ -524,6 +525,7 @@ export default function UserSettings() {
                 <TouchableOpacity onPress={() => changeKilos(index, "add")}>
                   <Icon name="plus" size={24} />
                 </TouchableOpacity>
+                </View>
               </View>
             ))}
 
@@ -571,15 +573,15 @@ export default function UserSettings() {
                 />
               )}
             </TouchableOpacity>
-            <TouchableOpacity
+            {showRep && <TouchableOpacity
               style={[
                 styles({ colors, spacing }).button,
                 { padding: 8, width: "33%" },
               ]}
               onPress={() => addMaxRep()}
-            >
+            > 
               <Text>Lisää liike</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
             {updateMaxList && (
               <TouchableOpacity
                 style={[
@@ -741,7 +743,7 @@ const styles = ({ colors, spacing }) =>
     oneRepMaxs: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
       borderBottomWidth: 1,
       borderBottomColor: "black",
       padding: 8,
