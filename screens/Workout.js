@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   FlatList,
   Pressable,
-  Alert
+  Alert,
+  KeyboardAvoidingView,
+  Dimensions
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -14,6 +16,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AddBox from "../components/AddBox";
 import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
 import moment from 'moment-timezone';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 import NavBar from "../components/NavBar";
 import { useUser } from "../context/UseUser";
 
@@ -158,6 +162,7 @@ const styles = ({ spacing }) =>
       height: "100%",
       alignItems: "center",
       marginTop: spacing.medium,
+      
     },
     workoutNameInput: {
       flexDirection: "row",
@@ -166,7 +171,6 @@ const styles = ({ spacing }) =>
       justifyContent: "center",
       textAlign: "center",
       padding: 5,
-      marginBottom: 10,
       borderColor: "black",
       borderWidth: 2,
       borderRadius: 20,

@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
         height: navbarHeight,
         borderColor: 'grey',
         borderWidth: 1,
-        backgroundColor: '#EFF5D5'
+        backgroundColor: '#EFF5D5',
     },
 })
