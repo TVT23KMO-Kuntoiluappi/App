@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     position: "absolute",
-    height: navbarHeight,
+    height: '10%',
     borderColor: "grey",
     borderWidth: 1,
     backgroundColor: "#EFF5D5",

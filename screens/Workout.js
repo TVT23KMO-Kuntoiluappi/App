@@ -19,10 +19,13 @@ import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../
 import moment from 'moment-timezone';
 import NavBar from "../components/NavBar";
 import { useUser } from "../context/UseUser";
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export default function Workout(props) {
+  const tabBarHeight = useBottomTabBarHeight()
   const { spacing } = useTheme();
   const { workoutName, setWorkoutName, data, setData,
     movementName, setMovementName
@@ -113,61 +116,66 @@ export default function Workout(props) {
   };
 
   return (
-    <SafeAreaView>
+    <View style={[styles({ spacing }).page, { height: "100%"}]}>
       <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"} 
-        style={styles({ spacing }).container}
-      >
-      <View style={styles({ spacing }).workoutNameInput}>
-        <TextInput
-          style={styles({ spacing }).text}
-          maxLength={40}
-          onChangeText={(text) => setWorkoutName(text)}
-          value={workoutName}
-          placeholder="Treeni 1"
-        />
-        <FAB style={styles({ spacing }).fab} icon="pencil" size="small" />
-      </View>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        extraData={data}
-        renderItem={({ item }) => (
-          <AddBox
-            movement={item}
-            data={data}
-            updateSet={updateSet}
-            setData={setData}
-            selectedId={selectedId}
+          behavior={Platform.OS === "ios" ? "padding" : "height"} 
+          style={[styles({ spacing }).container]}
+        >
+        <View style={styles({ spacing }).workoutNameInput}>
+          <TextInput
+            style={styles({ spacing }).text}
+            maxLength={40}
+            onChangeText={(text) => setWorkoutName(text)}
+            value={workoutName}
+            placeholder="Treeni 1"
           />
-        )}
-      />
-      <View style={styles({ spacing }).addBox}>
-        <FAB
-          style={{
-            backgroundColor: "#B8A90B",
-            borderWidth: 1,
-            borderColor: "black",
-          }}
-          icon="plus"
-          size="medium"
-          onPress={addBox}
+          <FAB style={styles({ spacing }).fab} icon="pencil" size="small" />
+        </View>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id.toString()}
+          extraData={data}
+          renderItem={({ item }) => (
+            <AddBox
+              movement={item}
+              data={data}
+              updateSet={updateSet}
+              setData={setData}
+              selectedId={selectedId}
+            />
+          )}
         />
-      </View>
-      <TouchableOpacity style={styles({ spacing }).saveButton} onPress={handleSave}>
-        <Text style={styles({ spacing }).saveButtonText}>Tallenna</Text>
-      </TouchableOpacity>
+        <View style={styles({ spacing }).addBox}>
+          <FAB
+            style={{
+              backgroundColor: "#B8A90B",
+              borderWidth: 1,
+              borderColor: "black",
+            }}
+            icon="plus"
+            size="medium"
+            onPress={addBox}
+          />
+        </View>
+        
+        <TouchableOpacity style={styles({ spacing }).saveButton} onPress={handleSave}>
+          <Icon name = "content-save" size = {24} color = "black" />
+        </TouchableOpacity>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 const styles = ({ spacing }) =>
   StyleSheet.create({
+    page: {
+      paddingTop: '5%'
+    },
     container: {
-      height: '90%',
-      width: screenWidth,
+      width: '100%',
+      height: "100%",
       alignItems: "center",
       marginTop: spacing.medium,
+      paddingBottom: '5%'
     },
     workoutNameInput: {
       flexDirection: "row",
@@ -234,16 +242,17 @@ const styles = ({ spacing }) =>
       justifyContent: 'center',
       alignSelf: 'center',
       position: 'absolute',
-      bottom: '3%',
+      bottom: '4%',
       right: '7%'
     },
     saveButton: {
       position: "absolute",
-      bottom: 20,
-      borderWidth: 2,
+      bottom: '4%',
+      right: '25%',
+      borderWidth: 1,
       borderColor: "black",
       padding: spacing.medium,
-      borderRadius: 50,
+      borderRadius: 15,
       backgroundColor: "#B8A90B",
     },
     saveButtonText: {
