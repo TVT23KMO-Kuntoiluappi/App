@@ -114,8 +114,7 @@ export const uploadUserPicture = async (uri) => {
     }
     
     await uploadBytes(storageRef, blob, metadata)
-    const url = await getDownloadURL(storageRef)
-    
+    return await getDownloadURL(storageRef)
   } catch (error) {
     throw error
   }
@@ -124,7 +123,7 @@ export const uploadUserPicture = async (uri) => {
 export const getUserPicture = async () => {
   try {
     if (!auth.currentUser) {
-      throw new Error('Authentication required')
+      throw new Error('Authentication required hööö')
     }
 
     const path = `users/${auth.currentUser.uid}/profile/avatar`

@@ -18,20 +18,14 @@ import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../
 import moment from 'moment-timezone';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+import NavBar from "../components/NavBar";
+import { useUser } from "../context/UseUser";
 
 export default function Workout(props) {
   const { spacing } = useTheme();
-  const [workoutName, setWorkoutName] = useState("");
-  const [movementName, setMovementName] = useState("");
-  const [weights, setWeights] = useState("");
-  const [reps, seReps] = useState("");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      movementName: "",
-      sets: [{ id: 1, weight: "", reps: "" }],
-    },
-  ]);
+  const { workoutName, setWorkoutName, data, setData,
+    movementName, setMovementName
+   } = useUser()
   const [selectedId, setSelectedId] = useState(null);
 
   const suomenAika = moment()
@@ -248,6 +242,6 @@ const styles = ({ spacing }) =>
       backgroundColor: "#B8A90B",
     },
     saveButtonText: {
-      fontSize: spacing.large,
+      fontSize: 20,
     },
   });
