@@ -18,7 +18,9 @@ export default function AddSet({
       prevdata.map((movement) => 
         movement.id === movementId ? {
           ...movement,
-          sets: movement.sets.filter((set) => set.id !== setId),
+          sets: movement.sets
+            .filter((set) => set.id !== setId)
+            .map((set, index) => ({ ...set, id: index + 1}))
         }
         : movement
       )
@@ -70,7 +72,7 @@ export default function AddSet({
             }}
           />
           <Pressable onPress={() => removeItem(set.id)}>
-            <Ionicons name="trash" size={24} />
+            <Ionicons name="trash" size={24}/>
           </Pressable>
         </View>
     </>
