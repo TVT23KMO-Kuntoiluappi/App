@@ -3,10 +3,10 @@ import {
   Text,
   View,
   TextInput,
-  TouchableOpacity,
-  Pressable,
   FlatList,
-  ScrollView,
+  KeyboardAvoidingView,
+  Platform, 
+  Pressable
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -38,9 +38,17 @@ export default function AddBox({ movementName, setData, movement }) {
     );
   };
 
+  const removeBox = (movementId) => {
+    setData((prevdata) => 
+      prevdata
+        .filter((movement) => movement.id !== movementId)
+        .map((movement, index) => ({ ...movement, id: index + 1 }))
+    )
+  }
+
   return (
     <>
-      <View style={styles({ spacing }).container}>
+      <KeyboardAvoidingView behavior="padding" style={styles({ spacing }).container}>
         <View style={styles({ spacing }).workoutMovementBox}>
           <View style={styles({ spacing }).workoutMovementName}>
             <TextInput
@@ -86,9 +94,17 @@ export default function AddBox({ movementName, setData, movement }) {
               onPress={() => addRow(movement.id)}
             />
             <Text>Lisää uusi sarja</Text>
+            
           </View>
+            <Pressable 
+              style={styles({ spacing }).removeBox} 
+              onPress={() => removeBox(movement.id)}
+            >
+              <Ionicons name="trash" size={24} />
+              <Text>Poista liike</Text>
+            </Pressable>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </>
   );
 }
@@ -96,9 +112,10 @@ export default function AddBox({ movementName, setData, movement }) {
 const styles = ({ spacing }) =>
   StyleSheet.create({
     container: {
+      flex: 1,
       width: "100%",
       alignItems: "center",
-      marginTop: spacing.medium,
+      marginTop: spacing.small,
     },
     workoutNameInput: {
       flexDirection: "row",
@@ -163,6 +180,18 @@ const styles = ({ spacing }) =>
     addBox: {
       marginTop: 35,
     },
+    removeBox: {
+      width: '35%',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      flexDirection: 'row',
+      marginTop: 20,
+      padding: 3,
+      backgroundColor: '#ff575c',
+      borderColor: 'black',
+      borderWidth: 1,
+      borderRadius: 10
+    },
     saveButton: {
       position: "absolute",
       bottom: 40,
@@ -173,7 +202,7 @@ const styles = ({ spacing }) =>
       backgroundColor: "#B8A90B",
     },
     saveButtonText: {
-      fontSize: 24
+      fontSize: 24,
     },
     addNewSetView: {
       flexDirection: "row",

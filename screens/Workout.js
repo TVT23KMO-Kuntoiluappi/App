@@ -9,6 +9,7 @@ import {
   Dimensions,
   Alert,
   KeyboardAvoidingView,
+  Platform
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -112,7 +113,11 @@ export default function Workout(props) {
   };
 
   return (
-    <SafeAreaView style={styles({ spacing }).container}>
+    <SafeAreaView>
+      <KeyboardAvoidingView 
+        behavior="padding" 
+        style={styles({ spacing }).container}
+      >
       <View style={styles({ spacing }).workoutNameInput}>
         <TextInput
           style={styles({ spacing }).text}
@@ -152,17 +157,17 @@ export default function Workout(props) {
       <TouchableOpacity style={styles({ spacing }).saveButton} onPress={handleSave}>
         <Text style={styles({ spacing }).saveButtonText}>Tallenna</Text>
       </TouchableOpacity>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 const styles = ({ spacing }) =>
   StyleSheet.create({
     container: {
-      width: "100%",
-      height: "100%",
+      height: '100%',
+      width: screenWidth,
       alignItems: "center",
       marginTop: spacing.medium,
-      
     },
     workoutNameInput: {
       flexDirection: "row",
@@ -229,7 +234,7 @@ const styles = ({ spacing }) =>
       justifyContent: 'center',
       alignSelf: 'center',
       position: 'absolute',
-      bottom: '7%',
+      bottom: '3%',
       right: '7%'
     },
     saveButton: {
