@@ -115,7 +115,7 @@ export default function Workout(props) {
   return (
     <SafeAreaView>
       <KeyboardAvoidingView 
-        behavior="padding" 
+        behavior={Platform.OS === "ios" ? "padding" : "height"} 
         style={styles({ spacing }).container}
       >
       <View style={styles({ spacing }).workoutNameInput}>
@@ -164,7 +164,7 @@ export default function Workout(props) {
 const styles = ({ spacing }) =>
   StyleSheet.create({
     container: {
-      height: '100%',
+      height: '90%',
       width: screenWidth,
       alignItems: "center",
       marginTop: spacing.medium,
