@@ -34,7 +34,7 @@ export default function AddSet({
           <TextInput
             style={styles({ spacing }).setBoxTextInput}
             maxLength={20}
-            placeholder="Esim 10kg"
+            placeholder="Esim 10"
             value={set.weight}
             onChangeText={(text) => {
               setData((prevData) =>

@@ -175,12 +175,15 @@ function MyTabs() {
 const styles = StyleSheet.create({
   bottomNav: {
     flexDirection: "row",
-    padding: 8,
   },
   navButton: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 8,
+    backgroundColor: '#B8A90B',
+    borderTopColor: 'black',
+    borderTopWidth: 1
   },
   navButtonText: {},
 });

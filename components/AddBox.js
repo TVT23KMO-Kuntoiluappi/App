@@ -66,16 +66,18 @@ export default function AddBox({ movementName, setData, movement }) {
               value={movementName}
               placeholder="Liikkeen nimi"
               fontSize={20}
+              placeholderTextColor={"grey"}
             />
             {/*<FAB style={styles({ spacing }).fab} icon="pencil" size="small" />*/}
             <FAB
-              style={styles({ spacing }).fab2}
+              style={styles({ spacing }).fab}
               icon="trending-up"
               size="small"
+              color="white"
             />
           </View>
           <View style={styles({ spacing }).setBoxInfo}>
-            <Text style={styles({ spacing }).setBoxInfoText}>Sarjapaino</Text>
+            <Text style={styles({ spacing }).setBoxInfoText}>Sarjapaino (kg)</Text>
             <Text style={styles({ spacing }).setBoxInfoText}>Toistomäärä</Text>
           </View>
           <FlatList
@@ -91,17 +93,17 @@ export default function AddBox({ movementName, setData, movement }) {
               style={styles({ spacing }).addNewSet}
               icon="plus"
               size="small"
+              color="white"
               onPress={() => addRow(movement.id)}
             />
             <Text>Lisää uusi sarja</Text>
-            
           </View>
             <Pressable 
               style={styles({ spacing }).removeBox} 
               onPress={() => removeBox(movement.id)}
             >
-              <Ionicons name="trash" size={24} />
-              <Text>Poista liike</Text>
+              <Ionicons name="trash" size={24} color={"white"}/>
+              <Text style={{color: 'white'}}>Poista liike</Text>
             </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -115,20 +117,7 @@ const styles = ({ spacing }) =>
       flex: 1,
       width: "100%",
       alignItems: "center",
-      marginTop: spacing.small,
-    },
-    workoutNameInput: {
-      flexDirection: "row",
-      backgroundColor: "#B8A90B",
-      alignItems: "center",
-      justifyContent: "center",
-      textAlign: "center",
-      padding: 5,
-      marginBottom: 20,
-      borderColor: "black",
-      borderWidth: 2,
-      borderRadius: 20,
-      width: "90%",
+      marginTop: spacing.small * 1.5,
     },
     text: {
       fontSize: 26,
@@ -136,20 +125,17 @@ const styles = ({ spacing }) =>
       textAlign: "center",
     },
     fab: {
-      backgroundColor: "none",
-    },
-    fab2: {
-      backgroundColor: "#B8A90B",
-      borderColor: "black",
-      borderWidth: 1,
+      backgroundColor: "#353536",
+      //borderColor: "black",
+      //borderWidth: 1,
     },
     workoutMovementBox: {
-      width: "95%",
+      width: "97%",
       padding: 15,
-      backgroundColor: "#EFF5D5",
+      backgroundColor: "#c7c7c9",
       borderColor: "black",
-      borderWidth: 2,
-      borderRadius: 20,
+      borderWidth: 1,
+      borderRadius: 5,
     },
     workoutMovementName: {
       width: "100%",
@@ -187,10 +173,10 @@ const styles = ({ spacing }) =>
       flexDirection: 'row',
       marginTop: 20,
       padding: 3,
-      backgroundColor: '#ff575c',
+      backgroundColor: '#a1020f',
       borderColor: 'black',
       borderWidth: 1,
-      borderRadius: 10
+      borderRadius: 5
     },
     saveButton: {
       position: "absolute",
@@ -218,7 +204,7 @@ const styles = ({ spacing }) =>
       alignItems: "center",
       marginRight: spacing.small,
       borderColor: "black",
-      backgroundColor: "#B8A90B",
+      backgroundColor: "#353536",
       borderWidth: 1,
       borderRadius: 0,
     },

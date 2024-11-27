@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useTheme, FAB } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AddBox from "../components/AddBox";
@@ -31,6 +31,7 @@ export default function Workout(props) {
     movementName, setMovementName
    } = useUser()
   const [selectedId, setSelectedId] = useState(null);
+  const flatListRef = useRef();
 
   const suomenAika = moment()
     .tz("Europe/Helsinki")
@@ -46,6 +47,14 @@ export default function Workout(props) {
         sets: [{ id: 1, weight: '', reps: ''}]
       }
     ])
+
+    setTimeout(() => {
+      flatListRef.current?.scrollToIndex({
+        index: data.length - 1,
+        animated: true,
+      });
+    }, 100);
+
   };
 
   // Päivitä sarjat
@@ -128,10 +137,13 @@ export default function Workout(props) {
             onChangeText={(text) => setWorkoutName(text)}
             value={workoutName}
             placeholder="Treeni 1"
+            color='white'
+            placeholderTextColor={'white'}
           />
-          <FAB style={styles({ spacing }).fab} icon="pencil" size="small" />
+          <FAB style={styles({ spacing }).fab} icon="pencil" size="small" color={'white'} />
         </View>
         <FlatList
+          ref={flatListRef}
           data={data}
           keyExtractor={(item) => item.id.toString()}
           extraData={data}
@@ -168,7 +180,8 @@ export default function Workout(props) {
 const styles = ({ spacing }) =>
   StyleSheet.create({
     page: {
-      paddingTop: '5%'
+      paddingTop: '10%',
+      paddingBottom: '4%'
     },
     container: {
       width: '100%',
@@ -179,15 +192,15 @@ const styles = ({ spacing }) =>
     },
     workoutNameInput: {
       flexDirection: "row",
-      backgroundColor: "#B8A90B",
+      backgroundColor: "#353536",
       alignItems: "center",
       justifyContent: "center",
       textAlign: "center",
       padding: 5,
       borderColor: "black",
       borderWidth: 2,
-      borderRadius: 20,
-      width: "90%",
+      borderRadius: 10,
+      width: "95%",
     },
     text: {
       fontSize: 26,
@@ -196,26 +209,6 @@ const styles = ({ spacing }) =>
     },
     fab: {
       backgroundColor: "none",
-    },
-    fab2: {
-      backgroundColor: "#B8A90B",
-      borderColor: "black",
-      borderWidth: 1,
-    },
-    workoutMovementBox: {
-      width: "93%",
-      padding: 15,
-      backgroundColor: "#EFF5D5",
-      borderColor: "black",
-      borderWidth: 2,
-      borderRadius: 20,
-    },
-    workoutMovementName: {
-      width: "95%",
-      flexDirection: "row",
-      borderBottomColor: "black",
-      borderBottomWidth: 0.5,
-      padding: 5,
     },
     setBox: {
       flexDirection: "row",
