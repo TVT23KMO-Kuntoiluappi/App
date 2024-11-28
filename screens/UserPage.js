@@ -1,46 +1,34 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
+import React, { useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useUser } from '../context/UseUser';
-import { Image } from 'expo-image';
-import Loading from '../components/Loading';
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import WorkOutSheets from '../components/WorkOutSheets';
+import WorkOutData from '../components/WorkOutData';
+import ProfileInfo from '../components/ProfileInfo';
 
-export default function UserPage({navigation}) {
-  const { colors, spacing } = useTheme()
-  const { profilePic, fname, lname, username, weight, height } = useUser()
-  const [loading, setLoading] = useState(false);
-  const [bmi, setBmi] = useState((weight/((height/100)*(height/100))).toFixed(2))
+export default function UserPage({ navigation }) {
+  const { colors, spacing } = useTheme();
+
+  // Profiilitiedot - Näytetään ensimmäisenä
+  const profileData = [
+    { key: 'profile', component: <ProfileInfo navigation={navigation} />},
+    { key: 'data', component: <WorkOutData />},
+    // WorkOutSheets - Näytetään alla
+    { key: 'workouts', component: <WorkOutSheets /> },
+    { key: 'paddingCOmponen', component: <View style = {{height: 100}}></View>}
+    
+  ];
 
   return (
     <SafeAreaView style={styles({ colors, spacing }).container}>
-      <ScrollView
-        contentContainerStyle={styles({ colors, spacing }).containerScroll}
-      >
-        <View style={styles({ colors, spacing }).profileInfo}>
-          <View style={{ position: "relative" }}>
-            <Image
-              source={
-                profilePic
-                  ? { uri: profilePic }
-                  : require("./images/default-profpic.png")
-              }
-              style={{ width: 100, height: 100, borderRadius: 50 }}
-            />
-            {loading && <Loading />}
-          </View>
-          <View style = {{height: "100%",width: "50%",alignItems: "flex-start", justifyContent: "space-around"}}>
-            <View><Text>{fname} {lname} ({username})</Text></View>
-            <View><Text>Paino: {weight} kg Pituus: {height} cm</Text></View>
-            <View><Text>Painoindeksi: {bmi}</Text></View>
-          </View>
-          <TouchableOpacity onPress = {() => navigation.navigate("Asetukset")}>
-            <Icon name="cog" size={48} />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      <FlatList
+        data={profileData} 
+        renderItem={({ item }) => <View>{item.component}</View>} 
+        keyExtractor={(item) => item.key}
+        contentContainerStyle={styles({ colors, spacing }).containerScroll} 
+      />
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = ({ colors, spacing }) =>
@@ -63,11 +51,10 @@ const styles = ({ colors, spacing }) =>
     profileInfo: {
       width: "95%",
       height: 100,
-      flexDirection: "column",
+      flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
       marginBottom: 20,
-      flexDirection: "row",
       marginTop: 20,
     },
-  })
+  });

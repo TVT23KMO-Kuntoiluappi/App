@@ -6,8 +6,8 @@ import { auth, signInWithEmailAndPassword, getAuth } from "../firebase/Config";
 
 export default function Login({setLogged, navigation}) {
   const { colors, spacing } = useTheme()
-  const [username, setUsername] = useState('testi@testi.fi')
-  const [password, setPassword] = useState('testing123')
+  const [username, setUsername] = useState('jaakko@posti.com')
+  const [password, setPassword] = useState('Yazga1395')
 
   const login = () => {
     // const auth = getAuth()
