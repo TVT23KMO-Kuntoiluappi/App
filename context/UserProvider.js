@@ -12,6 +12,7 @@ import {
   setDoc,
   collection,
   auth,
+  getDocs,
 } from "../firebase/Config";
 import { UserContext } from "./UserContext";
 import { onAuthStateChanged } from "firebase/auth";
@@ -30,6 +31,7 @@ export default function UserProvider({ children }) {
   const [oneRepMax, setOneRepMax] = useState([]);
   const [workoutName, setWorkoutName] = useState("");
   const [movementName, setMovementName] = useState("");
+  const [workOutFirebaseData, setWorkOutFirebaseData] = useState([])
   const [data, setData] = useState([
     {
       id: 1,
@@ -45,6 +47,7 @@ export default function UserProvider({ children }) {
         getUserData(user.uid);
         fetchProfilePicture();
         getOneRepMax();
+        getWorkOutFirebaseData(user.uid)
       }
       setLoading(false);
     });
@@ -69,6 +72,21 @@ export default function UserProvider({ children }) {
       console.error("Virhe käyttäjätietojen hakemisessa:", error);
     }
   };
+
+  const getWorkOutFirebaseData = async (userId) => {
+    try {
+      const docRef = collection(firestore, `users/${userId}/tallennetuttreenit`);
+      const docSnap = await getDocs(docRef)
+      const workouts = docSnap.docs.map(doc => ({
+        workoutId: doc.id, // Dokumentin ID
+        ...doc.data(), // Dokumentin data
+      }));
+      setWorkOutFirebaseData(workouts)
+      console.log("treenidata: ", workouts)
+    } catch (error) {
+      console.error("Virhe treenidatan hakemisessa: ", error)
+    }
+  }
 
   const fetchProfilePicture = async () => {
     try {
@@ -134,6 +152,7 @@ export default function UserProvider({ children }) {
         setData,
         movementName,
         setMovementName,
+        workOutFirebaseData
       }}
     >
       {children}
