@@ -9,7 +9,6 @@ export default function WorkOutData() {
     const { workOutFirebaseData, oneRepMax } = useUser();
     const [modalVisible, setModalVisible] = useState(false)
     const [index, setIndex] = useState(0)
-    console.log("hep", workOutFirebaseData[6])
 
     function formatTimestamp(timestamp) {
         const [year, month, day, hours, minutes, seconds] = timestamp.split(":");
@@ -35,8 +34,8 @@ export default function WorkOutData() {
                                         <Text>settejä: {movement.sets.length}</Text>
                                     </View>
                                 ))}
-                                {item.movements.length > 5 && (
-                                    <Text style={{ fontStyle: "italic", color: "gray" }}>...näytä lisää:</Text>
+                                {item.movements.length > 4 && (
+                                    <Text style={{ fontStyle: "italic", color: colors.text }}>...näytä lisää:</Text>
                                 )}
                             </View>
                             <TouchableOpacity
@@ -78,7 +77,8 @@ const styles = ({ colors, spacing }) =>
             borderRadius: spacing.small,
             backgroundColor: colors.surface,
             alignItems: "center",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
+            paddingBottom: spacing.small,
             margin: 10
         },
         workOutDetails: {

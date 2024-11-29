@@ -2,9 +2,10 @@ import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from
 import React, { useEffect, useState } from 'react'
 import { useUser } from '../context/UseUser'
 import { LineChart } from 'react-native-chart-kit';
-import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from 'react-native-paper';
+import { Picker } from '@react-native-picker/picker';
+import WorkOutSheetsModal from './WorkOutSheetsModal';
 
 export default function WorkOutSheets() {
     const { colors, spacing } = useTheme()
@@ -22,23 +23,21 @@ export default function WorkOutSheets() {
     const [calculatedMax, setCalculatedMax] = useState([])
     const [maxWeightList, setMaxWeightList] = useState([])
     const [maxPercentage, setMaxPercentage] = useState([])
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
     const [items, setItems] = useState([]);
-    const [open2, setOpen2] = useState(false);
-    const [value2, setValue2] = useState(null);
     const [items2, setItems2] = useState([
         { label: "toistot", value: 1 },
-        { label: "toistos (avg)", value: 2 },
+        { label: "toistot (avg)", value: 2 },
         { label: "paino (sum)", value: 3 },
         { label: "paino (avg)", value: 4 },
         { label: "voimaindeksi", value: 5 },
         { label: "maksimi (calc)", value: 6 },
-        { label: "maksimi (real)", value: 7},
-        { label: "prosentit", value: 8}
+        { label: "maksimi (real)", value: 7 },
+        { label: "prosentit maksimista", value: 8 }
     ]);
+
     const [LineChartWidth, setLineChartWidth] = useState(Dimensions.get('window').width - 40)
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modal2Visible, setModal2Visible] = useState(false);
+    const [selectedValue, setSelectedValue] = useState("java");
 
     const transformWorkouts = (data) => {
         return data.reduce((result, workout) => {
@@ -63,7 +62,6 @@ export default function WorkOutSheets() {
             });
 
             const tempMovementNames = getMovementNames(result)
-            // console.log("movement names: ", tempMovementNames)
             setMovementNames(tempMovementNames)
             return result;
         }, {});
@@ -88,25 +86,20 @@ export default function WorkOutSheets() {
             return;
         }
         const dates = Object.keys(movement);
-        // console.log("dates: ", dates);
         let formatDatesList = []
         for (let date of dates) {
             const format = formatDate(date)
             formatDatesList.push(format)
         }
 
-        console.log("picked dates pituus : ", formatDatesList.length)
         const minWidth = Dimensions.get('window').width - 40;
         const calculatedWidth = Math.max(80 * formatDatesList.length, minWidth);
         setLineChartWidth(calculatedWidth)
-        // console.log("tempMax: ", tempMax)
-        // console.log("formatted: ", formatDatesList)
         setPickedDates(formatDatesList);
 
         let tempMax
         for (let alkio of oneRepMax) {
-            if (alkio.move.toUpperCase()===pickedName) {
-                // console.log("KOODI TOIMII: ", alkio.move, alkio.move.toUpperCase())
+            if (alkio.move.toUpperCase() === pickedName) {
                 tempMax = alkio.mass
             }
         }
@@ -118,7 +111,7 @@ export default function WorkOutSheets() {
         let pwIndexList = []
         let calcMaxList = []
         let maxList = []
-        let maxPercentageList =[]
+        let maxPercentageList = []
         for (let date of dates) {
             const currentData = movement[date]
             if (!currentData || !currentData.sets || !currentData.weight) {
@@ -140,7 +133,7 @@ export default function WorkOutSheets() {
             // laskee voimaindeksin, jossa yhdistään tehtyjen toistojen määrä painojen keskiarvoon
             let x = 0   // alkuarvo, kun selvitetään suurin voimaindexi
             for (let i = 0; i < currentData.sets.length; i++) {
-                const power = currentData.sets[i]*currentData.weight[i]
+                const power = currentData.sets[i] * currentData.weight[i]
                 if (power > x) {
                     x = power
                 }
@@ -150,7 +143,7 @@ export default function WorkOutSheets() {
             // Tekee laskennallisen maksimitoiston tietyltä treenikerralta. Tätä voisi verrata vielä prosentuaalisesti omaan oikaan maksimiin.
             let a = 0
             for (let i = 0; i < currentData.sets.length; i++) {
-                const max = parseFloat(currentData.weight[i])*(1 + parseFloat(currentData.sets[i])/30)
+                const max = parseFloat(currentData.weight[i]) * (1 + parseFloat(currentData.sets[i]) / 30)
                 if (max > a) {
                     a = max
                 }
@@ -167,24 +160,16 @@ export default function WorkOutSheets() {
             }
             maxList.push(parseFloat(y))
             // lasketaan yhden treenikerran maksimin prosenttiosuus kyseisen liikkeen maksimista
-            const maxRepPercentage =  (parseFloat(maxRep) / parseFloat(tempMax))*100
+            const maxRepPercentage = (parseFloat(maxRep) / parseFloat(tempMax)) * 100
             tempMax ? maxPercentageList.push(parseFloat(maxRepPercentage.toFixed(1))) : maxPercentageList.push(0)
         }
-        // console.log("sumSets: ", sumSetsList)
         setPickedSetsSum(sumSetsList)
-        // console.log("avgSets: ", avgSetsList)
         setPickedSetsAvg(avgSetsList)
-        // console.log("sumWeight: ", sumWeightList)
         setPickedWeightSum(sumWeightList)
-        // console.log("avgWeight: ", avgWeightList)
         setPickedWeightAvg(avgWeightList)
-        // console.log("pwIndex: ", pwIndexList)
         setPowerIndex(pwIndexList)
-        // console.log("calcMaxList: ", calcMaxList)
         setCalculatedMax(calcMaxList)
-        // console.log("reaalimaksimi", maxList)
         setMaxWeightList(maxList)
-        // console.log("prosenttiosuus maksimista: ", maxPercentageList)
         setMaxPercentage(maxPercentageList)
     };
 
@@ -195,6 +180,9 @@ export default function WorkOutSheets() {
         if (movementNames.length > 0) {
             const tempList = []
             for (let i = 1; i <= names.length; i++) {
+                if (names[i-1]=== ""){
+                    continue
+                }
                 tempList.push({ label: names[i - 1].toUpperCase(), value: i })
             }
             // console.log("templist: ", tempList)
@@ -207,13 +195,10 @@ export default function WorkOutSheets() {
 
     useEffect(() => {
         itemsToPicker(movementNames)
-        // console.log("onerepmaxlist: ", oneRepMax)
     }, [movementNames])
-
 
     useEffect(() => {
         const data = transformWorkouts(workOutFirebaseData)
-        console.log("muunnettu data ", workOutFirebaseData)
         setWorkOutData(data)
     }, [])
 
@@ -227,9 +212,9 @@ export default function WorkOutSheets() {
         if (!match) {
             throw new Error("Invalid HEX color.");
         }
-    
+
         let r, g, b;
-    
+
         if (hex.length === 7) {
             r = parseInt(hex.slice(1, 3), 16);
             g = parseInt(hex.slice(3, 5), 16);
@@ -239,7 +224,7 @@ export default function WorkOutSheets() {
             g = parseInt(hex[2] + hex[2], 16);
             b = parseInt(hex[3] + hex[3], 16);
         }
-    
+
         return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     }
 
@@ -247,50 +232,39 @@ export default function WorkOutSheets() {
     return (
         <View>
             <View style={styles({ colors, spacing }).headLine}>
-                <Text style = {{marginBottom: spacing.small, fontSize: 24}}>Tilastot</Text>
+                <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Tilastot</Text>
             </View>
             <View style={styles({ colors, spacing }).dropDowns}>
                 <View style={styles({ colors, spacing }).dropdownWrapper}>
-                    <DropDownPicker
-                        open={open}
-                        value={value}
-                        items={items}
-                        setOpen={setOpen}
-                        setValue={setValue}
-                        setItems={setItems}
-                        placeholder="Valitse liike"
-                        listMode="SCROLLVIEW"
-                        style={styles({ colors, spacing }).dropdown}
-                        dropDownContainerStyle={styles({ colors, spacing }).dropdownContainer}
-                        onSelectItem={(item) => {
-                            console.log(item);
-                            setPickedWorkOut(item.label);
-                        }}
-                    />
+                    <Picker
+                        selectedValue={pickedWorkOut}
+                        onValueChange={(itemValue, itemIndex) => setPickedWorkOut(itemValue)}
+                        style={styles({ colors, spacing }).picker}
+                    >
+                        {items.map((item, index)=>(
+                            <Picker.Item key={index} label={item.label} value={item.label} />
+                        ))}
+                        
+                    </Picker>
+ 
                 </View>
                 <View style={styles({ colors, spacing }).dropdownWrapper}>
-                    <DropDownPicker
-                        open={open2}
-                        value={value2}
-                        items={items2}
-                        setOpen={setOpen2}
-                        setValue={setValue2}
-                        setItems={setItems2}
-                        placeholder="valitse data"
-                        listMode="SCROLLVIEW"
-                        style={styles({ colors, spacing }).dropdown}
-                        dropDownContainerStyle={styles({ colors, spacing }).dropdownContainer}
-                        onSelectItem={(item) => {
-                            console.log(item);
-                            setPickedStyle(item.value);
-                        }}
-                    />
+                <Picker
+                        selectedValue={pickedStyle}
+                        onValueChange={(itemValue, itemIndex) => setPickedStyle(itemValue)}
+                        style={styles({ colors, spacing }).picker}
+                    >
+                        {items2.map((item, index)=>(
+                            <Picker.Item key={index} label={item.label} value={item.value} />
+                        ))}
+                        
+                    </Picker>
+
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModal2Visible(true)}>
                     <Icon
                         name="help-circle"
                         size={32}
-                        onPress={() => setModalVisible(true)}
                     />
                 </TouchableOpacity>
             </View>
@@ -315,13 +289,13 @@ export default function WorkOutSheets() {
                                                                 ? powerIndex
                                                                 : pickedStyle == 6
                                                                     ? calculatedMax
-                                                                    : pickedStyle == 7 
+                                                                    : pickedStyle == 7
                                                                         ? maxWeightList
                                                                         : pickedStyle == 8
                                                                             ? maxPercentage
                                                                             : maxPercentage,
-                                        color: (opacity = 1) =>  hexToRgba(colors.text, opacity), // Punainen viiva
-                                        strokeWidth: 4, // Viivan paksuus
+                                        color: (opacity = 1) => hexToRgba(colors.text, opacity), // Punainen viiva
+                                        strokeWidth: 4, 
                                     },
                                 ],
                             }}
@@ -332,8 +306,8 @@ export default function WorkOutSheets() {
                                 backgroundColor: colors.surface,
                                 backgroundGradientFrom: colors.surface,
                                 backgroundGradientTo: colors.surface,
-                                decimalPlaces: 1, // Näytä desimaalit
-                                color: (opacity = 1) => hexToRgba(colors.card, opacity), 
+                                decimalPlaces: 1, 
+                                color: (opacity = 1) => hexToRgba(colors.card, opacity),
                                 labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                             }}
                             style={{
@@ -348,45 +322,53 @@ export default function WorkOutSheets() {
                     <Text>Valitse haluttu data</Text>
                 </View>
             }
+            <WorkOutSheetsModal 
+                modal2Visible={modal2Visible}
+                setModal2Visible={setModal2Visible}
+            />
         </View>
     );
 }
 
 const styles = ({ colors, spacing }) =>
     StyleSheet.create({
-    headLine: {
-        width: "100%",
-        borderBottomColor: "black",
-        borderBottomWidth: 2,
-        alignItems: "center",
-        marginBottom: spacing.small
-    },
-    dropdownWrapper: {
-        flex: 1,
-        marginHorizontal: 5,
-    },
-    dropdown: {
-        width: '100%',
-        borderColor: '#cccccc',
-        zIndex: 5000
-    },
-    dropdownContainer: {
-        width: '100%',
-        zIndex: 5000
-    },
-    dropDowns: {
-        flexDirection: 'row',
-        width: Dimensions.get('window').width - 40,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    emptyLinechart: {
-        width: Dimensions.get('window').width - 40,
-        height: 220,
-        marginVertical: 8,
-        borderRadius: spacing.small,
-        backgroundColor: colors.surface,
-        alignItems: "center",
-        justifyContent: "center"
-    }
-});
+        headLine: {
+            width: "100%",
+            borderBottomColor: "black",
+            borderBottomWidth: 2,
+            alignItems: "center",
+            marginBottom: spacing.small
+        },
+        dropdownWrapper: {
+            flex: 1,
+            marginHorizontal: 5,
+        },
+        dropdown: {
+            width: '100%',
+            borderColor: '#cccccc',
+            zIndex: 5000
+        },
+        dropdownContainer: {
+            width: '100%',
+            zIndex: 5000
+        },
+        dropDowns: {
+            flexDirection: 'row',
+            width: Dimensions.get('window').width - 40,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        },
+        picker: {
+            borderWidth: 1,
+            borderColor: "black",
+        },
+        emptyLinechart: {
+            width: Dimensions.get('window').width - 40,
+            height: 220,
+            marginVertical: 8,
+            borderRadius: spacing.small,
+            backgroundColor: colors.surface,
+            alignItems: "center",
+            justifyContent: "center"
+        }
+    });
