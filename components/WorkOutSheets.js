@@ -25,15 +25,15 @@ export default function WorkOutSheets() {
     const [maxPercentage, setMaxPercentage] = useState([])
     const [items, setItems] = useState([]);
     const [items2, setItems2] = useState([
-        { label: "toistot", value: 1 },
-        { label: "toistot (avg)", value: 2 },
-        { label: "paino (sum)", value: 3 },
-        { label: "paino (avg)", value: 4 },
-        { label: "voimaindeksi", value: 5 },
-        { label: "maksimi (calc)", value: 6 },
-        { label: "maksimi (real)", value: 7 },
-        { label: "prosentit maksimista", value: 8 }
-    ]);
+        { label: "toistot", value:'1' },
+        { label: "toistot (avg)", value: '2' },
+        { label: "paino (sum)", value: '3' },
+        { label: "paino (avg)", value: '4' },
+        { label: "voimaindeksi", value: '5' },
+        { label: "maksimi (calc)", value: '6' },
+        { label: "maksimi (real)", value: '7' },
+        { label: "prosentit maksimista", value: '8' }
+    ])
 
     const [LineChartWidth, setLineChartWidth] = useState(Dimensions.get('window').width - 40)
     const [modal2Visible, setModal2Visible] = useState(false);
@@ -183,7 +183,7 @@ export default function WorkOutSheets() {
                 if (names[i-1]=== ""){
                     continue
                 }
-                tempList.push({ label: names[i - 1].toUpperCase(), value: i })
+                tempList.push({ label: names[i - 1].toUpperCase(), value: i.toString() })
             }
             // console.log("templist: ", tempList)
             setItems(tempList)
@@ -277,23 +277,23 @@ export default function WorkOutSheets() {
                                 datasets: [
                                     {
                                         data:
-                                            pickedStyle === 1
-                                                ? pickedSetsSum
-                                                : pickedStyle === 2
-                                                    ? pickedSetsAvg
-                                                    : pickedStyle === 3
-                                                        ? pickedWeightSum
-                                                        : pickedStyle === 4
-                                                            ? pickedWeightAvg
-                                                            : pickedStyle === 5
-                                                                ? powerIndex
-                                                                : pickedStyle == 6
-                                                                    ? calculatedMax
-                                                                    : pickedStyle == 7
-                                                                        ? maxWeightList
-                                                                        : pickedStyle == 8
-                                                                            ? maxPercentage
-                                                                            : maxPercentage,
+                                        pickedStyle === "1"
+                                            ? pickedSetsSum
+                                            : pickedStyle === "2"
+                                                ? pickedSetsAvg
+                                                : pickedStyle === "3"
+                                                    ? pickedWeightSum
+                                                    : pickedStyle === "4"
+                                                        ? pickedWeightAvg
+                                                        : pickedStyle === "5"
+                                                            ? powerIndex
+                                                            : pickedStyle == "6"
+                                                                ? calculatedMax
+                                                                : pickedStyle == "7"
+                                                                    ? maxWeightList
+                                                                    : pickedStyle == "8"
+                                                                        ? maxPercentage
+                                                                        : maxPercentage,
                                         color: (opacity = 1) => hexToRgba(colors.text, opacity), // Punainen viiva
                                         strokeWidth: 4, 
                                     },
