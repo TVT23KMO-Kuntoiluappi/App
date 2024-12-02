@@ -37,6 +37,7 @@ export default function AddSet({
             placeholder="Esim 10"
             placeholderTextColor={'grey'}
             value={set.weight}
+            keyboardType = "decimal-pad" //keyboardType = "decimal-pad"
             onChangeText={(text) => {
               setData((prevData) =>
                 prevData.map((movement) =>
@@ -58,6 +59,7 @@ export default function AddSet({
             value={set.reps}
             placeholder="Esim 10-15"
             placeholderTextColor={'grey'}
+            keyboardType = "decimal-pad"
             onChangeText={(text) => {
               setData((prevData) =>
                 prevData.map((movement) =>
