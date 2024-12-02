@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useUser } from '../context/UseUser';
 import { useTheme } from 'react-native-paper';
 import WorkOutDataModal from './WorkOutDataModal';
+import SwiperFlatList, { SwiperFlatlist } from 'react-native-swiper-flatlist'
 
 export default function WorkOutData() {
     const { colors, spacing } = useTheme();
@@ -21,7 +22,36 @@ export default function WorkOutData() {
                 <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Tehdyt treenit</Text>
             </View>
             <View style={{ height: 250 }}>
-
+                <SwiperFlatList 
+                    index={0}
+                    loop
+                    autoplay={false}
+                    data={workOutFirebaseData}
+                    renderItem={({item, index})=>(
+                        <View key={index} style={styles({ colors, spacing }).workOutData}>
+                            <View style={styles({ colors, spacing }).workOutDetails}>
+                                <Text style={{ fontWeight: 'bold' }}>{item.workoutName}  {formatTimestamp(item.workoutId)}</Text>
+                                <Text></Text>
+                                {item.movements.slice(0, 4).map((movement, index2) => (
+                                    <View key={index2} style={{ flexDirection: "row", justifyContent: "space-between", margintTop: 0 }}>
+                                        <Text>{movement.movementName}  </Text>
+                                        <Text>settejä: {movement.sets.length}</Text>
+                                    </View>
+                                ))}
+                                {item.movements.length > 4 && (
+                                    <Text style={{ fontStyle: "italic", color: colors.text }}>...näytä lisää:</Text>
+                                )}
+                            </View>
+                            <TouchableOpacity
+                                style={styles({ colors, spacing }).button}
+                                onPress = {()=>{setModalVisible(true); setIndex(index)}}
+                            >
+                                <Text>tarkemmat tiedot</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                />
+                {/*
                 <ScrollView horizontal style={styles({ colors, spacing }).scrollView}>
                     {workOutFirebaseData.map((item, index) => (
                         <View key={index} style={styles({ colors, spacing }).workOutData}>
@@ -46,7 +76,7 @@ export default function WorkOutData() {
                             </TouchableOpacity>
                         </View>
                     ))}
-                </ScrollView>
+                </ScrollView>*/}
                 <WorkOutDataModal 
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
@@ -73,7 +103,6 @@ const styles = ({ colors, spacing }) =>
         workOutData: {
             width: Dimensions.get('window').width - 40,
             height: 220,
-            marginVertical: 8,
             borderRadius: spacing.small,
             backgroundColor: colors.surface,
             alignItems: "center",
