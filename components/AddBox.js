@@ -132,9 +132,10 @@ const styles = ({ spacing }) =>
     workoutMovementBox: {
       width: "97%",
       padding: 15,
-      backgroundColor: "#c7c7c9",
-      borderColor: "black",
-      borderWidth: 1,
+      //backgroundColor: "#c7c7c9",
+      backgroundColor: '#e8f5e9',
+      //borderColor: "black",
+      //borderWidth: 1,
       borderRadius: 5,
     },
     workoutMovementName: {

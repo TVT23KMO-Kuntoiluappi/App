@@ -33,7 +33,7 @@ export default function WorkOutSheets() {
         { label: "maksimi (calc)", value: '6' },
         { label: "maksimi (real)", value: '7' },
         { label: "prosentit maksimista", value: '8' }
-    ]);
+    ])
 
     const [LineChartWidth, setLineChartWidth] = useState(Dimensions.get('window').width - 40)
     const [modal2Visible, setModal2Visible] = useState(false);
@@ -277,23 +277,23 @@ export default function WorkOutSheets() {
                                 datasets: [
                                     {
                                         data:
-                                            pickedStyle === "1"
-                                                ? pickedSetsSum
-                                                : pickedStyle === "2"
-                                                    ? pickedSetsAvg
-                                                    : pickedStyle === "3"
-                                                        ? pickedWeightSum
-                                                        : pickedStyle === "4"
-                                                            ? pickedWeightAvg
-                                                            : pickedStyle === "5"
-                                                                ? powerIndex
-                                                                : pickedStyle == "6"
-                                                                    ? calculatedMax
-                                                                    : pickedStyle == "7"
-                                                                        ? maxWeightList
-                                                                        : pickedStyle == "8"
-                                                                            ? maxPercentage
-                                                                            : maxPercentage,
+                                        pickedStyle === "1"
+                                            ? pickedSetsSum
+                                            : pickedStyle === "2"
+                                                ? pickedSetsAvg
+                                                : pickedStyle === "3"
+                                                    ? pickedWeightSum
+                                                    : pickedStyle === "4"
+                                                        ? pickedWeightAvg
+                                                        : pickedStyle === "5"
+                                                            ? powerIndex
+                                                            : pickedStyle == "6"
+                                                                ? calculatedMax
+                                                                : pickedStyle == "7"
+                                                                    ? maxWeightList
+                                                                    : pickedStyle == "8"
+                                                                        ? maxPercentage
+                                                                        : maxPercentage,
                                         color: (opacity = 1) => hexToRgba(colors.text, opacity), // Punainen viiva
                                         strokeWidth: 4, 
                                     },
