@@ -88,10 +88,10 @@ function MyTabBar({ state, descriptors, navigation }) {
           case "Login":
             iconName = "login";
             break;
-          case "Workout":
+          case "Treenaa!":
             iconName = "dumbbell";
             break;
-          case "Gallery":
+          case "Galleria":
             iconName = "image";
             break;
           case "Userpage":
@@ -125,7 +125,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             ) : (
               <Icon
                 name={iconName}
-                size={40}
+                size={32}
                 color={isFocused ? colors.primary : colors.text}
               />
             )}
@@ -152,10 +152,10 @@ function MyTabs() {
     >
       {/*  <Tab.Screen name="Login" component={Login} />
       <Tab.Screen name="Register" component={Register} />*/}
-      <Tab.Screen name="Workout" component={Workout} />
-      <Tab.Screen name="Movement" component={MovementBank} />
-      {/*<Tab.Screen name="WorkoutBank" component={WorkoutBank} />*/}
-      <Tab.Screen name="Gallery" component={Gallery} />
+      <Tab.Screen name="Treenaa!" component={Workout} />
+      <Tab.Screen name="Liikkeet" component={MovementBank} />
+      <Tab.Screen name="Treenit" component={WorkoutBank} />
+      <Tab.Screen name="Galleria" component={Gallery} />
       <Tab.Screen name="Userpage" component={UserPage} />
       <Tab.Screen
         name="Asetukset"
