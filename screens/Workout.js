@@ -24,7 +24,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-export default function Workout(props) {
+export default function Workout() {
   const tabBarHeight = useBottomTabBarHeight()
   const { spacing } = useTheme();
   const { workoutName, setWorkoutName, data, setData,
