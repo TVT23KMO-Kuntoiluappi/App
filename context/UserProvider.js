@@ -16,6 +16,7 @@ import {
 } from "../firebase/Config";
 import { UserContext } from "./UserContext";
 import { onAuthStateChanged } from "firebase/auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function UserProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ export default function UserProvider({ children }) {
       sets: [{ id: 1, weight: "", reps: "" }],
     },
   ]);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const removeAuthListener = onAuthStateChanged(auth, (user) => {
@@ -55,6 +57,31 @@ export default function UserProvider({ children }) {
     return () => removeAuthListener();
   }, []);
 
+  useEffect(() => {
+    const loadTheme = async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem('theme');
+        if (savedTheme !== null) {
+          setIsDark(JSON.parse(savedTheme));
+        }
+      } catch (error) {
+        console.error('Error loading theme:', error);
+      }
+    };
+    loadTheme();
+  }, []);
+
+  useEffect(() => {
+    const saveTheme = async () => {
+      try {
+        await AsyncStorage.setItem('theme', JSON.stringify(isDark));
+      } catch (error) {
+        console.error('Error saving theme:', error);
+      }
+    };
+    saveTheme();
+  }, [isDark]);
+
   const getUserData = async (userId) => {
     try {
       const docRef = doc(firestore, `users/${userId}/omattiedot/perustiedot`);
@@ -67,6 +94,7 @@ export default function UserProvider({ children }) {
         setWeight(userData.weight || "");
         setHeight(userData.height || "");
         setEmail(auth.currentUser?.email || "");
+        setIsDark(userData.isDark || false);
       }
     } catch (error) {
       console.error("Virhe käyttäjätietojen hakemisessa:", error);
@@ -116,6 +144,24 @@ export default function UserProvider({ children }) {
     }
   };
 
+  const updateTheme = async (isDark) => {
+    try {
+      const userId = auth.currentUser.uid;
+      const docRef = doc(firestore, `users/${userId}/omattiedot/perustiedot`);
+      await updateDoc(docRef, {
+        isDark: isDark
+      });
+    } catch (error) {
+      console.error("Virhe teeman tallentamisessa:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      updateTheme(isDark);
+    }
+  }, [isDark, user]);
+
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -152,7 +198,9 @@ export default function UserProvider({ children }) {
         setData,
         movementName,
         setMovementName,
-        workOutFirebaseData
+        workOutFirebaseData,
+        isDark,
+        setIsDark,
       }}
     >
       {children}
@@ -161,19 +209,3 @@ export default function UserProvider({ children }) {
 }
 
 const styles = StyleSheet.create({});
-
-/* esimerkki:
-
-jos on näin:
-export const useUser = () => {
-    return useContext(UserContext)
-}
-
-const { fname, setFname } = useUser()
-
-
-JOs ei useUseria
-
-const { fname, setFname } = useCOntext(UserContext)
-
-*/
