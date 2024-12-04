@@ -35,7 +35,9 @@ export default function AddSet({
             style={styles({ spacing }).setBoxTextInput}
             maxLength={20}
             placeholder="Esim 10"
+            placeholderTextColor={'grey'}
             value={set.weight}
+            keyboardType = "decimal-pad" //keyboardType = "decimal-pad"
             onChangeText={(text) => {
               setData((prevData) =>
                 prevData.map((movement) =>
@@ -56,6 +58,8 @@ export default function AddSet({
             maxLength={20}
             value={set.reps}
             placeholder="Esim 10-15"
+            placeholderTextColor={'grey'}
+            keyboardType = "decimal-pad"
             onChangeText={(text) => {
               setData((prevData) =>
                 prevData.map((movement) =>
