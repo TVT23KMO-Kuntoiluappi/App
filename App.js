@@ -12,26 +12,25 @@ import Workout from "./screens/Workout";
 import UserProvider from "./context/UserProvider";
 import StartScreen from "./components/StartScreen";
 import * as SplashScreen from "expo-splash-screen";
+import { useUser } from "./context/UseUser";
 
-const { LightTheme, DarkTheme } = MyCustomTheme
-const Stack = createNativeStackNavigator()
+const { LightTheme, DarkTheme } = MyCustomTheme;
+const Stack = createNativeStackNavigator();
 
 export default function App(props) {
-  const [logged, setLogged] = useState(false)
-  const [isDark, setIsDark] = useState(false)
-  const [appIsReady, setAppIsReady] = useState(false)
-  const theme = useMemo(() => (isDark ? DarkTheme : LightTheme), [isDark])
+  const [logged, setLogged] = useState(false);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
-        await SplashScreen.preventAutoHideAsync()
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await SplashScreen.preventAutoHideAsync();
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
-        console.warn(e)
+        console.warn(e);
       } finally {
-        setAppIsReady(true)
-        await SplashScreen.hideAsync()
+        setAppIsReady(true);
+        await SplashScreen.hideAsync();
       }
     }
 
@@ -39,31 +38,40 @@ export default function App(props) {
   }, []);
 
   if (!appIsReady) {
-    return null;
+    return <StartScreen />;
   }
 
   return (
     <UserProvider>
-      <PaperProvider theme={theme}>
-        <NavigationContainer theme={theme}>
-          {logged ? (
-            <MyTabs />
-          ) : (
-            <Stack.Navigator>
-              <Stack.Screen name="Login">
-                {({ navigation }) => (
-                  <Login setLogged={setLogged} navigation={navigation} />
-                )}
-              </Stack.Screen>
-              <Stack.Screen name="Register">
-                {(props) => <Register {...props} setLogged={setLogged} />}
-              </Stack.Screen>
-              <Stack.Screen name="Workout" component={Workout} />
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
-      </PaperProvider>
+      <AppContent setLogged={setLogged} logged={logged} />
     </UserProvider>
+  );
+}
+
+function AppContent({ setLogged, logged }) {
+  const { isDark } = useUser();
+  const theme = useMemo(() => (isDark ? DarkTheme : LightTheme), [isDark]);
+
+  return (
+    <PaperProvider theme={theme}>
+      <NavigationContainer theme={theme}>
+        {logged ? (
+          <MyTabs />
+        ) : (
+          <Stack.Navigator>
+            <Stack.Screen name="Login">
+              {({ navigation }) => (
+                <Login setLogged={setLogged} navigation={navigation} />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Register">
+              {(props) => <Register {...props} setLogged={setLogged} />}
+            </Stack.Screen>
+            <Stack.Screen name="Workout" component={Workout} />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 
