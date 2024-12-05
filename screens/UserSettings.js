@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useTheme, FAB, IconButton } from "react-native-paper";
+import { useTheme, FAB, IconButton, Switch } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import {
   uploadUserPicture,
@@ -53,6 +53,8 @@ export default function UserSettings() {
     setProfilePic,
     oneRepMax,
     setOneRepMax,
+    isDark,
+    setIsDark,
   } = useUser();
 
   const { colors, spacing } = useTheme();
@@ -482,6 +484,14 @@ export default function UserSettings() {
                 </Text>
               </TouchableOpacity>
             )}
+          </View>
+          <View style={styles({ colors, spacing }).info}>
+            <Text style={styles({ colors, spacing }).label}>Tumma teema</Text>
+            <Switch
+              value={isDark}
+              onValueChange={() => setIsDark(!isDark)}
+              color={colors.primary}
+            />
           </View>
         </TouchableOpacity>
         {(fnameEditable ||
