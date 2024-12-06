@@ -13,8 +13,10 @@ export default function WorkOutData() {
 
     function formatTimestamp(timestamp) {
         const [year, month, day, hours, minutes, seconds] = timestamp.split(":");
-        return `${day}.${month}.${year} klo ${hours}.${minutes}`;
+        return `${day}.${month}.${year} klo ${hours}.${minutes}`
     }
+
+    const workOutDataReverse = [...workOutFirebaseData].reverse()
 
     return (
         <>
@@ -26,7 +28,7 @@ export default function WorkOutData() {
                     index={0}
                     loop
                     autoplay={false}
-                    data={workOutFirebaseData}
+                    data={workOutDataReverse}
                     renderItem={({item, index})=>(
                         <View key={index} style={styles({ colors, spacing }).workOutData}>
                             <View style={styles({ colors, spacing }).workOutDetails}>
@@ -80,7 +82,7 @@ export default function WorkOutData() {
                 <WorkOutDataModal 
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
-                    workOutFirebaseData={workOutFirebaseData}
+                    workOutFirebaseData={workOutDataReverse}
                     index = {index}
                     formatTimestamp={formatTimestamp}
                 />

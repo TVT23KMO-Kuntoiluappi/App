@@ -32,8 +32,7 @@ export default function WorkOutSheets() {
         { label: "voimaindeksi", value: '5' },
         { label: "maksimi (calc)", value: '6' },
         { label: "maksimi (real)", value: '7' },
-        { label: "prosentit maksimista", value: '8' }
-    ])
+        { label: "prosentit maksimista", value: '8' }])
 
     const [LineChartWidth, setLineChartWidth] = useState(Dimensions.get('window').width - 40)
     const [modal2Visible, setModal2Visible] = useState(false);
@@ -293,7 +292,7 @@ export default function WorkOutSheets() {
                                                                     ? maxWeightList
                                                                     : pickedStyle == "8"
                                                                         ? maxPercentage
-                                                                        : maxPercentage,
+                                                                        : pickedSetsSum,
                                         color: (opacity = 1) => hexToRgba(colors.text, opacity), // Punainen viiva
                                         strokeWidth: 4, 
                                     },

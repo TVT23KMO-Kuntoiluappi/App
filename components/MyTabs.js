@@ -21,7 +21,7 @@ const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
   const { colors, spacing } = useTheme();
-  const { profilePic, setProfilePic, username } = useUser()
+  const { profilePic, setProfilePic, username, fname } = useUser()
   const [isKeyboardVisible, setKeyboardVisible] = useState(false)
 
   useEffect(() => {
@@ -91,11 +91,17 @@ function MyTabBar({ state, descriptors, navigation }) {
           case "Treenaa!":
             iconName = "dumbbell";
             break;
+          case "Treenit":
+            iconName = "weight-lifter"
+            break;
           case "Galleria":
             iconName = "image";
             break;
           case "Userpage":
             iconName = "account";
+            break;
+          case "Liikkeet":
+            iconName = "arm-flex"
             break;
           default:
             iconName = "circle";
@@ -117,8 +123,8 @@ function MyTabBar({ state, descriptors, navigation }) {
                     : require("../screens/images/default-profpic.png")
                 }
                 style={{
-                  width: 40,
-                  height: 40,
+                  width: 32,
+                  height: 32,
                   borderRadius: 20,
                 }}
               />
@@ -135,7 +141,9 @@ function MyTabBar({ state, descriptors, navigation }) {
                 { color: isFocused ? colors.primary : colors.text },
               ]}
             >
-              {route.name === "Userpage" ? username : label}
+              {route.name === "Userpage" && username.length < 11 ? username :
+                route.name === "Userpage" && fname.length < 11 ? fname
+                          : label}
             </Text>
           </PlatformPressable>
         );
