@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -13,6 +14,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { FontAwesome } from "@expo/vector-icons";
 import { useUser } from "../context/UseUser";
 import { TouchableOpacityBase } from "react-native";
+import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
 
 export default function WorkoutBank() {
   const { colors, spacing } = useTheme();
@@ -26,6 +28,80 @@ export default function WorkoutBank() {
   } = useUser();
   const [searchWorkout, setSearchWorkout] = useState("");
   const [expanded, setExpanded] = useState({});
+  const [pressedWorkouts, setPressedWorkouts] = useState({})
+
+
+
+  const addWorkoutToFirebase = async (workout) => {
+    const workoutName = workout.name
+
+    setData((prevData) => [
+      ...prevData,
+      ...workout.content.map((exercise, index) => {
+        const [movementName, reps] = exercise.split(":");
+        const sets = Array.from(
+          { length: parseInt(reps.match(/\d+/g)?.[0] || 1) },
+          (_, i) => ({
+            id: i + 1,
+            weight: "",
+            reps: reps.trim(),
+          })
+        );
+
+        return {
+          id: prevData.length + index + 1,
+          movementName: movementName.trim(),
+          sets,
+        };
+      }),
+    ]);
+
+    try {
+      const userId = auth.currentUser.uid
+      await addWorkout(userId, data, workoutName);
+      Alert.alert(
+        "Tallennus onnistui!",
+        "Hienoa!",
+        [{ text: "OK" }]
+      );
+      // Tyhjennä lomakekentät
+      setMovementName("");
+      setWorkoutName("");
+      setData([
+        {
+          id: 1,
+          movementName: "",
+          sets: [{ id: 1, weight: "", reps: "" }],
+        },
+      ]);
+    } catch (error) {
+        console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
+        throw new Error("Tietojen lisääminen epäonnistui.");
+    }
+  }
+
+
+  // FIREBASEEN LISÄYS
+  async function addWorkout(userId, workoutDetails, workoutName) {
+    if (!workoutName){
+      console.error("Cannot add workout, workoutName is empty!")
+      return;
+    }
+
+    const userDetailsRef = doc(collection(firestore, `users/${userId}/treenipohjat`), workoutName);
+    try {
+      const workoutData = {
+        movements: workoutDetails,
+        workoutName: workoutName
+      }
+
+      await setDoc(userDetailsRef, workoutData);
+      console.log("Treeni lisätty onnistuneesti!");
+    } catch (error) {
+      console.error("Virhe treenin lisäämisessä:", error);
+    }
+  }
+
 
   const workouts = [
     { id: "1", name: "Arnold's Golden Six", 
@@ -86,6 +162,19 @@ export default function WorkoutBank() {
     }));
   };
 
+  const handlePressHeart = (workoutId, workout) => {
+    // Päivitä painetun sydämen tila
+    setPressedWorkouts((prevState) => ({
+      ...prevState,
+      [workoutId]: !prevState[workoutId],
+    }));
+  
+    // Tallenna treeni Firestoreen vain jos sydäntä ei ole aiemmin painettu
+    if (!pressedWorkouts[workoutId]) {
+      addWorkoutToFirebase(workout);
+    }
+  };
+
   const renderWorkout = (workout) => (
     <View key={workout.id} style={styles({ spacing }).workoutBox}>
       <View style={styles({ spacing }).workoutBoxInfoContainer}>
@@ -103,8 +192,8 @@ export default function WorkoutBank() {
               color={"#555"}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome name={"heart"} size={36} color={"#555"} />
+          <TouchableOpacity onPress={() => handlePressHeart(workout.id, workout)}>
+            <FontAwesome name={"heart"} size={36} color={pressedWorkouts[workout.id] ? "#a1020f" : "#555" } />
           </TouchableOpacity>
         </View>
       </View>
