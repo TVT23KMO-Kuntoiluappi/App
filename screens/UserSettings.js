@@ -255,6 +255,7 @@ export default function UserSettings() {
   };
 
   const userUpdate = () => {
+    console.log("userUpdate")
     try {
       updateUserData({
         firstName: fname,
@@ -264,6 +265,7 @@ export default function UserSettings() {
         weight: weight,
       });
       updateUserDetails(username, email);
+      console.log("userUpdate")
     } catch (error) {
       console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
       throw new Error("Tietojen lisääminen epäonnistui.");

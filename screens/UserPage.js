@@ -5,6 +5,7 @@ import { useUser } from '../context/UseUser';
 import WorkOutSheets from '../components/WorkOutSheets';
 import WorkOutData from '../components/WorkOutData';
 import ProfileInfo from '../components/ProfileInfo';
+import UserWorkOutTemplates from '../components/UserWorkOutTemplates';
 
 export default function UserPage({ navigation }) {
   const { colors, spacing } = useTheme();
@@ -12,10 +13,10 @@ export default function UserPage({ navigation }) {
   // Profiilitiedot - Näytetään ensimmäisenä
   const profileData = [
     { key: 'profile', component: <ProfileInfo navigation={navigation} />},
+    { key: 'templates', component: <UserWorkOutTemplates navigation={navigation} />},
     { key: 'data', component: <WorkOutData />},
-    // WorkOutSheets - Näytetään alla
     { key: 'workouts', component: <WorkOutSheets /> },
-    { key: 'paddingCOmponen', component: <View style = {{height: 100}}></View>}
+    { key: 'paddingComponent', component: <View style = {{height: 100}}></View>}
     
   ];
 

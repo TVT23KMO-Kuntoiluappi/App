@@ -41,6 +41,8 @@ export default function UserProvider({ children }) {
     },
   ]);
   const [isDark, setIsDark] = useState(false);
+  const [usersSavedWorkOuts, setUsersSavedWorkOuts] = useState()
+  const [updateContent, setUpdateContent] = useState(0)
 
   useEffect(() => {
     const removeAuthListener = onAuthStateChanged(auth, (user) => {
@@ -56,6 +58,23 @@ export default function UserProvider({ children }) {
 
     return () => removeAuthListener();
   }, []);
+
+  // tein tämän useEffectin, jos haluaa ympäri sovellusta päivittää datan
+  // Jos haluaa ajaa tämän, niin tekee esim. setUpdateContent(prevdata=>(prevdata+1))
+  useEffect(() => {
+    const removeAuthListener = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      if (user) {
+        getUserData(user.uid);
+        fetchProfilePicture();
+        getOneRepMax();
+        getWorkOutFirebaseData(user.uid)
+      }
+      setLoading(false);
+    });
+    console.log(updateContent)
+    return () => removeAuthListener();
+  }, [updateContent]);
 
   useEffect(() => {
     const loadTheme = async () => {
@@ -102,6 +121,7 @@ export default function UserProvider({ children }) {
   };
 
   const getWorkOutFirebaseData = async (userId) => {
+    // hakee tallennetut treenit
     try {
       const docRef = collection(firestore, `users/${userId}/tallennetuttreenit`);
       const docSnap = await getDocs(docRef)
@@ -110,9 +130,22 @@ export default function UserProvider({ children }) {
         ...doc.data(), // Dokumentin data
       }));
       setWorkOutFirebaseData(workouts)
-      console.log("treenidata: ", workouts)
+      // console.log("treenidata: ", workouts)
     } catch (error) {
       console.error("Virhe treenidatan hakemisessa: ", error)
+    }
+    // hakee omat treenipohjat
+    try {
+      const docSaved = collection(firestore, `users/${userId}/treenipohjat`)
+      const snapSaved = await getDocs(docSaved)
+      const savedTemplates = snapSaved.docs.map(doc => ({
+        templateName: doc.id,
+        ...doc.data()
+      }))
+      setUsersSavedWorkOuts(savedTemplates)
+      console.log("Treenipohjat: ", savedTemplates)
+    } catch(error) {
+      console.error("Virhe tallennettujen treenien hakemisessa")
     }
   }
 
@@ -201,6 +234,10 @@ export default function UserProvider({ children }) {
         workOutFirebaseData,
         isDark,
         setIsDark,
+        usersSavedWorkOuts,
+        setUsersSavedWorkOuts,
+        updateContent,
+        setUpdateContent
       }}
     >
       {children}
