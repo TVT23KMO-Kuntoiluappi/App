@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useTheme, FAB } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AddBox from "../components/AddBox";
@@ -24,14 +24,36 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-export default function Workout() {
+export default function Workout({route}) {
   const tabBarHeight = useBottomTabBarHeight()
   const { spacing } = useTheme();
   const { workoutName, setWorkoutName, data, setData,
-    movementName, setMovementName
+    movementName, setMovementName, setUpdateContent
    } = useUser()
   const [selectedId, setSelectedId] = useState(null);
   const flatListRef = useRef();
+
+  // asettaa movementNamen, jos tulleen routen kautta navigoimalla
+  useEffect(() => {
+    if (route.params?.workoutName) {
+      console.log(route.params.workoutName);
+      const savedData = route.params.savedData.movements.map((movement) => ({
+        ...movement,
+        workoutName: route.params.workoutName, // Lisää workoutName jokaiselle liikkeelle
+      }));
+      console.log("Tallennetut treenit: ", savedData);
+  
+      // Päivitä data ja workoutName
+      setData(savedData);
+      setWorkoutName(route.params.workoutName);
+    }
+  }, [route.params?.workoutName]);
+  
+  
+
+  useEffect(()=> {
+    console.log("data: ", data)
+  }, [data])
 
   const suomenAika = moment()
     .tz("Europe/Helsinki")
@@ -106,7 +128,7 @@ export default function Workout() {
         "Hienoa!",
         [{ text: "OK" }]
       );
-      // Tyhjennä lomakekentät
+      // Tyhjennä lomakekentäta
       setMovementName("");
       setWorkoutName("");
       setData([
@@ -116,6 +138,7 @@ export default function Workout() {
           sets: [{ id: 1, weight: "", reps: "" }],
         },
       ]);
+      setUpdateContent(prevData => (prevData +1)) // tämä tekee firebasedata päivityksen, kun tallennus tapahtuu
     } catch (error) {
       console.log("Error saving workout:", error.message);
 

@@ -5,8 +5,9 @@ import {
   TextInput,
   FlatList,
   KeyboardAvoidingView,
-  Platform, 
-  Pressable
+  Platform,
+  Pressable,
+  TouchableOpacity
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -14,32 +15,36 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MyCustomTheme from "../components/MyCustomTheme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AddSet from "./AddSet";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import DataModal from "./DataModal";
 
 export default function AddBox({ movementName, setData, movement }) {
-  const { spacing } = useTheme();
+  const { colors, spacing } = useTheme();
+  const [modalVisible, setModalVisible] = useState(false)
+  const [fromAddBox, setFromAddBox]= useState(false)
 
   const addRow = () => {
     setData((prevData) =>
       prevData.map((item) =>
         item.id === movement.id
           ? {
-              ...item,
-              sets: [
-                ...item.sets,
-                {
-                  id: item.sets.length + 1,
-                  weight: "",
-                  reps: "",
-                },
-              ],
-            }
+            ...item,
+            sets: [
+              ...item.sets,
+              {
+                id: item.sets.length + 1,
+                weight: "",
+                reps: "",
+              },
+            ],
+          }
           : item
       )
     );
   };
 
   const removeBox = (movementId) => {
-    setData((prevdata) => 
+    setData((prevdata) =>
       prevdata
         .filter((movement) => movement.id !== movementId)
         .map((movement, index) => ({ ...movement, id: index + 1 }))
@@ -63,18 +68,22 @@ export default function AddBox({ movementName, setData, movement }) {
                   )
                 )
               }
-              value={movementName}
+              value={movement.movementName}
               placeholder="Liikkeen nimi"
               fontSize={20}
               placeholderTextColor={"grey"}
             />
-            {/*<FAB style={styles({ spacing }).fab} icon="pencil" size="small" />*/}
-            <FAB
-              style={styles({ spacing }).fab}
-              icon="trending-up"
-              size="small"
-              color="white"
-            />
+            <TouchableOpacity onPress={() => {
+              console.log("Opening modal");
+              setModalVisible(true);
+              setFromAddBox(true)
+            }}>
+              <Icon
+                name={"chart-areaspline"}
+                size={32}
+                color={colors.text}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles({ spacing }).setBoxInfo}>
             <Text style={styles({ spacing }).setBoxInfoText}>Sarjapaino (kg)</Text>
@@ -98,15 +107,22 @@ export default function AddBox({ movementName, setData, movement }) {
             />
             <Text>Lisää uusi sarja</Text>
           </View>
-            <Pressable 
-              style={styles({ spacing }).removeBox} 
-              onPress={() => removeBox(movement.id)}
-            >
-              <Ionicons name="trash" size={24} color={"white"}/>
-              <Text style={{color: 'white'}}>Poista liike</Text>
-            </Pressable>
+          <Pressable
+            style={styles({ spacing }).removeBox}
+            onPress={() => removeBox(movement.id)}
+          >
+            <Ionicons name="trash" size={24} color={"white"} />
+            <Text style={{ color: 'white' }}>Poista liike</Text>
+          </Pressable>
         </View>
       </KeyboardAvoidingView>
+      <DataModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        name={movement.movementName}
+        fromAddBox={fromAddBox}
+        setFromAddBox={setFromAddBox}
+      />
     </>
   );
 }
