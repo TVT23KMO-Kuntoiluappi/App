@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import { useTheme } from 'react-native-paper';
 
-export default function WorkOutDataModal({ modalVisible, setModalVisible, workOutFirebaseData, index, formatTimestamp }) {
-    const data = workOutFirebaseData[index];
+export default function WorkOutDataModal({ modalVisible, setModalVisible, workOutDataReverse, index, formatTimestamp }) {
+    const data = workOutDataReverse[index];
     const { colors, spacing} = useTheme()
+    
+    useEffect(()=>{
+        console.log("modalindex: ", index)
+    },[modalVisible])
 
     return (
         <View style={styles({ colors, spacing }).container}>

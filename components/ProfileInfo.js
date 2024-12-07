@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from 'react-native-paper';
 import { useUser } from '../context/UseUser';
@@ -14,6 +14,11 @@ export default function ProfileInfo({ navigation }) {
   return (
     <>
       <View style={styles({ colors, spacing }).headLine}>
+        <Icon
+          name={"account"}
+          size={32}
+          color={colors.text}
+        />
         <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Omat sivut</Text>
       </View>
       <View style={styles({ colors, spacing }).profileInfo}>
@@ -46,19 +51,19 @@ const styles = ({ colors, spacing }) =>
   StyleSheet.create({
     headLine: {
       width: "100%",
-      borderBottomColor: "black",
-      borderBottomWidth: 2,
+      flexDirection: "row",
       alignItems: "center",
-      marginBottom: spacing.small,
-      marginTop: spacing.medium
-  },
+      alignContent: "center",
+      marginTop: spacing.medium,
+      marginLeft: spacing.small
+    },
     profileInfo: {
-      width: "95%",
+      width: Dimensions.get('window').width - 40,
       height: 100,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginBottom: 20,
-      marginTop: 20,
+      marginLeft: 10,
+      marginRight: 10
     },
   })

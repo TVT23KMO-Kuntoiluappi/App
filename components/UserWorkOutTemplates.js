@@ -6,7 +6,7 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import { FontAwesome } from '@expo/vector-icons';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export default function UserWorkOutTemplates({navigation}) {
+export default function UserWorkOutTemplates({ navigation }) {
     const { colors, spacing } = useTheme()
     const { usersSavedWorkOuts } = useUser()
     const [expanded, setExpanded] = useState({});
@@ -18,7 +18,7 @@ export default function UserWorkOutTemplates({navigation}) {
             const numOfWorkout = usersSavedWorkOuts[move].movements.length
             const compHeight = numOfWorkout * 40 + 200
             setComponentHeight(compHeight)
-            console.log(numOfWorkout, "   ",compHeight)
+            console.log(numOfWorkout, "   ", compHeight)
         } else {
             setComponentHeight(150)
         }
@@ -28,15 +28,21 @@ export default function UserWorkOutTemplates({navigation}) {
     return (
         <>
             <View style={styles({ colors, spacing }).headLine}>
+                <Icon
+                    name={"heart"}
+                    size={32}
+                    color={colors.text}
+                />
                 <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Suosikkitreenit</Text>
             </View>
-            <View style={{ height: componentHeight }}>
+            <View style={{ height: componentHeight, width: Dimensions.get('window').width }}>
                 <SwiperFlatList
                     index={0}
                     autoplay={false}
                     data={usersSavedWorkOuts}
+                    scrollEnabled={!biggerFavourite}
                     renderItem={({ item, index }) => (
-                        <View key={index} style={[styles({ colors, spacing }).workoutBox, {justifyContent: biggerFavourite ? 'space-between' : 'center'}]}>
+                        <View key={index} style={[styles({ colors, spacing }).workoutBox, { justifyContent: biggerFavourite ? 'space-between' : 'center' }]}>
                             <View style={styles({ colors, spacing }).workoutBoxInfoContainer}>
                                 <View style={styles({ colors, spacing }).workoutName}>
                                     <Text style={styles({ colors, spacing }).workoutBoxMainText}>
@@ -86,10 +92,11 @@ const styles = ({ colors, spacing }) =>
     StyleSheet.create({
         headLine: {
             width: "100%",
-            borderBottomColor: "black",
-            borderBottomWidth: 2,
+            flexDirection: "row",
             alignItems: "center",
-            marginBottom: spacing.small
+            alignContent: "center",
+            marginTop: spacing.medium,
+            marginLeft: spacing.small
         },
         text: {
             width: "85%",
@@ -100,7 +107,8 @@ const styles = ({ colors, spacing }) =>
             backgroundColor: colors.surface,
             alignItems: "center",
             paddingBottom: spacing.small,
-            margin: 10
+            marginLeft: 20,
+            marginRight: 20
         },
         workoutBoxInfoContainer: {
             flexDirection: "row",

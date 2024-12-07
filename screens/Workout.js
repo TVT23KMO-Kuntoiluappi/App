@@ -36,14 +36,19 @@ export default function Workout({route}) {
   // asettaa movementNamen, jos tulleen routen kautta navigoimalla
   useEffect(() => {
     if (route.params?.workoutName) {
-      console.log(route.params.movementName);
-      const savedData = route.params.savedData.movements;
-      console.log("tallennetut treenit: ", savedData);
+      console.log(route.params.workoutName);
+      const savedData = route.params.savedData.movements.map((movement) => ({
+        ...movement,
+        workoutName: route.params.workoutName, // Lisää workoutName jokaiselle liikkeelle
+      }));
+      console.log("Tallennetut treenit: ", savedData);
+  
+      // Päivitä data ja workoutName
       setData(savedData);
-
       setWorkoutName(route.params.workoutName);
     }
   }, [route.params?.workoutName]);
+  
   
 
   useEffect(()=> {
@@ -123,7 +128,7 @@ export default function Workout({route}) {
         "Hienoa!",
         [{ text: "OK" }]
       );
-      // Tyhjennä lomakekentät
+      // Tyhjennä lomakekentäta
       setMovementName("");
       setWorkoutName("");
       setData([

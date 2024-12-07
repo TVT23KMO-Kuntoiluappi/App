@@ -26,11 +26,12 @@ export default function WorkOutData() {
             const numOfWorkout = workOutDataReverse[move].movements.length
             const compHeight = numOfWorkout * 40 + 220
             setComponentHeight(compHeight)
-            console.log(numOfWorkout, "   ",compHeight)
+            console.log(numOfWorkout, "   ", compHeight)
         } else {
             setComponentHeight(150)
         }
         setBiggerFavourite(!biggerFavourite)
+        setIndex(move)
     };
 
     const workOutDataReverse = [...workOutFirebaseData].reverse()
@@ -56,7 +57,7 @@ export default function WorkOutData() {
         }
     }
 
-    const addWorkoutToFirebase = async (workout, name) =>{
+    const addWorkoutToFirebase = async (workout, name) => {
         const workoutName = name
         console.log("ADDDD")
         if (name) {
@@ -64,33 +65,39 @@ export default function WorkOutData() {
                 const userId = auth.currentUser.uid
                 await addWorkout(userId, workout, workoutName);
                 Alert.alert(
-                  "Tallennus onnistui!",
-                  "Hienoa!",
-                  [{ text: "OK" }]
+                    "Tallennus onnistui!",
+                    "Hienoa!",
+                    [{ text: "OK" }]
                 );
-              } catch (error) {
-                  console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
-                  throw new Error("Tietojen lisääminen epäonnistui.");
-              }
+            } catch (error) {
+                console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
+                throw new Error("Tietojen lisääminen epäonnistui.");
+            }
         } else {
             Alert.alert(
                 "Nimi puuttuu!",
                 "Voit lisätä suosikkitreeneihin vain nimellisiä treenejä!",
                 [{ text: "OK" }]
-              );
+            );
         }
-        setUpdateContent(prevData => (prevData +1))
+        setUpdateContent(prevData => (prevData + 1))
     }
 
     return (
         <>
             <View style={styles({ colors, spacing }).headLine}>
+                <Icon
+                    name={"dumbbell"}
+                    size={32}
+                    color={colors.text}
+                />
                 <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Tehdyt treenit</Text>
             </View>
-            <View style={{ height: componentHeight }}>
+            <View style={{ height: componentHeight, width: Dimensions.get('window').width }}>
                 <SwiperFlatList
                     index={0}
                     autoplay={false}
+                    scrollEnabled={!biggerFavourite}
                     data={workOutDataReverse}
                     renderItem={({ item, index }) => (
                         <View key={index} style={[styles({ colors, spacing }).workoutBox, { justifyContent: biggerFavourite ? 'space-between' : 'center' }]}>
@@ -112,9 +119,9 @@ export default function WorkOutData() {
                                             color={"#555"}
                                         />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={()=>addWorkoutToFirebase(item.movements, item.workoutName)}>
+                                    <TouchableOpacity onPress={() => addWorkoutToFirebase(item.movements, item.workoutName)}>
                                         <Icon
-                                            name={"heart"}
+                                            name={"heart-outline"}
                                             size={32}
                                             color={colors.text}
                                         />
@@ -143,37 +150,10 @@ export default function WorkOutData() {
                         </View>
                     )}
                 />
-
-                {/*
-                <ScrollView horizontal style={styles({ colors, spacing }).scrollView}>
-                    {workOutFirebaseData.map((item, index) => (
-                        <View key={index} style={styles({ colors, spacing }).workOutData}>
-                            <View style={styles({ colors, spacing }).workOutDetails}>
-                                <Text style={{ fontWeight: 'bold' }}>{item.workoutName}  {formatTimestamp(item.workoutId)}</Text>
-                                <Text></Text>
-                                {item.movements.slice(0, 4).map((movement, index2) => (
-                                    <View key={index2} style={{ flexDirection: "row", justifyContent: "space-between", margintTop: 0 }}>
-                                        <Text>{movement.movementName}  </Text>
-                                        <Text>settejä: {movement.sets.length}</Text>
-                                    </View>
-                                ))}
-                                {item.movements.length > 4 && (
-                                    <Text style={{ fontStyle: "italic", color: colors.text }}>...näytä lisää:</Text>
-                                )}
-                            </View>
-                            <TouchableOpacity
-                                style={styles({ colors, spacing }).button}
-                                onPress = {()=>{setModalVisible(true); setIndex(index)}}
-                            >
-                                <Text>tarkemmat tiedot</Text>
-                            </TouchableOpacity>
-                        </View>
-                    ))}
-                </ScrollView>*/}
                 <WorkOutDataModal
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
-                    workOutFirebaseData={workOutDataReverse}
+                    workOutDataReverse={workOutDataReverse}
                     index={index}
                     formatTimestamp={formatTimestamp}
                 />
@@ -188,21 +168,23 @@ const styles = ({ colors, spacing }) =>
     StyleSheet.create({
         headLine: {
             width: "100%",
-            borderBottomColor: "black",
-            borderBottomWidth: 2,
+            flexDirection: "row",
             alignItems: "center",
-            marginBottom: spacing.small
+            alignContent: "center",
+            marginTop: spacing.medium,
+            marginLeft: spacing.medium
         },
         text: {
             width: "85%",
         },
         workoutBox: {
-            width: Dimensions.get('window').width - 40,
+            width: Dimensions.get('window').width -40,
             borderRadius: spacing.small,
             backgroundColor: colors.surface,
             alignItems: "center",
             paddingBottom: spacing.small,
-            margin: 10
+            marginLeft: 20,
+            marginRight: 20
         },
         workOutDetails: {
             flexDirection: "row",

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useUser } from '../context/UseUser'
 import { LineChart } from 'react-native-chart-kit';
@@ -7,7 +7,7 @@ import { useTheme } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import WorkOutSheetsModal from './WorkOutSheetsModal';
 
-export default function WorkOutSheets() {
+export default function WorkOutSheets({name, fromAddBox}) {
     const { colors, spacing } = useTheme()
     const { workOutFirebaseData, oneRepMax } = useUser();
     const [workOutData, setWorkOutData] = useState()
@@ -25,7 +25,7 @@ export default function WorkOutSheets() {
     const [maxPercentage, setMaxPercentage] = useState([])
     const [items, setItems] = useState([]);
     const [items2, setItems2] = useState([
-        { label: "toistot", value:'1' },
+        { label: "toistot", value: '1' },
         { label: "toistot (avg)", value: '2' },
         { label: "paino (sum)", value: '3' },
         { label: "paino (avg)", value: '4' },
@@ -36,7 +36,16 @@ export default function WorkOutSheets() {
 
     const [LineChartWidth, setLineChartWidth] = useState(Dimensions.get('window').width - 40)
     const [modal2Visible, setModal2Visible] = useState(false);
-    const [selectedValue, setSelectedValue] = useState("java");
+    const [selectedValue, setSelectedValue] = useState("java");  
+    
+    useEffect(() => {
+        if (fromAddBox) {
+            const normalizedName = typeof name === "string" ? name.toUpperCase() : ""; 
+            setPickedWorkOut(normalizedName);
+            console.log("Picked WorkOut updated:", normalizedName);
+        }
+    }, [fromAddBox, name]); 
+    
 
     const transformWorkouts = (data) => {
         return data.reduce((result, workout) => {
@@ -81,7 +90,12 @@ export default function WorkOutSheets() {
         }
         const movement = workOutData[pickedName];
         if (!movement) {
-            console.error(`No data found for movement: ${pickedName}`);
+            console.log(`No data found for movement: ${pickedName}`);
+            Alert.alert(
+                "Liike puuttuu",
+                "Tästä liikkeestä ei ole dataa, mutta voit tutkia toisia liikkeitä.",
+                [{ text: "OK" }] 
+            );
             return;
         }
         const dates = Object.keys(movement);
@@ -179,7 +193,7 @@ export default function WorkOutSheets() {
         if (movementNames.length > 0) {
             const tempList = []
             for (let i = 1; i <= names.length; i++) {
-                if (names[i-1]=== ""){
+                if (names[i - 1] === "") {
                     continue
                 }
                 tempList.push({ label: names[i - 1].toUpperCase(), value: i.toString() })
@@ -229,8 +243,13 @@ export default function WorkOutSheets() {
 
 
     return (
-        <View>
+        <>
             <View style={styles({ colors, spacing }).headLine}>
+                <Icon
+                    name={"chart-areaspline"}
+                    size={32}
+                    color={colors.text}
+                />
                 <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Tilastot</Text>
             </View>
             <View style={styles({ colors, spacing }).dropDowns}>
@@ -240,23 +259,23 @@ export default function WorkOutSheets() {
                         onValueChange={(itemValue, itemIndex) => setPickedWorkOut(itemValue)}
                         style={styles({ colors, spacing }).picker}
                     >
-                        {items.map((item, index)=>(
+                        {items.map((item, index) => (
                             <Picker.Item key={index} label={item.label} value={item.label} />
                         ))}
-                        
+
                     </Picker>
- 
+
                 </View>
                 <View style={styles({ colors, spacing }).dropdownWrapper}>
-                <Picker
+                    <Picker
                         selectedValue={pickedStyle}
                         onValueChange={(itemValue, itemIndex) => setPickedStyle(itemValue)}
                         style={styles({ colors, spacing }).picker}
                     >
-                        {items2.map((item, index)=>(
+                        {items2.map((item, index) => (
                             <Picker.Item key={index} label={item.label} value={item.value} />
                         ))}
-                        
+
                     </Picker>
 
                 </View>
@@ -276,25 +295,25 @@ export default function WorkOutSheets() {
                                 datasets: [
                                     {
                                         data:
-                                        pickedStyle === "1"
-                                            ? pickedSetsSum
-                                            : pickedStyle === "2"
-                                                ? pickedSetsAvg
-                                                : pickedStyle === "3"
-                                                    ? pickedWeightSum
-                                                    : pickedStyle === "4"
-                                                        ? pickedWeightAvg
-                                                        : pickedStyle === "5"
-                                                            ? powerIndex
-                                                            : pickedStyle == "6"
-                                                                ? calculatedMax
-                                                                : pickedStyle == "7"
-                                                                    ? maxWeightList
-                                                                    : pickedStyle == "8"
-                                                                        ? maxPercentage
-                                                                        : pickedSetsSum,
+                                            pickedStyle === "1"
+                                                ? pickedSetsSum
+                                                : pickedStyle === "2"
+                                                    ? pickedSetsAvg
+                                                    : pickedStyle === "3"
+                                                        ? pickedWeightSum
+                                                        : pickedStyle === "4"
+                                                            ? pickedWeightAvg
+                                                            : pickedStyle === "5"
+                                                                ? powerIndex
+                                                                : pickedStyle == "6"
+                                                                    ? calculatedMax
+                                                                    : pickedStyle == "7"
+                                                                        ? maxWeightList
+                                                                        : pickedStyle == "8"
+                                                                            ? maxPercentage
+                                                                            : pickedSetsSum,
                                         color: (opacity = 1) => hexToRgba(colors.text, opacity), // Punainen viiva
-                                        strokeWidth: 4, 
+                                        strokeWidth: 4,
                                     },
                                 ],
                             }}
@@ -305,12 +324,13 @@ export default function WorkOutSheets() {
                                 backgroundColor: colors.surface,
                                 backgroundGradientFrom: colors.surface,
                                 backgroundGradientTo: colors.surface,
-                                decimalPlaces: 1, 
+                                decimalPlaces: 1,
                                 color: (opacity = 1) => hexToRgba(colors.card, opacity),
                                 labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                             }}
                             style={{
-                                marginVertical: 8,
+                                marginLeft: fromAddBox? -30 : 10,
+                                marginRight: 10,
                                 borderRadius: spacing.small,
                             }}
                         />
@@ -321,11 +341,11 @@ export default function WorkOutSheets() {
                     <Text>Valitse haluttu data</Text>
                 </View>
             }
-            <WorkOutSheetsModal 
+            <WorkOutSheetsModal
                 modal2Visible={modal2Visible}
                 setModal2Visible={setModal2Visible}
             />
-        </View>
+        </>
     );
 }
 
@@ -333,10 +353,10 @@ const styles = ({ colors, spacing }) =>
     StyleSheet.create({
         headLine: {
             width: "100%",
-            borderBottomColor: "black",
-            borderBottomWidth: 2,
-            alignItems: "center",
-            marginBottom: spacing.small
+            flexDirection: "row",
+            alignContent: "center",
+            marginTop: spacing.medium,
+            marginLeft: spacing.small
         },
         dropdownWrapper: {
             flex: 1,
@@ -364,7 +384,8 @@ const styles = ({ colors, spacing }) =>
         emptyLinechart: {
             width: Dimensions.get('window').width - 40,
             height: 220,
-            marginVertical: 8,
+            marginLeft: 10,
+            marginRight: 10,
             borderRadius: spacing.small,
             backgroundColor: colors.surface,
             alignItems: "center",
