@@ -142,7 +142,7 @@ export default function WorkOutData() {
                                         style={styles({ colors, spacing }).button}
                                         onPress={() => setModalVisible(true)}
                                     >
-                                        <Text>tarkemmat tiedot</Text>
+                                        <Text style={{color: colors.text}}>tarkemmat tiedot</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
@@ -225,6 +225,8 @@ const styles = ({ colors, spacing }) =>
             alignItems: "center",
             borderRadius: spacing.small,
             marginTop: spacing.small,
+            borderWidth: 2,
+            borderColor: colors.text,
         },
         workoutContentText: {
             fontSize: 20,
