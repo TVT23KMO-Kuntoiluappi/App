@@ -53,11 +53,11 @@ export default function AddBox({ movementName, setData, movement }) {
 
   return (
     <>
-      <KeyboardAvoidingView behavior="padding" style={styles({ spacing }).container}>
-        <View style={styles({ spacing }).workoutMovementBox}>
-          <View style={styles({ spacing }).workoutMovementName}>
+      <KeyboardAvoidingView behavior="padding" style={styles({ colors, spacing }).container}>
+        <View style={styles({ colors, spacing }).workoutMovementBox}>
+          <View style={styles({ colors, spacing }).workoutMovementName}>
             <TextInput
-              style={styles({ spacing }).text}
+              style={styles({ colors, spacing }).text}
               maxLength={40}
               onChangeText={(text) =>
                 setData((prevData) =>
@@ -85,9 +85,9 @@ export default function AddBox({ movementName, setData, movement }) {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles({ spacing }).setBoxInfo}>
-            <Text style={styles({ spacing }).setBoxInfoText}>Sarjapaino (kg)</Text>
-            <Text style={styles({ spacing }).setBoxInfoText}>Toistomäärä</Text>
+          <View style={styles({ colors, spacing }).setBoxInfo}>
+            <Text style={styles({ colors, spacing }).setBoxInfoText}>Sarjapaino (kg)</Text>
+            <Text style={styles({ colors, spacing }).setBoxInfoText}>Toistomäärä</Text>
           </View>
           <FlatList
             data={movement.sets}
@@ -97,9 +97,9 @@ export default function AddBox({ movementName, setData, movement }) {
               <AddSet set={item} movementId={movement.id} setData={setData} />
             )}
           />
-          <View style={styles({ spacing }).addNewSetView}>
+          <View style={styles({ colors, spacing }).addNewSetView}>
             <FAB
-              style={styles({ spacing }).addNewSet}
+              style={styles({ colors, spacing }).addNewSet}
               icon="plus"
               size="small"
               color="white"
@@ -108,7 +108,7 @@ export default function AddBox({ movementName, setData, movement }) {
             <Text>Lisää uusi sarja</Text>
           </View>
           <Pressable
-            style={styles({ spacing }).removeBox}
+            style={styles({ colors, spacing }).removeBox}
             onPress={() => removeBox(movement.id)}
           >
             <Ionicons name="trash" size={24} color={"white"} />
@@ -127,7 +127,7 @@ export default function AddBox({ movementName, setData, movement }) {
   );
 }
 
-const styles = ({ spacing }) =>
+const styles = ({ colors, spacing }) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -142,17 +142,14 @@ const styles = ({ spacing }) =>
     },
     fab: {
       backgroundColor: "#353536",
-      //borderColor: "black",
-      //borderWidth: 1,
     },
     workoutMovementBox: {
       width: "97%",
       padding: 15,
-      //backgroundColor: "#c7c7c9",
-      backgroundColor: '#e8f5e9',
-      //borderColor: "black",
-      //borderWidth: 1,
-      borderRadius: 5,
+      backgroundColor: '#f5fbfc',
+      borderColor: "black",
+      //borderWidth: 0.5,
+      //borderRadius: 5,
     },
     workoutMovementName: {
       width: "100%",

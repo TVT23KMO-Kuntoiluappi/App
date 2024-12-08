@@ -26,7 +26,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export default function Workout({route}) {
   const tabBarHeight = useBottomTabBarHeight()
-  const { spacing } = useTheme();
+  const { colors, spacing } = useTheme();
   const { workoutName, setWorkoutName, data, setData,
     movementName, setMovementName, setUpdateContent
    } = useUser()
@@ -148,22 +148,21 @@ export default function Workout({route}) {
   };
 
   return (
-    <View style={[styles({ spacing }).page, { height: "100%"}]}>
+    <View style={[styles({ colors, spacing }).page, { height: "100%"}]}>
       <KeyboardAvoidingView 
           behavior={Platform.OS === "ios" ? "padding" : "height"} 
-          style={[styles({ spacing }).container]}
+          style={[styles({ colors, spacing }).container]}
         >
-        <View style={styles({ spacing }).workoutNameInput}>
+        <View style={styles({ colors, spacing }).workoutNameInput}>
           <TextInput
-            style={styles({ spacing }).text}
+            style={styles({ colors, spacing }).text}
             maxLength={40}
             onChangeText={(text) => setWorkoutName(text)}
             value={workoutName}
             placeholder="Treeni 1"
-            color='white'
-            placeholderTextColor={'white'}
+            placeholderTextColor={'grey'}
           />
-          <FAB style={styles({ spacing }).fab} icon="pencil" size="small" color={'white'} />
+          <FAB style={styles({ colors, spacing }).fab} icon="pencil" size="small" color={'grey'} />
         </View>
         <FlatList
           ref={flatListRef}
@@ -180,7 +179,7 @@ export default function Workout({route}) {
             />
           )}
         />
-        <View style={styles({ spacing }).addBox}>
+        <View style={styles({ colors, spacing }).addBox}>
           <FAB
             style={{
               backgroundColor: "#B8A90B",
@@ -193,18 +192,19 @@ export default function Workout({route}) {
           />
         </View>
         
-        <TouchableOpacity style={styles({ spacing }).saveButton} onPress={handleSave}>
+        <TouchableOpacity style={styles({ colors, spacing }).saveButton} onPress={handleSave}>
           <Icon name = "content-save" size = {24} color = "black" />
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
 }
-const styles = ({ spacing }) =>
+const styles = ({ colors, spacing }) =>
   StyleSheet.create({
     page: {
       paddingTop: '10%',
-      paddingBottom: '4%'
+      paddingBottom: '4%',
+      backgroundColor: '#5890a1'
     },
     container: {
       width: '100%',
@@ -215,14 +215,11 @@ const styles = ({ spacing }) =>
     },
     workoutNameInput: {
       flexDirection: "row",
-      backgroundColor: "#353536",
+      backgroundColor: "#f5fbfc",
       alignItems: "center",
       justifyContent: "center",
       textAlign: "center",
       padding: 5,
-      borderColor: "black",
-      borderWidth: 2,
-      borderRadius: 10,
       width: "95%",
     },
     text: {

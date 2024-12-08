@@ -176,14 +176,14 @@ export default function WorkoutBank() {
   };
 
   const renderWorkout = (workout) => (
-    <View key={workout.id} style={styles({ spacing }).workoutBox}>
-      <View style={styles({ spacing }).workoutBoxInfoContainer}>
-        <View style={styles({ spacing }).workoutName}>
-          <Text style={styles({ spacing }).workoutBoxMainText}>
+    <View key={workout.id} style={styles({ colors, spacing }).workoutBox}>
+      <View style={styles({ colors, spacing }).workoutBoxInfoContainer}>
+        <View style={styles({ colors, spacing }).workoutName}>
+          <Text style={styles({ colors, spacing }).workoutBoxMainText}>
             {workout.name}
           </Text>
         </View>
-        <View style={styles({ spacing }).workoutSave}>
+        <View style={styles({ colors, spacing }).workoutSave}>
           <TouchableOpacity onPress={() => toggleBox(workout.id)}>
             <FontAwesome
               style={{ marginRight: "20%" }}
@@ -198,10 +198,10 @@ export default function WorkoutBank() {
         </View>
       </View>
       {expanded[workout.id] && (
-        <View style={styles({ spacing }).workoutContent}>
+        <View style={styles({ colors, spacing }).workoutContent}>
           {workout.content.map((item, index) => (
             <Text
-              style={styles({ spacing }).workoutContentText}
+              style={styles({ colors, spacing }).workoutContentText}
               key={`${workout.id}-content-${index}`}
             >
               {item}
@@ -214,12 +214,12 @@ export default function WorkoutBank() {
 
 
   return (
-    <View style={[styles({ spacing }).page, { height: "100%" }]}>
+    <View style={[styles({ colors, spacing }).page, { height: "100%" }]}>
       <ScrollView>
-        <View style={styles({ spacing }).container}>
-          <View style={styles({ spacing }).searchBox}>
+        <View style={styles({ colors, spacing }).container}>
+          <View style={styles({ colors, spacing }).searchBox}>
             <TextInput
-              style={styles({ spacing }).text}
+              style={styles({ colors, spacing }).text}
               maxLength={40}
               onChangeText={(text) => setSearchWorkout(text)}
               value={searchWorkout}
@@ -228,7 +228,7 @@ export default function WorkoutBank() {
               placeholderTextColor={"black"}
             />
             <FAB
-              style={styles({ spacing }).fab}
+              style={styles({ colors, spacing }).fab}
               icon="magnify"
               size="small"
               color={"black"}
@@ -241,11 +241,12 @@ export default function WorkoutBank() {
   );
 }
 
-const styles = ({ spacing }) =>
+const styles = ({ colors, spacing }) =>
   StyleSheet.create({
     page: {
       paddingTop: "20%",
       flex: 1,
+      backgroundColor: '#5890a1'
     },
     container: {
       flex: 1,
@@ -256,7 +257,7 @@ const styles = ({ spacing }) =>
       flexDirection: "row",
       width: "70%",
       justifyContent: "space-between",
-      backgroundColor: "#c7c7c9",
+      backgroundColor: "#f5fbfc",
       padding: 10,
       paddingLeft: 20,
       borderRadius: 20,
@@ -270,7 +271,7 @@ const styles = ({ spacing }) =>
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "flex-start",
-      backgroundColor: "#e8f5e9",
+      backgroundColor: '#f5fbfc',
       marginBottom: "2%",
       overflow: "hidden",
     },

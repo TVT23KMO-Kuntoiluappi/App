@@ -183,6 +183,7 @@ function MyTabs() {
 const styles = StyleSheet.create({
   bottomNav: {
     flexDirection: "row",
+    paddingBottom: 5
   },
   navButton: {
     flex: 1,
