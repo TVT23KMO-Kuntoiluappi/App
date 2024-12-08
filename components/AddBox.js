@@ -105,7 +105,7 @@ export default function AddBox({ movementName, setData, movement }) {
               color="white"
               onPress={() => addRow(movement.id)}
             />
-            <Text>Lisää uusi sarja</Text>
+            <Text style={styles({ colors, spacing }).text}>Lisää uusi sarja</Text>
           </View>
           <Pressable
             style={styles({ colors, spacing }).removeBox}
@@ -133,12 +133,13 @@ const styles = ({ colors, spacing }) =>
       flex: 1,
       width: "100%",
       alignItems: "center",
-      marginTop: spacing.small * 1.5,
+      marginTop: spacing?.small * 1.5,
     },
     text: {
       fontSize: 26,
       width: "80%",
       textAlign: "center",
+      color: colors?.text || 'white'
     },
     fab: {
       backgroundColor: "#353536",
@@ -146,7 +147,7 @@ const styles = ({ colors, spacing }) =>
     workoutMovementBox: {
       width: "97%",
       padding: 15,
-      backgroundColor: '#f5fbfc',
+      backgroundColor: colors?.card || 'white',
       borderColor: "black",
       //borderWidth: 0.5,
       //borderRadius: 5,
@@ -155,7 +156,7 @@ const styles = ({ colors, spacing }) =>
       width: "100%",
       flexDirection: "row",
       justifyContent: "space-between",
-      borderBottomColor: "black",
+      borderBottomColor: colors?.text || 'white',
       borderBottomWidth: 0.5,
       padding: 2,
     },
@@ -176,6 +177,7 @@ const styles = ({ colors, spacing }) =>
       width: "50%",
       marginLeft: 5,
       marginRight: 5,
+      color: colors?.text || 'white'
     },
     addBox: {
       marginTop: 35,
@@ -197,7 +199,7 @@ const styles = ({ colors, spacing }) =>
       bottom: 40,
       borderWidth: 2,
       borderColor: "black",
-      padding: spacing.large,
+      padding: spacing?.large,
       borderRadius: 50,
       backgroundColor: "#B8A90B",
     },
@@ -216,10 +218,13 @@ const styles = ({ colors, spacing }) =>
       height: 25,
       justifyContent: "center",
       alignItems: "center",
-      marginRight: spacing.small,
+      marginRight: spacing?.small,
       borderColor: "black",
       backgroundColor: "#353536",
       borderWidth: 1,
       borderRadius: 0,
     },
+    text: {
+      color: colors?.text
+    }
   });

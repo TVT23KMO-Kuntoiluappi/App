@@ -45,7 +45,7 @@ function MyTabBar({ state, descriptors, navigation }) {
   }
 
   return (
-    <View style={[styles.bottomNav, { backgroundColor: colors.card }]}>
+    <View style={styles({ colors, spacing }).bottomNav}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
         const label =
@@ -113,7 +113,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             accessibilityState={isFocused ? { selected: true } : {}}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles.navButton}
+            style={styles({ colors, spacing }).navButton}
           >
             {route.name === "Userpage" ? (
               <Image
@@ -132,14 +132,11 @@ function MyTabBar({ state, descriptors, navigation }) {
               <Icon
                 name={iconName}
                 size={32}
-                color={isFocused ? colors.primary : colors.text}
+                color={isFocused ? 'grey' : colors.text}
               />
             )}
             <Text
-              style={[
-                styles.navButtonText,
-                { color: isFocused ? colors.primary : colors.text },
-              ]}
+              style={({color: isFocused ? 'grey' : colors.text})}
             >
               {route.name === "Userpage" && username.length < 11 ? username :
                 route.name === "Userpage" && fname.length < 11 ? fname
@@ -156,7 +153,7 @@ function MyTabs() {
   return (
     <Tab.Navigator
       tabBar={(props) => <MyTabBar {...props} />}
-      screenOptions={{ headerShown: false }} // Jos haluaa otsikon ylhäältä pois, niin tähän false
+      screenOptions={{ headerShown: false }}
     >
       {/*  <Tab.Screen name="Login" component={Login} />
       <Tab.Screen name="Register" component={Register} />*/}
@@ -174,27 +171,25 @@ function MyTabs() {
   );
 }
 
-// Register ja Usersetting Jaakolle
-// Workout Tanelille
-// Gallery Juholle
-// MovementBank Antrelle
-
-// ^^Poista kommentit jos haluaa editointivaiheessa päästä navigoimaan sivulle
-const styles = StyleSheet.create({
+const styles = ({ colors, spacing }) =>
+  StyleSheet.create({
   bottomNav: {
     flexDirection: "row",
-    paddingBottom: 5
+    paddingBottom: 5,
+    backgroundColor: colors?.navbar || 'black',
   },
   navButton: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 8,
-    backgroundColor: '#B8A90B',
-    borderTopColor: 'black',
+    backgroundColor: colors?.navbar || 'black',
+    borderTopColor: colors?.text || 'black',
     borderTopWidth: 1
   },
-  navButtonText: {},
+  navButtonText: {
+    
+  },
 });
 
 export default MyTabs;

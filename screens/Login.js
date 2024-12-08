@@ -39,22 +39,22 @@ export default function Login({ setLogged, navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles({ colors, spacing }).container}>
       <Image
         source={require("../assets/logo.png")}
-        style={styles.logo}
+        style={styles({ colors, spacing }).logo}
         contentFit="contain"
       />
-      <View style={styles.textInputContainer}>
+      <View style={styles({ colors, spacing }).textInputContainer}>
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Käyttäjätunnus"
         />
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setPassword(text)}
           value={password}
@@ -63,26 +63,27 @@ export default function Login({ setLogged, navigation }) {
         />
       </View>
       <TouchableOpacity
-        style={styles.button}
+        style={styles({ colors, spacing }).button}
         onPress={() => {
           login();
         }}
       >
-        <Text style={styles.buttonText}>Kirjaudu sisään</Text>
+        <Text style={styles({ colors, spacing }).buttonText}>Kirjaudu sisään</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.button}
+        style={styles({ colors, spacing }).button}
         onPress={() => {
           navigation.navigate("Register");
         }}
       >
-        <Text style={styles.buttonText}>Rekisteröidy</Text>
+        <Text style={styles({ colors, spacing }).buttonText}>Rekisteröidy</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ({ colors, spacing }) =>
+  StyleSheet.create({
   container: {
     alignItems: "center",
     height: "100%",
@@ -93,28 +94,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textInput: {
-    backgroundColor: "#EFF5D5",
+    backgroundColor: colors?.surface,
     margin: 10,
     padding: 10,
-    borderColor: "black",
-    borderWidth: 2,
+    borderColor: colors?.text,
+    borderWidth: 1,
     borderRadius: 20,
     width: "90%",
     height: 55,
+    color: colors?.text
   },
   button: {
-    backgroundColor: "#B8A90B",
+    backgroundColor: colors?.button || 'black',
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    borderColor: "black",
-    borderWidth: 2,
+    borderColor: colors?.text,
+    borderWidth: 1,
     borderRadius: 20,
     margin: 7,
     width: "50%",
   },
   buttonText: {
     fontSize: 20,
+    color: colors.text
   },
   logo: {
     width: "60%",

@@ -91,7 +91,7 @@ export default function WorkOutData() {
                     size={32}
                     color={colors.text}
                 />
-                <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Tehdyt treenit</Text>
+                <Text style={{ marginBottom: spacing.small, fontSize: 24, color: colors.text }}>Tehdyt treenit</Text>
             </View>
             <View style={{ height: componentHeight, width: Dimensions.get('window').width }}>
                 <SwiperFlatList
@@ -176,11 +176,12 @@ const styles = ({ colors, spacing }) =>
         },
         text: {
             width: "85%",
+            color: colors.text
         },
         workoutBox: {
             width: Dimensions.get('window').width -40,
             borderRadius: spacing.small,
-            backgroundColor: colors.surface,
+            backgroundColor: colors.card,
             alignItems: "center",
             paddingBottom: spacing.small,
             marginLeft: 20,
@@ -199,9 +200,11 @@ const styles = ({ colors, spacing }) =>
         },
         workoutBoxMainText: {
             fontSize: spacing.large,
+            color: colors.text
         },
         workoutBoxMainTextDate: {
             fontSize: spacing.medium,
+            color:colors.text
         },
         workoutSave: {
             width: "35%",
@@ -217,7 +220,7 @@ const styles = ({ colors, spacing }) =>
         button: {
             width: "50%",
             height: 40,
-            backgroundColor: colors.card,
+            backgroundColor: colors.button,
             justifyContent: "center",
             alignItems: "center",
             borderRadius: spacing.small,
@@ -228,6 +231,7 @@ const styles = ({ colors, spacing }) =>
             fontWeight: "bold",
             paddingBottom: 2,
             marginTop: spacing.small,
+            color: colors.text
         },
 
     })

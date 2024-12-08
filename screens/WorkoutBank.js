@@ -246,7 +246,7 @@ const styles = ({ colors, spacing }) =>
     page: {
       paddingTop: "20%",
       flex: 1,
-      backgroundColor: '#5890a1'
+      backgroundColor: colors?.background || 'white'
     },
     container: {
       flex: 1,
@@ -257,7 +257,7 @@ const styles = ({ colors, spacing }) =>
       flexDirection: "row",
       width: "70%",
       justifyContent: "space-between",
-      backgroundColor: "#f5fbfc",
+      backgroundColor: colors?.card || 'white',
       padding: 10,
       paddingLeft: 20,
       borderRadius: 20,
@@ -265,13 +265,14 @@ const styles = ({ colors, spacing }) =>
     },
     text: {
       width: "85%",
+      color: colors?.text || 'white'
     },
     workoutBox: {
       width: "95%",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "flex-start",
-      backgroundColor: '#f5fbfc',
+      backgroundColor: colors?.card || 'white',
       marginBottom: "2%",
       overflow: "hidden",
     },

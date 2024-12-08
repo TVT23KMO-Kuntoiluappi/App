@@ -1,12 +1,16 @@
 import { View, StyleSheet, Dimensions } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
+import { useTheme } from 'react-native-paper';
 
 const { width, height } = Dimensions.get("window");
 
 export default function StartScreen() {
+
+  const { colors, spacing } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={styles({ colors, spacing }).container}>
       <Image
         source={require("../assets/logo.png")}
         style={styles.logo}
@@ -16,10 +20,10 @@ export default function StartScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ({ colors, spacing }) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#EFF5D5",
+    backgroundColor: colors?.background || 'white',
   },
   logo: {
     width: width,

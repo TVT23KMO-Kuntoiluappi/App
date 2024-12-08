@@ -250,7 +250,7 @@ export default function WorkOutSheets({name, fromAddBox}) {
                     size={32}
                     color={colors.text}
                 />
-                <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Tilastot</Text>
+                <Text style={{ marginBottom: spacing.small, fontSize: 24, color: colors.text }}>Tilastot</Text>
             </View>
             <View style={styles({ colors, spacing }).dropDowns}>
                 <View style={styles({ colors, spacing }).dropdownWrapper}>
@@ -281,13 +281,14 @@ export default function WorkOutSheets({name, fromAddBox}) {
                 </View>
                 <TouchableOpacity onPress={() => setModal2Visible(true)}>
                     <Icon
+                        style={{color:colors.text}}
                         name="help-circle"
                         size={32}
                     />
                 </TouchableOpacity>
             </View>
             {pickedDates.length > 0 ?
-                <View style={{ height: 250 }}>
+                <View style={{ height: 250, marginBottom: 50 }}>
                     <ScrollView horizontal>
                         <LineChart
                             data={{
@@ -321,12 +322,12 @@ export default function WorkOutSheets({name, fromAddBox}) {
                             height={220}
                             yAxisLabel=""
                             chartConfig={{
-                                backgroundColor: colors.surface,
+                                backgroundColor: colors.card,
                                 backgroundGradientFrom: colors.surface,
-                                backgroundGradientTo: colors.surface,
+                                backgroundGradientTo: colors.card,
                                 decimalPlaces: 1,
-                                color: (opacity = 1) => hexToRgba(colors.card, opacity),
-                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                color: (opacity = 1) => hexToRgba(colors.card, opacity), // Dataviivan väri
+                                labelColor: (opacity = 1) => hexToRgba(colors.text, opacity),
                             }}
                             style={{
                                 marginLeft: fromAddBox? -30 : 10,
@@ -338,7 +339,7 @@ export default function WorkOutSheets({name, fromAddBox}) {
                     </ScrollView>
                 </View> :
                 <View style={styles({ colors, spacing }).emptyLinechart}>
-                    <Text>Valitse haluttu data</Text>
+                    <Text style={styles({ colors, spacing }).text}>Valitse haluttu data</Text>
                 </View>
             }
             <WorkOutSheetsModal
@@ -378,8 +379,15 @@ const styles = ({ colors, spacing }) =>
             justifyContent: 'space-between',
         },
         picker: {
+            backgroundColor: colors.background,
+            color: colors.text,            
             borderWidth: 1,
             borderColor: "black",
+        },
+        dropdownStyle: {
+            backgroundColor: colors.surface, // Valikon taustaväri
+            borderWidth: 1,
+            borderColor: colors.text,
         },
         emptyLinechart: {
             width: Dimensions.get('window').width - 40,
@@ -387,8 +395,12 @@ const styles = ({ colors, spacing }) =>
             marginLeft: 10,
             marginRight: 10,
             borderRadius: spacing.small,
-            backgroundColor: colors.surface,
+            backgroundColor: colors.card,
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            marginBottom: 50
+        },
+        text: {
+            color: colors.text
         }
     });
