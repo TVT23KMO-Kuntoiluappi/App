@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
-        "backgroundColor": "#EFF5D5"
+        "backgroundColor": "white"
       },
       "splash": {
         "image": null

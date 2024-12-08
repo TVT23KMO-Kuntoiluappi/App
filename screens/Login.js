@@ -109,7 +109,7 @@ const styles = ({ colors, spacing }) =>
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    borderColor: colors?.text,
+    borderColor: colors?.text || 'black',
     borderWidth: 1,
     borderRadius: 20,
     margin: 7,
@@ -117,7 +117,7 @@ const styles = ({ colors, spacing }) =>
   },
   buttonText: {
     fontSize: 20,
-    color: colors.text
+    color: 'white'
   },
   logo: {
     width: "60%",
