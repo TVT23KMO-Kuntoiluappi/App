@@ -13,12 +13,13 @@ const LightTheme = {
   colors: {
     ...NavigationDefaultTheme.colors,
     ...PaperDefaultTheme.colors,
-    primary: 'blue',
-    background: '#ffffff',
-    card: '#B8A90B',
-    text: '#333333',
-    surface: '#EFF5D5',
-    surfaceVariant: '#EFF5D5',
+    primary: '#F4F4FB',
+    background: '#F4F4FB',
+    card: '#F4F8FB',
+    navbar: '#8fd2ff',
+    button: '#09132F',
+    text: '#250f50',
+    surface: '#DDEDFF'
   },
   spacing,
 };
@@ -30,9 +31,10 @@ const DarkTheme = {
     ...NavigationDarkTheme.colors,
     ...PaperDarkTheme.colors,
     primary: 'blue',
-    background: '#333333',
-    card: '#B8A90B',
-    text: '#EFF5D5',
+    background: '#2e2d2d',
+    card: '#1e1e1e',
+    button: '#0A0A0A',
+    text: '#8fd2ff',
   },
   spacing,  
 };

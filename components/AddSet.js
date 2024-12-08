@@ -11,7 +11,7 @@ export default function AddSet({
   movement,
   set
 }) {
-  const { spacing } = useTheme()
+  const { colors, spacing } = useTheme()
 
   const removeItem = (setId) => {
     setData((prevdata) => 
@@ -76,7 +76,7 @@ export default function AddSet({
             }}
           />
           <Pressable onPress={() => removeItem(set.id)}>
-            <Ionicons name="trash" size={24}/>
+            <Ionicons name="trash" size={24} color={colors?.text}/>
           </Pressable>
         </View>
     </>
@@ -84,7 +84,7 @@ export default function AddSet({
 }
 
 
-const styles = ({ spacing }) => StyleSheet.create({
+const styles = ({ colors, spacing }) => StyleSheet.create({
     setBox: {
       flexDirection: "row",
       width: "95%",

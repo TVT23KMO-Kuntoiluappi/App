@@ -33,7 +33,7 @@ export default function UserWorkOutTemplates({ navigation }) {
                     size={32}
                     color={colors.text}
                 />
-                <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Suosikkitreenit</Text>
+                <Text style={{ marginBottom: spacing.small, fontSize: 24, color: colors.text }}>Suosikkitreenit</Text>
             </View>
             <View style={{ height: componentHeight, width: Dimensions.get('window').width }}>
                 <SwiperFlatList
@@ -96,15 +96,16 @@ const styles = ({ colors, spacing }) =>
             alignItems: "center",
             alignContent: "center",
             marginTop: spacing.medium,
-            marginLeft: spacing.small
+            marginLeft: spacing.medium
         },
         text: {
             width: "85%",
+            color: colors.text
         },
         workoutBox: {
             width: Dimensions.get('window').width - 40,
             borderRadius: spacing.small,
-            backgroundColor: colors.surface,
+            backgroundColor: colors.card,
             alignItems: "center",
             paddingBottom: spacing.small,
             marginLeft: 20,
@@ -117,6 +118,7 @@ const styles = ({ colors, spacing }) =>
             alignItems: "center",
             paddingLeft: "5%",
             alignSelf: "flex-start",
+            color: colors.text
         },
         workoutName: {
             width: "65%",
@@ -127,6 +129,7 @@ const styles = ({ colors, spacing }) =>
         },
         workoutBoxMainText: {
             fontSize: spacing.large,
+            color: colors.text
         },
         workoutContent: {
             width: "100%",
@@ -140,5 +143,6 @@ const styles = ({ colors, spacing }) =>
             fontWeight: "bold",
             paddingBottom: 2,
             marginTop: spacing.small,
+            color: colors.text
         },
     })

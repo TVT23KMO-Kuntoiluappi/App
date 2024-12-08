@@ -57,7 +57,7 @@ export default function UserSettings() {
     setIsDark,
   } = useUser();
 
-  const { colors, spacing } = useTheme();
+  const { colors, spacing } = useTheme()
   const [edit, setEdit] = useState(false);
   const [cameraOrLoad, setCameraOrLoad] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -295,7 +295,7 @@ export default function UserSettings() {
               style={styles({ colors, spacing }).button}
               onPress={() => setCameraOrLoad(!cameraOrLoad)}
             >
-              <Text>Vaihda profiilikuva</Text>
+              <Text style={styles({colors,spacing}).textComp}>Vaihda profiilikuva</Text>
             </TouchableOpacity>
           ) : (
             <>
@@ -345,6 +345,7 @@ export default function UserSettings() {
                   onChangeText={(text) => setFname(text)}
                   value={fname}
                   onBlur={() => setFnameEditable(false)}
+                  placeholderTextColor={colors.text}
                 />
               </View>
             ) : (
@@ -353,7 +354,7 @@ export default function UserSettings() {
                 onPress={() => setFnameEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Etunimi</Text>
-                <Text style={{ textAlign: "center" }}>
+                <Text style={styles({colors,spacing}).textComp}>
                   {fname || "etunimi"}
                 </Text>
               </TouchableOpacity>
@@ -369,6 +370,7 @@ export default function UserSettings() {
                   onChangeText={(text) => setLname(text)}
                   value={lname}
                   onBlur={() => setLnameEditable(false)}
+                  placeholderTextColor={colors.text}
                 />
               </View>
             ) : (
@@ -377,7 +379,7 @@ export default function UserSettings() {
                 onPress={() => setLnameEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Sukunimi</Text>
-                <Text style={{ textAlign: "center" }}>
+                <Text style={styles({colors,spacing}).textComp}>
                   {lname || "sukunimi"}
                 </Text>
               </TouchableOpacity>
@@ -395,6 +397,7 @@ export default function UserSettings() {
                   onChangeText={(text) => setUsername(text)}
                   value={username}
                   onBlur={() => setUsernameEditable(false)}
+                  placeholderTextColor={colors.text}
                 />
               </View>
             ) : (
@@ -405,7 +408,7 @@ export default function UserSettings() {
                 <Text style={styles({ colors, spacing }).label}>
                   Käyttäjätunnus
                 </Text>
-                <Text style={{ textAlign: "center" }}>
+                <Text style={styles({colors,spacing}).textComp}>
                   {username || "Käyttäjätunnus"}
                 </Text>
               </TouchableOpacity>
@@ -421,6 +424,7 @@ export default function UserSettings() {
                   onChangeText={(text) => setEmail(text)}
                   value={email}
                   onBlur={() => setEmailEditable(false)}
+                  placeholderTextColor={colors.text}
                 />
               </View>
             ) : (
@@ -431,7 +435,7 @@ export default function UserSettings() {
                 <Text style={styles({ colors, spacing }).label}>
                   Sähköposti
                 </Text>
-                <Text style={{ textAlign: "center" }}>
+                <Text style={styles({colors,spacing}).textComp}>
                   {email || "Sähköposti"}
                 </Text>
               </TouchableOpacity>
@@ -449,6 +453,7 @@ export default function UserSettings() {
                   onChangeText={(text) => setWeight(text)}
                   value={weight}
                   onBlur={() => setWeightEditable(false)}
+                  placeholderTextColor={colors.text}
                 />
               </View>
             ) : (
@@ -457,7 +462,7 @@ export default function UserSettings() {
                 onPress={() => setWeightEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Paino</Text>
-                <Text style={{ textAlign: "center" }}>
+                <Text style={styles({colors,spacing}).textComp}>
                   {weight || "100 kg"}
                 </Text>
               </TouchableOpacity>
@@ -473,6 +478,7 @@ export default function UserSettings() {
                   onChangeText={(text) => setHeight(text)}
                   value={height}
                   onBlur={() => setHeightEditable(false)}
+                  placeholderTextColor={colors.text}
                 />
               </View>
             ) : (
@@ -481,7 +487,7 @@ export default function UserSettings() {
                 onPress={() => setHeightEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Pituus</Text>
-                <Text style={{ textAlign: "center" }}>
+                <Text style={styles({colors,spacing}).textComp}>
                   {height || "180 cm"}
                 </Text>
               </TouchableOpacity>
@@ -506,17 +512,18 @@ export default function UserSettings() {
             style={styles({ colors, spacing }).button}
             onPress={() => userUpdate()}
           >
-            <Text>Päivitä tiedot</Text>
+            <Text style={styles({colors,spacing}).textComp}>Päivitä tiedot</Text>
           </TouchableOpacity>
         )}
         <View style={styles({ colors, spacing }).addOneRepMax}>
           <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
-            <Text>Lisää "One rep Max"</Text>
+            <Text style={styles({colors,spacing}).textComp}>Lisää "One rep Max"</Text>
             <TouchableOpacity>
               <Icon
                 name="help-circle"
                 size={24}
                 onPress={() => setModalVisible(true)}
+                style={styles({colors,spacing}).textComp}
               />
             </TouchableOpacity>
           </View>
@@ -524,18 +531,29 @@ export default function UserSettings() {
             oneRepMax.map((item, index) => (
               <View key={index} style={styles({ colors, spacing }).oneRepMaxs}>
                 <TouchableOpacity onPress={() => deleteMaxRep(index)}>
-                  <Ionicons name="trash" size={24} />
+                  <Ionicons 
+                    style={styles({colors,spacing}).textComp}
+                    name="trash" 
+                    size={24} 
+                  />
                 </TouchableOpacity>
-                <Text>{item.move}</Text>
+                <Text style={styles({colors,spacing}).textComp}>{item.move}</Text>
                 <View style = {{flexDirection: "row", width: "50%", justifyContent: "space-between"}}>
                 <TouchableOpacity
                   onPress={() => changeKilos(index, "subtract")}
                 >
-                  <Icon name="minus" size={24} />
+                  <Icon 
+                    style={styles({colors,spacing}).textComp} 
+                    name="minus" size={24} 
+                  />
                 </TouchableOpacity>
-                <Text>{item.mass} kg</Text>
+                <Text style={styles({colors,spacing}).textComp}>{item.mass} kg</Text>
                 <TouchableOpacity onPress={() => changeKilos(index, "add")}>
-                  <Icon name="plus" size={24} />
+                  <Icon 
+                    style={styles({colors,spacing}).textComp} 
+                    name="plus" 
+                    size={24} 
+                  />
                 </TouchableOpacity>
                 </View>
               </View>
@@ -557,6 +575,7 @@ export default function UserSettings() {
                 maxLength={40}
                 onChangeText={(text) => setLiike(text)}
                 value={liike}
+                placeholderTextColor={colors.text}
               />
               <TextInput
                 placeholder="liikkeen massa"
@@ -564,25 +583,32 @@ export default function UserSettings() {
                 maxLength={40}
                 onChangeText={(text) => setMassa(text)}
                 value={massa}
+                placeholderTextColor={colors.text}
               />
             </View>
           )}
           <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
             <TouchableOpacity onLongPress={() => addMaxRep()}>
               {!showRep ? (
-                <FAB
-                  style={styles({ spacing }).addNewSet}
-                  icon="plus"
-                  size="small"
+                <TouchableOpacity 
                   onPress={() => setShowRep(!showRep)}
+                >
+                <Icon 
+                                    style={[styles({colors,spacing}).textComp, {borderWidth: 2, borderColor: colors.text, backgroundColor: colors.background}]}
+                  name="plus" 
+                  size={32} 
                 />
+              </TouchableOpacity>
               ) : (
-                <FAB
-                  style={styles({ spacing }).addNewSet}
-                  icon="minus"
-                  size="small"
+                <TouchableOpacity 
                   onPress={() => setShowRep(!showRep)}
+                >
+                <Icon 
+                  style={[styles({colors,spacing}).textComp, {borderWidth: 2, borderColor: colors.text, backgroundColor: colors.background}]} 
+                  name="minus" 
+                  size={32} 
                 />
+              </TouchableOpacity>
               )}
             </TouchableOpacity>
             {showRep && <TouchableOpacity
@@ -592,7 +618,7 @@ export default function UserSettings() {
               ]}
               onPress={() => addMaxRep()}
             > 
-              <Text>Lisää liike</Text>
+              <Text style={styles({colors,spacing}).textComp}>Lisää liike</Text>
             </TouchableOpacity>}
             {updateMaxList && (
               <TouchableOpacity
@@ -671,7 +697,7 @@ const styles = ({ colors, spacing }) =>
       position: "relative",
       borderWidth: 2,
       borderColor: "black",
-      borderRadius: 20,
+      borderRadius: spacing.small,
       margin: 5,
       width: "45%",
     },
@@ -679,17 +705,18 @@ const styles = ({ colors, spacing }) =>
       position: "absolute",
       top: -7,
       left: 20,
-      backgroundColor: "#ffffff",
+      backgroundColor: colors?.background || "black",
       paddingHorizontal: 5,
       fontSize: 10,
-      color: "#888",
+      color: colors?.text || "black",
     },
     textInput: {
       height: 50,
       fontSize: 16,
       padding: 5,
       textAlign: "center",
-      color: "black",
+      color: colors?.text || "white",
+      borderColor: colors?.text || "white"
     },
     text: {
       alignItems: "center",
@@ -697,10 +724,13 @@ const styles = ({ colors, spacing }) =>
       margin: 5,
       padding: 5,
       borderWidth: 2,
-      borderColor: "black",
-      borderRadius: 20,
+      borderColor: colors?.text || "black",
+      borderRadius: spacing.small,
       width: "45%",
       height: 50,
+    },
+    textComp: {
+      color: colors?.text || "white"
     },
     profileDetails: {
       width: "100%",
@@ -712,11 +742,11 @@ const styles = ({ colors, spacing }) =>
       marginBottom: 10,
     },
     button: {
-      backgroundColor: colors?.card || "black",
+      backgroundColor: colors?.button || "black",
       justifyContent: "center",
       alignItems: "center",
       padding: 20,
-      borderColor: "black",
+      borderColor: colors?.text || "black",
       borderWidth: 2,
       borderRadius: spacing.small,
       margin: 7,
@@ -725,10 +755,10 @@ const styles = ({ colors, spacing }) =>
     addOneRepMax: {
       borderRadius: 8,
       width: "95%",
-      backgroundColor: "#EFF5D5",
+      backgroundColor: colors?.card || "black",
       margin: 5,
       padding: 5,
-      borderColor: "black",
+      borderColor: colors?.text || "black",
       borderWidth: 2,
       borderRadius: 20,
       justifyContent: "center",
@@ -757,7 +787,7 @@ const styles = ({ colors, spacing }) =>
       alignItems: "center",
       justifyContent: "space-between",
       borderBottomWidth: 1,
-      borderBottomColor: "black",
+      borderBottomColor: colors?.text || "black",
       padding: 8,
       width: "90%",
     },
@@ -766,11 +796,11 @@ const styles = ({ colors, spacing }) =>
       fontSize: 16,
       padding: 8,
       textAlign: "center",
-      color: "black",
-      backgroundColor: "#ffffff",
+      color: colors?.text || "black",
+      backgroundColor: colors?.background || "white",
       width: "45%",
       borderRadius: spacing.medium,
-      borderColor: "black",
+      borderColor: colors?.text || "black",
       borderWidth: 2,
     },
     addNewSet: {
@@ -778,8 +808,8 @@ const styles = ({ colors, spacing }) =>
       justifyContent: "center",
       alignItems: "center",
       marginRight: spacing.small,
-      borderColor: "black",
-      backgroundColor: "#B8A90B",
+      borderColor: colors?.text || "black",
+      backgroundColor: colors?.button || "white",
       borderWidth: 1,
       borderRadius: 0,
     },

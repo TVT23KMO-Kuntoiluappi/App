@@ -19,7 +19,7 @@ export default function ProfileInfo({ navigation }) {
           size={32}
           color={colors.text}
         />
-        <Text style={{ marginBottom: spacing.small, fontSize: 24 }}>Omat sivut</Text>
+        <Text style={{ marginBottom: spacing.small, fontSize: 24, color: colors.text }}>Omat sivut</Text>
       </View>
       <View style={styles({ colors, spacing }).profileInfo}>
         <View style={{ position: "relative" }}>
@@ -34,13 +34,13 @@ export default function ProfileInfo({ navigation }) {
           {loading && <Loading />}
         </View>
         <View style={{ height: "100%", width: "50%", alignItems: "flex-start", justifyContent: "space-around" }}>
-          <View><Text>{fname} {lname} ({username})</Text></View>
-          <View><Text>Paino: {weight} kg</Text></View>
-          <View><Text>Pituus: {height} cm</Text></View>
-          <View><Text>Painoindeksi: {bmi}</Text></View>
+          <View><Text style={{color:colors.text}}>{fname} {lname} ({username})</Text></View>
+          <View><Text style={{color:colors.text}}>Paino: {weight} kg</Text></View>
+          <View><Text style={{color:colors.text}}>Pituus: {height} cm</Text></View>
+          <View><Text style={{color:colors.text}}>Painoindeksi: {bmi}</Text></View>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate("Asetukset")}>
-          <Icon name="cog" size={48} />
+          <Icon style={{color:colors.text}} name="cog" size={48} />
         </TouchableOpacity>
       </View>
     </>

@@ -16,7 +16,7 @@ export default function UserPage({ navigation }) {
     { key: 'templates', component: <UserWorkOutTemplates navigation={navigation} />},
     { key: 'data', component: <WorkOutData />},
     { key: 'workouts', component: <WorkOutSheets /> },
-    { key: 'paddingComponent', component: <View style = {{height: 100}}></View>}
+    
     
   ];
 
@@ -26,6 +26,7 @@ export default function UserPage({ navigation }) {
         data={profileData} 
         renderItem={({ item }) => <View>{item.component}</View>} 
         keyExtractor={(item) => item.key}
+        style={styles({ colors, spacing }).flatlist}
         contentContainerStyle={styles({ colors, spacing }).containerScroll} 
       />
     </SafeAreaView>
@@ -41,6 +42,7 @@ const styles = ({ colors, spacing }) =>
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "flex-start",
+      backgroundColor: colors.background
     },
     containerScroll: {
       flexGrow: 1,
@@ -48,6 +50,8 @@ const styles = ({ colors, spacing }) =>
       alignItems: "center",
       justifyContent: "flex-start",
       marginTop: 30,
+      backgroundColor: colors.background,
+      
     },
     profileInfo: {
       width: "95%",
@@ -58,4 +62,7 @@ const styles = ({ colors, spacing }) =>
       marginBottom: 20,
       marginTop: 20,
     },
+    flatlist: {
+      backgroundColor: colors.background
+    }
   });

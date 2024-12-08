@@ -151,32 +151,32 @@ export default function Register({setLogged}) {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Luo tunnus</Text>
+    <SafeAreaView style={styles({ colors, spacing }).container}>
+      <Text style={styles({ colors, spacing }).header}>Luo tunnus</Text>
       <ScrollView contentContainerStyle={styles.textInputContainer}>
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setFname(text)}
           value={fname}
           placeholder="Etunimi"
         />
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setLname(text)}
           value={lname}
           placeholder="Sukunimi"
         />
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Käyttäjätunnus"
         />
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setEmail(text)}
           value={email}
@@ -184,7 +184,7 @@ export default function Register({setLogged}) {
         />    
         {checkPassword(firstPassword)}    
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setFirstPassword(text)}
           value={firstPassword}
@@ -192,7 +192,7 @@ export default function Register({setLogged}) {
           secureTextEntry={true}
         />
         <TextInput
-          style={styles.textInput}
+          style={styles({ colors, spacing }).textInput}
           maxLength={40}
           onChangeText={(text) => setPassword(text)}
           value={password}
@@ -200,14 +200,15 @@ export default function Register({setLogged}) {
           secureTextEntry={true}
         />
       </ScrollView>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Luo käyttäjä</Text>
+      <TouchableOpacity style={styles({ colors, spacing }).button} onPress={handleRegister}>
+        <Text style={styles({ colors, spacing }).buttonText}>Luo käyttäjä</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ({ colors, spacing }) => 
+  StyleSheet.create({
   container: {
     alignItems: 'center',
   },
@@ -221,17 +222,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   textInput: {
-    backgroundColor: '#EFF5D5',
+    backgroundColor: colors.surface,
     margin: 10,
     padding: 10,
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 20,
     width: 0.9*screenWidth,
-    height: 55
+    height: 55,
   },
   button: {
-    backgroundColor: '#B8A90B',
+    backgroundColor: colors?.card || 'black',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -242,6 +243,7 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   buttonText: {
-    fontSize: 20
+    fontSize: 20,
+    color: colors.text
   }
 });
