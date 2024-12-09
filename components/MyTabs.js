@@ -164,7 +164,11 @@ function MyTabs({ setLogged }) {
       </Tab.Screen>
       <Tab.Screen
         name="Asetukset"
-        options={{ headerShown: true, tabBarButton: () => null }}
+        options={{ 
+          headerShown: true, 
+          tabBarButton: () => null,
+        headerTitleAlign: "center"
+        }}
       >
         {() => <UserSettings setLogged={setLogged} />}
       </Tab.Screen>

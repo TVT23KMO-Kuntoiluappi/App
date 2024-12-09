@@ -41,9 +41,17 @@ export default function WorkOutSheets({name, fromAddBox}) {
     
     useEffect(() => {
         if (fromAddBox) {
-            const normalizedName = typeof name === "string" ? name.toUpperCase() : ""; 
-            setPickedWorkOut(normalizedName);
-            console.log("Picked WorkOut updated:", normalizedName);
+            const normalizedName = typeof name === "string" ? name.toUpperCase() : "";
+            if (!normalizedName) {
+                Alert.alert(
+                    "Liike puuttuu",
+                    "Tästä liikkeestä ei ole dataa, mutta voit tutkia toisia liikkeitä.",
+                    [{ text: "OK" }] 
+                );
+            } else {
+                setPickedWorkOut(normalizedName);
+                console.log("Picked WorkOut updated:", normalizedName);
+            }
         }
     }, [fromAddBox, name]); 
     
@@ -92,11 +100,6 @@ export default function WorkOutSheets({name, fromAddBox}) {
         const movement = workOutData[pickedName];
         if (!movement) {
             console.log(`No data found for movement: ${pickedName}`);
-            Alert.alert(
-                "Liike puuttuu",
-                "Tästä liikkeestä ei ole dataa, mutta voit tutkia toisia liikkeitä.",
-                [{ text: "OK" }] 
-            );
             return;
         }
         const dates = Object.keys(movement);

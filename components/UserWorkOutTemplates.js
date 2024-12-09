@@ -34,34 +34,34 @@ export default function UserWorkOutTemplates() {
         console.log("poistetava dokumentti: ", delededDocument)
         const userId = auth.currentUser.uid;
 
-      Alert.alert(
-        "Vahvistus", 
-        `Haluatko tämän suosikkitreenin: ${delededDocument.workoutName}?`,
-        [
-          {
-            text: "Peruuta", 
-            style: "cancel",
-          },
-          {
-            text: "Poista",
-            style: "destructive",
-            onPress: async () => {
-              try {
-                const workoutDocRef = doc(
-                  firestore,
-                  `users/${userId}/treenipohjat/${delededDocument.workoutName}`
-                );
-    
-                await deleteDoc(workoutDocRef);
-                setUpdateContent((prevData) => prevData + 1);
-                console.log(`Workout ${delededDocument.workoutName} poistettu onnistuneesti.`);
-              } catch (error) {
-                console.error("Virhe treenin poistossa:", error);
-              }
-            },
-          },
-        ]
-      );
+        Alert.alert(
+            "Vahvistus",
+            `Haluatko tämän suosikkitreenin: ${delededDocument.workoutName}?`,
+            [
+                {
+                    text: "Peruuta",
+                    style: "cancel",
+                },
+                {
+                    text: "Poista",
+                    style: "destructive",
+                    onPress: async () => {
+                        try {
+                            const workoutDocRef = doc(
+                                firestore,
+                                `users/${userId}/treenipohjat/${delededDocument.workoutName}`
+                            );
+
+                            await deleteDoc(workoutDocRef);
+                            setUpdateContent((prevData) => prevData + 1);
+                            console.log(`Workout ${delededDocument.workoutName} poistettu onnistuneesti.`);
+                        } catch (error) {
+                            console.error("Virhe treenin poistossa:", error);
+                        }
+                    },
+                },
+            ]
+        );
     }
 
     return (
@@ -83,29 +83,53 @@ export default function UserWorkOutTemplates() {
                     renderItem={({ item, index }) => (
                         <View key={index} style={[styles({ colors, spacing }).workoutBox, { justifyContent: biggerFavourite ? 'space-between' : 'center' }]}>
                             <View style={styles({ colors, spacing }).workoutBoxInfoContainer}>
-                                <View style={styles({ colors, spacing }).workoutName}>
-                                    <Text style={styles({ colors, spacing }).workoutBoxMainText}>
-                                        {item.templateName}
-                                    </Text>
+                                {/* Chevron Left */}
+                                {index > 0 && !biggerFavourite && (
+                                    <View style={styles({ colors, spacing }).arrowLeft}>
+                                        <TouchableOpacity>
+                                            <FontAwesome name={"chevron-left"} size={26} color={"#555"} />
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+
+                                {/* Center Content */}
+                                <View style={styles({ colors, spacing }).centerContent}>
+                                    <View style={styles({ colors, spacing }).textContainer}>
+                                        <Text style={styles({ colors, spacing }).workoutBoxMainText}>
+                                            {item.templateName}
+                                        </Text>
+                                    </View>
+                                    <View style={styles({ colors, spacing }).iconContainer}>
+                                        <TouchableOpacity onPress={() => toggleBox(index)}>
+                                            <FontAwesome
+                                                name={biggerFavourite ? "chevron-up" : "chevron-down"}
+                                                size={36}
+                                                color={"#555"}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                navigation.navigate("Treenaa!", {
+                                                    workoutName: item.templateName,
+                                                    savedData: item,
+                                                })
+                                            }
+                                        >
+                                            <Icon name={"dumbbell"} size={32} color={colors.text} />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                                <View style={styles({ colors, spacing }).workoutSave}>
-                                    <TouchableOpacity onPress={() => toggleBox(index)}>
-                                        <FontAwesome
-                                            style={{ marginRight: "20%" }}
-                                            name={biggerFavourite ? "chevron-up" : "chevron-down"}
-                                            size={36}
-                                            color={"#555"}
-                                        />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => navigation.navigate("Treenaa!", { workoutName: item.templateName, savedData: item })}>
-                                        <Icon
-                                            name={"dumbbell"}
-                                            size={32}
-                                            color={colors.text}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
+
+                                {/* Chevron Right */}
+                                {index < usersSavedWorkOuts.length - 1 && !biggerFavourite && (
+                                    <View style={styles({ colors, spacing }).arrowRight}>
+                                        <TouchableOpacity>
+                                            <FontAwesome name={"chevron-right"} size={26} color={"#555"} />
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
                             </View>
+
                             {biggerFavourite && (
                                 <View style={styles({ colors, spacing }).workoutContent}>
                                     {item.movements.map((movement, index) => (
@@ -118,14 +142,14 @@ export default function UserWorkOutTemplates() {
                                     ))}
                                 </View>
                             )}
-                            {biggerFavourite && 
-                            <TouchableOpacity style={{marginBottom: 30}} onPress={() => deleteFavourite(index)}>
-                                <Ionicons
-                                    name={"trash"}
-                                    size={32}
-                                    color={colors.text}
-                                />
-                            </TouchableOpacity>
+                            {biggerFavourite &&
+                                <TouchableOpacity style={{ marginBottom: 30 }} onPress={() => deleteFavourite(index)}>
+                                    <Ionicons
+                                        name={"trash"}
+                                        size={32}
+                                        color={colors.text}
+                                    />
+                                </TouchableOpacity>
                             }
                         </View>
                     )}
@@ -156,20 +180,62 @@ const styles = ({ colors, spacing }) =>
             flexDirection: "colum",
             alignItems: "center",
             marginLeft: 20,
-            marginRight: 20,      
+            marginRight: 20,
         },
         workoutBoxInfoContainer: {
-            flexDirection: "row",
+            position: "relative",
             width: "100%",
             height: 150,
+            flexDirection: "row", // Järjestä lapset vaakasuoraan
             alignItems: "center",
-            paddingLeft: "5%",
-            alignSelf: "flex-start",
+            justifyContent: "center", // Tasaa lapset
+          },
+          
+          centerContent: {
+            width: "80%",
+            flexDirection: "row", // Teksti ja ikonit vierekkäin
+            alignItems: "center",
+            justifyContent: "space-between", // Keskitetty vaakasuunnassa
+          },
+          
+          textContainer: {
+            flexDirection: "column", // Teksti päällekkäin
+            marginRight: 20, // Etäisyys ikoneista
+            alignItems: "flex-start", // Teksti vasemmalle
+          },
+          
+          iconContainer: {
+            flexDirection: "row", // Ikonit vierekkäin
+            alignItems: "center",
+            justifyContent: "flex-start", // Ikonit tekstin viereen
+            gap: 10, // Lisää etäisyyttä ikonien väliin
+          },
+          
+          arrowLeft: {
+            position: "absolute",
+            left: -20,
+            top: "50%",
+            transform: [{ translateY: -13 }], // Keskitä pystysuunnassa
+          },
+          
+          arrowRight: {
+            position: "absolute",
+            right: -20,
+            top: "50%",
+            transform: [{ translateY: -13 }], // Keskitä pystysuunnassa
+          },
+          
+          workoutName: {
+            flexDirection: "row",
+            alignItems: "center",
+          },
+          
+          workoutBoxMainText: {
+            fontSize: 18,
+            fontWeight: "bold",
             color: colors.text,
-        },
-        workoutName: {
-            width: "65%",
-        },
+          },
+          
         workoutSave: {
             width: "35%",
             flexDirection: "row",

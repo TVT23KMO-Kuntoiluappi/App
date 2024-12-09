@@ -729,7 +729,7 @@ export default function UserSettings({navigation, setLogged}) {
             style = {styles({colors,spacing}).button}
             onPress={()=>deleteAllUserData()}
           >
-            <Text style = {styles({colors,spacing}).textComp}>Poista käyttäjä</Text>
+            <Text style = {[styles({colors,spacing}).textComp, {color: colors.buttonText}]}>Poista käyttäjä</Text>
           </TouchableOpacity>
       </ScrollView>
       <OneRepMaxInfo

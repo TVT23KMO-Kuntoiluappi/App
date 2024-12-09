@@ -85,41 +85,41 @@ export default function WorkOutData() {
     }
 
     const deleteWorkOut = async (index) => {
-      const reverseIndex = workOutDataReverse.length - index - 1;
-      const workoutDataToDelete = workOutFirebaseData[reverseIndex];
-      const userId = auth.currentUser.uid;
-    
-      // Näytä varmistus-alert
-      Alert.alert(
-        "Vahvistus", // Otsikko
-        `Haluatko varmasti poistaa treenin: ${workoutDataToDelete.workoutName} ${formatTimestamp(workoutDataToDelete.workoutId)} ?`, // Viesti
-        [
-          {
-            text: "Peruuta", 
-            style: "cancel",
-          },
-          {
-            text: "Poista",
-            style: "destructive",
-            onPress: async () => {
-              try {
-                const workoutDocRef = doc(
-                  firestore,
-                  `users/${userId}/tallennetuttreenit/${workoutDataToDelete.workoutId}`
-                );
-    
-                await deleteDoc(workoutDocRef);
-                console.log(`Workout ${workoutDataToDelete.workoutId} poistettu onnistuneesti.`);
-                setUpdateContent((prevData) => prevData + 1);
-              } catch (error) {
-                console.error("Virhe treenin poistossa:", error);
-              }
-            },
-          },
-        ]
-      );
+        const reverseIndex = workOutDataReverse.length - index - 1;
+        const workoutDataToDelete = workOutFirebaseData[reverseIndex];
+        const userId = auth.currentUser.uid;
+
+        // Näytä varmistus-alert
+        Alert.alert(
+            "Vahvistus", // Otsikko
+            `Haluatko varmasti poistaa treenin: ${workoutDataToDelete.workoutName} ${formatTimestamp(workoutDataToDelete.workoutId)} ?`, // Viesti
+            [
+                {
+                    text: "Peruuta",
+                    style: "cancel",
+                },
+                {
+                    text: "Poista",
+                    style: "destructive",
+                    onPress: async () => {
+                        try {
+                            const workoutDocRef = doc(
+                                firestore,
+                                `users/${userId}/tallennetuttreenit/${workoutDataToDelete.workoutId}`
+                            );
+
+                            await deleteDoc(workoutDocRef);
+                            console.log(`Workout ${workoutDataToDelete.workoutId} poistettu onnistuneesti.`);
+                            setUpdateContent((prevData) => prevData + 1);
+                        } catch (error) {
+                            console.error("Virhe treenin poistossa:", error);
+                        }
+                    },
+                },
+            ]
+        );
     };
-    
+
 
 
     return (
@@ -141,32 +141,49 @@ export default function WorkOutData() {
                     renderItem={({ item, index }) => (
                         <View key={index} style={[styles({ colors, spacing }).workoutBox, { justifyContent: biggerFavourite ? 'space-between' : 'center' }]}>
                             <View style={styles({ colors, spacing }).workOutDetails}>
-                                <View style={styles({ colors, spacing }).workoutName}>
-                                    <Text style={styles({ colors, spacing }).workoutBoxMainText}>
-                                        {item.workoutName ? item.workoutName : "Treeni pvm:"}
-                                    </Text>
-                                    <Text style={styles({ colors, spacing }).workoutBoxMainTextDate}>
-                                        {formatTimestamp(item.workoutId)}
-                                    </Text>
-                                </View>
-                                <View style={styles({ colors, spacing }).workoutSave}>
-                                    <TouchableOpacity onPress={() => toggleBox(index)}>
-                                        <FontAwesome
-                                            style={{ marginRight: "20%" }}
-                                            name={biggerFavourite ? "chevron-up" : "chevron-down"}
-                                            size={36}
-                                            color={"#555"}
-                                        />
+                                {/* Chevron Left */}
+                                {index > 0 && !biggerFavourite &&
+                                <View style={styles({ colors, spacing }).arrowLeft}>
+                                    <TouchableOpacity>
+                                        <FontAwesome name={"chevron-left"} size={26} color={"#555"} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => addWorkoutToFirebase(item.movements, item.workoutName)}>
-                                        <Icon
-                                            name={"heart-outline"}
-                                            size={32}
-                                            color={colors.text}
-                                        />
-                                    </TouchableOpacity>
+                                </View> }
+
+                                {/* Center Content */}
+                                <View style={styles({ colors, spacing }).centerContent}>
+                                    <View style={styles({ colors, spacing }).textContainer}>
+                                        <Text style={styles({ colors, spacing }).workoutBoxMainText}>
+                                            {item.workoutName ? item.workoutName : "Treeni pvm:"}
+                                        </Text>
+                                        <Text style={styles({ colors, spacing }).workoutBoxMainTextDate}>
+                                            {formatTimestamp(item.workoutId)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles({ colors, spacing }).iconContainer}>
+                                        <TouchableOpacity onPress={() => toggleBox(index)}>
+                                            <FontAwesome
+                                                name={biggerFavourite ? "chevron-up" : "chevron-down"}
+                                                size={36}
+                                                color={"#555"}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => addWorkoutToFirebase(item.movements, item.workoutName)}>
+                                            <Icon name={"heart-outline"} size={32} color={colors.text} />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
+                                
+                                
+                                {/* Chevron Right */}
+                                {index < workOutDataReverse.length-1 && !biggerFavourite &&
+                                <View style={styles({ colors, spacing }).arrowRight}>
+                                    <TouchableOpacity>
+                                        <FontAwesome name={"chevron-right"} size={26} color={"#555"} />
+                                    </TouchableOpacity>
+                                </View> }
                             </View>
+
+
                             {biggerFavourite && (
                                 <View style={styles({ colors, spacing }).workoutContent}>
                                     {item.movements.map((movement, idx) => (
@@ -182,7 +199,7 @@ export default function WorkOutData() {
                                             style={[styles({ colors, spacing }).button, { positinon: "absolute", rigth: "50%", transform: [{ translateX: -50 }] }]}
                                             onPress={() => setModalVisible(true)}
                                         >
-                                            <Text style={{ color: colors.text }}>tarkemmat tiedot</Text>
+                                            <Text style={{ color: colors.buttonText }}>tarkemmat tiedot</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity onPress={() => deleteWorkOut(index)}>
                                             <Ionicons
@@ -194,6 +211,7 @@ export default function WorkOutData() {
                                     </View>
                                 </View>
                             )}
+
 
                         </View>
                     )}
@@ -207,9 +225,7 @@ export default function WorkOutData() {
                         formatTimestamp={formatTimestamp}
                     />}
             </View>
-
         </>
-
     )
 }
 
@@ -237,16 +253,59 @@ const styles = ({ colors, spacing }) =>
             marginRight: 20
         },
         workOutDetails: {
-            flexDirection: "row",
+            position: "relative",
             width: "100%",
             height: 150,
+            flexDirection: "row", // Järjestä lapset vaakasuoraan
             alignItems: "center",
-            paddingLeft: "5%",
-            alignSelf: "flex-start",
-        },
-        workoutName: {
-            width: "65%",
-        },
+            justifyContent: "center", // Tilaa tasaisesti reunojen väliin
+          },
+          
+          arrowLeft: {
+            position: "absolute",
+            left: -20,
+            top: "50%",
+            transform: [{ translateY: -13 }], // Keskittää pystysuunnassa
+          },
+          
+          arrowRight: {
+            position: "absolute",
+            right: -20,
+            top: "50%",
+            transform: [{ translateY: -13 }], // Keskittää pystysuunnassa
+          },
+          
+          centerContent: {
+            width: "80%",
+            flexDirection: "row", // Teksti ja ikonit vierekkäin
+            alignItems: "center", // Keskittää pystysuunnassa
+            justifyContent: "space-between", // Keskittää vaakasuunnassa
+          },
+          
+          textContainer: {
+            flexDirection: "column", // Järjestää tekstin päällekkäin
+            marginRight: 20, // Etäisyys ikoneista
+            alignItems: "flex-start", // Teksti vasemmalle
+          },
+          
+          iconContainer: {
+            flexDirection: "row", // Ikonit vierekkäin
+            alignItems: "center",
+            justifyContent: "flex-start", // Pidä ikonit kiinni tekstissä
+            gap: 10, // Etäisyys ikonien välillä
+          },
+          
+          workoutBoxMainText: {
+            fontSize: 18,
+            fontWeight: "bold",
+            color: colors.text,
+          },
+          
+          workoutBoxMainTextDate: {
+            fontSize: 14,
+            color: colors.text,
+          },          
+
         workoutBoxMainText: {
             fontSize: spacing.large,
             color: colors.text
@@ -256,7 +315,6 @@ const styles = ({ colors, spacing }) =>
             color: colors.text
         },
         workoutSave: {
-            width: "35%",
             flexDirection: "row",
         },
         workoutContent: {
