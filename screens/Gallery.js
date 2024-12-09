@@ -301,10 +301,7 @@ export default function Gallery() {
     () =>
       loading ? null : images.length === 0 ? (
         <View style={styles({ colors, spacing }).emptyState}>
-          <IconButton icon="arm-flex" size={100} iconColor="black" />
-          <Text
-            style={{ color: colors.onBackground, fontSize: 18, marginTop: 20 }}
-          >
+          <Text style={{ color: colors.text, fontSize: 18, marginTop: 20 }}>
             Lisää ensimmäinen kuvasi!
           </Text>
         </View>

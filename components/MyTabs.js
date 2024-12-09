@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { Text, PlatformPressable } from "@react-navigation/elements";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -21,33 +21,33 @@ const Tab = createBottomTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation }) {
   const { colors, spacing } = useTheme();
-  const { profilePic, setProfilePic, username, fname } = useUser()
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false)
+  const { profilePic, setProfilePic, username, fname } = useUser();
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
     if (Platform.OS === "android") {
       const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-        setKeyboardVisible(true)
+        setKeyboardVisible(true);
       });
       const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-        setKeyboardVisible(false)
+        setKeyboardVisible(false);
       });
 
       return () => {
-        showSubscription.remove()
-        hideSubscription.remove()
+        showSubscription.remove();
+        hideSubscription.remove();
       };
     }
   }, []);
 
   if (isKeyboardVisible && Platform.OS === "android") {
-    return null
+    return null;
   }
 
   return (
     <View style={styles({ colors, spacing }).bottomNav}>
       {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key]
+        const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
@@ -92,7 +92,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             iconName = "dumbbell";
             break;
           case "Treenit":
-            iconName = "weight-lifter"
+            iconName = "weight-lifter";
             break;
           case "Galleria":
             iconName = "image";
@@ -101,19 +101,19 @@ function MyTabBar({ state, descriptors, navigation }) {
             iconName = "account";
             break;
           case "Liikkeet":
-            iconName = "arm-flex"
+            iconName = "arm-flex";
             break;
           default:
             iconName = "circle";
         }
 
         return (
-          <PlatformPressable
+          <TouchableOpacity
             key={route.key}
-            accessibilityState={isFocused ? { selected: true } : {}}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={styles({ colors, spacing }).navButton}
+            style={styles({ colors, spacing, isFocused }).navButton}
+            activeOpacity={1}
           >
             {route.name === "Userpage" ? (
               <Image
@@ -129,20 +129,16 @@ function MyTabBar({ state, descriptors, navigation }) {
                 }}
               />
             ) : (
-              <Icon
-                name={iconName}
-                size={32}
-                color={isFocused ? 'grey' : colors.text}
-              />
+              <Icon name={iconName} size={32} color={colors.text} />
             )}
-            <Text
-              style={({color: isFocused ? 'grey' : colors.text})}
-            >
-              {route.name === "Userpage" && username.length < 11 ? username :
-                route.name === "Userpage" && fname.length < 11 ? fname
-                          : label}
+            <Text style={{ color: colors.text }}>
+              {route.name === "Userpage" && username.length < 11
+                ? username
+                : route.name === "Userpage" && fname.length < 11
+                ? fname
+                : label}
             </Text>
-          </PlatformPressable>
+          </TouchableOpacity>
         );
       })}
     </View>
@@ -171,25 +167,26 @@ function MyTabs() {
   );
 }
 
-const styles = ({ colors, spacing }) =>
+const styles = ({ colors, spacing, isFocused }) =>
   StyleSheet.create({
-  bottomNav: {
-    flexDirection: "row",
-    paddingBottom: 5,
-    backgroundColor: colors?.navbar || 'black',
-  },
-  navButton: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 8,
-    backgroundColor: colors?.navbar || 'black',
-    borderTopColor: colors?.text || 'black',
-    borderTopWidth: 1
-  },
-  navButtonText: {
-    
-  },
-});
+    bottomNav: {
+      flexDirection: "row",
+      padding: 2,
+      backgroundColor: colors?.navbar || "black",
+      borderTopWidth: 1,
+      borderTopColor: colors?.text + "20",
+    },
+    navButton: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 3,
+      backgroundColor: isFocused
+        ? colors?.primary + "20"
+        : colors?.navbar || "black",
+      borderRadius: 8,
+      margin: 2,
+    },
+  });
 
 export default MyTabs;

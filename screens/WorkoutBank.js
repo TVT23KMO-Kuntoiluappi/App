@@ -8,13 +8,22 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { useTheme, FAB } from "react-native-paper";
+import { useTheme, FAB, IconButton } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { FontAwesome } from "@expo/vector-icons";
 import { useUser } from "../context/UseUser";
 import { TouchableOpacityBase } from "react-native";
-import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
+import {
+  auth,
+  setDoc,
+  getDoc,
+  updateDoc,
+  collection,
+  firestore,
+  doc,
+} from "../firebase/Config";
+
 
 export default function WorkoutBank() {
   const { colors, spacing } = useTheme();
@@ -28,12 +37,10 @@ export default function WorkoutBank() {
   } = useUser();
   const [searchWorkout, setSearchWorkout] = useState("");
   const [expanded, setExpanded] = useState({});
-  const [pressedWorkouts, setPressedWorkouts] = useState({})
-
-
+  const [pressedWorkouts, setPressedWorkouts] = useState({});
 
   const addWorkoutToFirebase = async (workout) => {
-    const workoutName = workout.name
+    const workoutName = workout.name;
 
     setData((prevData) => [
       ...prevData,
@@ -57,13 +64,9 @@ export default function WorkoutBank() {
     ]);
 
     try {
-      const userId = auth.currentUser.uid
+      const userId = auth.currentUser.uid;
       await addWorkout(userId, data, workoutName);
-      Alert.alert(
-        "Tallennus onnistui!",
-        "Hienoa!",
-        [{ text: "OK" }]
-      );
+      Alert.alert("Tallennus onnistui!", "Hienoa!", [{ text: "OK" }]);
       // Tyhjennä lomakekentät
       setMovementName("");
       setWorkoutName("");
@@ -75,25 +78,27 @@ export default function WorkoutBank() {
         },
       ]);
     } catch (error) {
-        console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
-        throw new Error("Tietojen lisääminen epäonnistui.");
+      console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
+      throw new Error("Tietojen lisääminen epäonnistui.");
     }
-  }
-
+  };
 
   // FIREBASEEN LISÄYS
   async function addWorkout(userId, workoutDetails, workoutName) {
-    if (!workoutName){
-      console.error("Cannot add workout, workoutName is empty!")
+    if (!workoutName) {
+      console.error("Cannot add workout, workoutName is empty!");
       return;
     }
 
-    const userDetailsRef = doc(collection(firestore, `users/${userId}/treenipohjat`), workoutName);
+    const userDetailsRef = doc(
+      collection(firestore, `users/${userId}/treenipohjat`),
+      workoutName
+    );
     try {
       const workoutData = {
         movements: workoutDetails,
-        workoutName: workoutName
-      }
+        workoutName: workoutName,
+      };
 
       await setDoc(userDetailsRef, workoutData);
       console.log("Treeni lisätty onnistuneesti!");
@@ -102,52 +107,66 @@ export default function WorkoutBank() {
     }
   }
 
-
   const workouts = [
-    { id: "1", name: "Arnold's Golden Six", 
+    {
+      id: "1",
+      name: "Arnold's Golden Six",
       content: [
-        "Takakyykky: 4 x 10", 
+        "Takakyykky: 4 x 10",
         "Penkkipunnerrus: 3 x 10",
         "Leuanveto: 3 x maksimitoistot",
         "Pystypunnerrus: 4 x 10",
         "Hauiskääntö: 3 x 10",
-        "Istumaannousut: 3 x 15-20"
-      ]},
-    { id: "2", name: "Jalat", 
+        "Istumaannousut: 3 x 15-20",
+      ],
+    },
+    {
+      id: "2",
+      name: "Jalat",
       content: [
         "Etukyykky: 3 x 10",
         "Jalkaprässi: 4 x 8",
         "Jalan ojennus laitteessa (etureidet): 3 x 12",
         "Askelkyykyt: 3 x 12",
-        "Pohkeet laitteessa: 3 x 12"
-      ]},
-    { id: "3", name: "Kädet", 
+        "Pohkeet laitteessa: 3 x 12",
+      ],
+    },
+    {
+      id: "3",
+      name: "Kädet",
       content: [
         "Pystypunnerrus laitteessa: 3 x 10",
         "Hauiskääntö käsipainoilla: 3 x 10",
         "Hauiskääntö Scott-penkissä: 4 x 10",
         "Ranskalainen punnerrus mutkatangolla: 4 x 8",
         "Pushdown taljassa köydellä: 3 x 12",
-        "Vipunostot käsipainoilla: 3 x 12"
-      ]},
-    { id: "4", name: "Vetävät lihakset", 
+        "Vipunostot käsipainoilla: 3 x 12",
+      ],
+    },
+    {
+      id: "4",
+      name: "Vetävät lihakset",
       content: [
         "Ylätalja leveä tanko myötäote: 4 x 10",
         "Alatalja kapea kahva: 3 x 12",
         "Hauiskääntö mutkatanko: 3 x 10",
         "Hammerkääntö käsipainoilla: 4 x 8",
         "Takaolkalaite: 3 x 12",
-        "Alaselkälaite: 3 x maksimitoistot"
-      ]},
-    { id: "5", name: "Työntävät lihakset", 
+        "Alaselkälaite: 3 x maksimitoistot",
+      ],
+    },
+    {
+      id: "5",
+      name: "Työntävät lihakset",
       content: [
         "Penkkipunnerrus käsipainoilla: 4 x 10",
         "Vinopenkki Smith-laitteessa: 3 x 12",
         "Pystypunnerrus käsipainoilla: 4 x 8",
         "Yhden käden push-down taljassa: 3 x 12",
         "Ojentajapunnerrus niskan takaa käsipainolla: 4 x 10",
-        "Vipunostot käsipainoilla: 3 x 12"
-      ]},
+        "Vipunostot käsipainoilla: 3 x 12",
+      ],
+    },
   ];
 
   // Suodatetut treenit hakutermin perusteella
@@ -168,7 +187,7 @@ export default function WorkoutBank() {
       ...prevState,
       [workoutId]: !prevState[workoutId],
     }));
-  
+
     // Tallenna treeni Firestoreen vain jos sydäntä ei ole aiemmin painettu
     if (!pressedWorkouts[workoutId]) {
       addWorkoutToFirebase(workout);
@@ -192,8 +211,14 @@ export default function WorkoutBank() {
               color={colors?.text}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handlePressHeart(workout.id, workout)}>
-            <FontAwesome name={"heart"} size={36} color={pressedWorkouts[workout.id] ? "#a1020f" : "#555" } />
+          <TouchableOpacity
+            onPress={() => handlePressHeart(workout.id, workout)}
+          >
+            <FontAwesome
+              name={"heart"}
+              size={36}
+              color={pressedWorkouts[workout.id] ? "#a1020f" : "#555"}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -210,8 +235,7 @@ export default function WorkoutBank() {
         </View>
       )}
     </View>
-  )
-
+  );
 
   return (
     <View style={[styles({ colors, spacing }).page, { height: "100%" }]}>
@@ -227,11 +251,11 @@ export default function WorkoutBank() {
               color={colors?.text}
               placeholderTextColor={"grey"}
             />
-            <FAB
-              style={styles({ colors, spacing }).fab}
+            <IconButton
               icon="magnify"
-              size="small"
-              color={colors?.text}
+              size={24}
+              iconColor={colors?.text}
+              style={{ margin: 0, padding: 0 }}
             />
           </View>
           {filteredWorkouts.map(renderWorkout)}
@@ -246,7 +270,7 @@ const styles = ({ colors, spacing }) =>
     page: {
       paddingTop: "20%",
       flex: 1,
-      backgroundColor: colors?.background || 'white'
+      backgroundColor: colors?.background || "white",
     },
     container: {
       flex: 1,
@@ -257,7 +281,7 @@ const styles = ({ colors, spacing }) =>
       flexDirection: "row",
       width: "70%",
       justifyContent: "space-between",
-      backgroundColor: colors?.card || 'white',
+      backgroundColor: colors?.card || "white",
       padding: 10,
       paddingLeft: 20,
       borderRadius: 20,
@@ -265,14 +289,14 @@ const styles = ({ colors, spacing }) =>
     },
     text: {
       width: "85%",
-      color: colors?.text || 'white'
+      color: colors?.text || "white",
     },
     workoutBox: {
       width: "95%",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "flex-start",
-      backgroundColor: colors?.card || 'white',
+      backgroundColor: colors?.card || "white",
       marginBottom: "2%",
       overflow: "hidden",
     },
@@ -294,7 +318,7 @@ const styles = ({ colors, spacing }) =>
     },
     workoutBoxMainText: {
       fontSize: spacing.large,
-      color: colors?.text
+      color: colors?.text,
     },
     workoutContent: {
       width: "100%",
@@ -309,7 +333,7 @@ const styles = ({ colors, spacing }) =>
       borderBottomWidth: 0.25,
       borderBottomColor: colors?.text,
       paddingBottom: "1%",
-      color: colors?.text
+      color: colors?.text,
     },
     fab: {
       backgroundColor: "none",

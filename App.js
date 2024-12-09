@@ -59,12 +59,24 @@ function AppContent({ setLogged, logged }) {
           <MyTabs />
         ) : (
           <Stack.Navigator>
-            <Stack.Screen name="Login">
+            <Stack.Screen
+              name="Login"
+              options={{
+                title: "Kirjaudu",
+                headerTitleAlign: "center",
+              }}
+            >
               {({ navigation }) => (
                 <Login setLogged={setLogged} navigation={navigation} />
               )}
             </Stack.Screen>
-            <Stack.Screen name="Register">
+            <Stack.Screen 
+            name="Register"
+            options={{
+              title: "Rekisteröidy",
+              headerTitleAlign: "center"
+            }}
+            >
               {(props) => <Register {...props} setLogged={setLogged} />}
             </Stack.Screen>
             <Stack.Screen name="Workout" component={Workout} />
