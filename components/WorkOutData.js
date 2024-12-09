@@ -4,9 +4,10 @@ import { useUser } from '../context/UseUser';
 import { useTheme } from 'react-native-paper';
 import WorkOutDataModal from './WorkOutDataModal';
 import SwiperFlatList, { SwiperFlatlist } from 'react-native-swiper-flatlist'
-import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc } from "../firebase/Config";
+import { auth, setDoc, getDoc, updateDoc, collection, firestore, doc, deleteDoc } from "../firebase/Config";
 import { FontAwesome } from '@expo/vector-icons';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function WorkOutData() {
     const { colors, spacing } = useTheme();
@@ -83,6 +84,44 @@ export default function WorkOutData() {
         setUpdateContent(prevData => (prevData + 1))
     }
 
+    const deleteWorkOut = async (index) => {
+      const reverseIndex = workOutDataReverse.length - index - 1;
+      const workoutDataToDelete = workOutFirebaseData[reverseIndex];
+      const userId = auth.currentUser.uid;
+    
+      // Näytä varmistus-alert
+      Alert.alert(
+        "Vahvistus", // Otsikko
+        `Haluatko varmasti poistaa treenin: ${workoutDataToDelete.workoutName} ${formatTimestamp(workoutDataToDelete.workoutId)} ?`, // Viesti
+        [
+          {
+            text: "Peruuta", 
+            style: "cancel",
+          },
+          {
+            text: "Poista",
+            style: "destructive",
+            onPress: async () => {
+              try {
+                const workoutDocRef = doc(
+                  firestore,
+                  `users/${userId}/tallennetuttreenit/${workoutDataToDelete.workoutId}`
+                );
+    
+                await deleteDoc(workoutDocRef);
+                console.log(`Workout ${workoutDataToDelete.workoutId} poistettu onnistuneesti.`);
+                setUpdateContent((prevData) => prevData + 1);
+              } catch (error) {
+                console.error("Virhe treenin poistossa:", error);
+              }
+            },
+          },
+        ]
+      );
+    };
+    
+
+
     return (
         <>
             <View style={styles({ colors, spacing }).headLine}>
@@ -138,26 +177,35 @@ export default function WorkOutData() {
                                             {movement.movementName}: {movement.sets.length} x {movement.sets[0].reps}
                                         </Text>
                                     ))}
-                                    <TouchableOpacity
-                                        style={styles({ colors, spacing }).button}
-                                        onPress={() => setModalVisible(true)}
-                                    >
-                                        <Text style={{color: colors.text}}>tarkemmat tiedot</Text>
-                                    </TouchableOpacity>
+                                    <View style={styles({ colors, spacing }).infoOrDelete}>
+                                        <TouchableOpacity
+                                            style={[styles({ colors, spacing }).button, { positinon: "absolute", rigth: "50%", transform: [{ translateX: -50 }] }]}
+                                            onPress={() => setModalVisible(true)}
+                                        >
+                                            <Text style={{ color: colors.text }}>tarkemmat tiedot</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => deleteWorkOut(index)}>
+                                            <Ionicons
+                                                name={"trash"}
+                                                size={32}
+                                                color={colors.text}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             )}
 
                         </View>
                     )}
                 />
-                {workOutDataReverse && 
-                <WorkOutDataModal
-                    modalVisible={modalVisible}
-                    setModalVisible={setModalVisible}
-                    workOutDataReverse={workOutDataReverse}
-                    index={index}
-                    formatTimestamp={formatTimestamp}
-                /> }
+                {workOutDataReverse &&
+                    <WorkOutDataModal
+                        modalVisible={modalVisible}
+                        setModalVisible={setModalVisible}
+                        workOutDataReverse={workOutDataReverse}
+                        index={index}
+                        formatTimestamp={formatTimestamp}
+                    />}
             </View>
 
         </>
@@ -180,7 +228,7 @@ const styles = ({ colors, spacing }) =>
             color: colors.text
         },
         workoutBox: {
-            width: Dimensions.get('window').width -40,
+            width: Dimensions.get('window').width - 40,
             borderRadius: spacing.small,
             backgroundColor: colors.card,
             alignItems: "center",
@@ -205,7 +253,7 @@ const styles = ({ colors, spacing }) =>
         },
         workoutBoxMainTextDate: {
             fontSize: spacing.medium,
-            color:colors.text
+            color: colors.text
         },
         workoutSave: {
             width: "35%",
@@ -235,6 +283,14 @@ const styles = ({ colors, spacing }) =>
             paddingBottom: 2,
             marginTop: spacing.small,
             color: colors.text
+        },
+        infoOrDelete: {
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            paddingLeft: 10,
+            paddingRight: 10,
+            alignItems: "center"
         },
 
     })

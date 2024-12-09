@@ -5,12 +5,27 @@ import { useUser } from '../context/UseUser';
 import { Image } from 'expo-image';
 import Loading from '../components/Loading';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { signOut, getAuth } from "../firebase/Config";
+import { useNavigation } from '@react-navigation/native';
 
-export default function ProfileInfo({ navigation }) {
+export default function ProfileInfo({ setLogged }) {
+  const navigation = useNavigation()
   const { colors, spacing } = useTheme();
   const { profilePic, fname, lname, username, weight, height, workOutFirebaseData } = useUser();
   const [loading, setLoading] = useState(false);
   const [bmi, setBmi] = useState((weight / ((height / 100) * (height / 100))).toFixed(2));
+
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      console.log("Sign-out successful.")
+      setLogged(false)
+    }).catch((error) => {
+      console.error("An error happened signingOUt", error)
+    });
+  };
+
   return (
     <>
       <View style={styles({ colors, spacing }).headLine}>
@@ -34,14 +49,19 @@ export default function ProfileInfo({ navigation }) {
           {loading && <Loading />}
         </View>
         <View style={{ height: "100%", width: "50%", alignItems: "flex-start", justifyContent: "space-around" }}>
-          <View><Text style={{color:colors.text}}>{fname} {lname} ({username})</Text></View>
-          <View><Text style={{color:colors.text}}>Paino: {weight} kg</Text></View>
-          <View><Text style={{color:colors.text}}>Pituus: {height} cm</Text></View>
-          <View><Text style={{color:colors.text}}>Painoindeksi: {bmi}</Text></View>
+          <View><Text style={{ color: colors.text }}>{fname} {lname} ({username})</Text></View>
+          <View><Text style={{ color: colors.text }}>Paino: {weight} kg</Text></View>
+          <View><Text style={{ color: colors.text }}>Pituus: {height} cm</Text></View>
+          <View><Text style={{ color: colors.text }}>Painoindeksi: {bmi}</Text></View>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("Asetukset")}>
-          <Icon style={{color:colors.text}} name="cog" size={48} />
-        </TouchableOpacity>
+        <View style={styles({colors,spacing}).logOutGoc}>
+          <TouchableOpacity onPress={() => handleLogout()} >
+            <Icon style={{ color: colors.text }} name="logout" size={40} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Asetukset")}>
+            <Icon style={{ color: colors.text }} name="cog" size={40} />
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   )
@@ -64,6 +84,11 @@ const styles = ({ colors, spacing }) =>
       alignItems: "center",
       justifyContent: "space-between",
       marginLeft: 10,
-      marginRight: 10
+      marginRight: 10,
     },
+    logOutGoc:{
+      height: "100%",
+      flexDirection: "column",
+      justifyContent: "space-evenly",
+    }
   })

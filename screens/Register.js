@@ -221,7 +221,8 @@ const styles = ({ colors, spacing }) =>
   header: {
     fontSize: 42,
     marginTop: 20,
-    marginBottom: 0
+    marginBottom: 0,
+    color: colors.text
   },
   textInputContainer: {
     marginBottom: 20,

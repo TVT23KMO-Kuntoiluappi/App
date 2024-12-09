@@ -161,7 +161,11 @@ function MyTabs({ setLogged }) {
       <Tab.Screen name="Liikkeet" component={MovementBank} />
       <Tab.Screen name="Treenit" component={WorkoutBank} />
       <Tab.Screen name="Galleria" component={Gallery} />
-      <Tab.Screen name="Userpage" component={UserPage} />
+      <Tab.Screen 
+        name="Userpage"  
+      >
+        {() => <UserPage setLogged={setLogged} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Asetukset"
         options={{ headerShown: true, tabBarButton: () => null }}

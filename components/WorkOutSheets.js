@@ -7,6 +7,7 @@ import { useTheme } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import WorkOutSheetsModal from './WorkOutSheetsModal';
 
+
 export default function WorkOutSheets({name, fromAddBox}) {
     const { colors, spacing } = useTheme()
     const { workOutFirebaseData, oneRepMax } = useUser();
@@ -240,7 +241,6 @@ export default function WorkOutSheets({name, fromAddBox}) {
 
         return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     }
-
 
     return (
         <>
