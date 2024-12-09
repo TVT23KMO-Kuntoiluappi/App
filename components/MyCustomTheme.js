@@ -18,6 +18,7 @@ const LightTheme = {
     card: '#FFFFFF',
     navbar: '#8fd2ff',
     button: '#09132F',
+    buttonText: '#FFFFFF',
     text: '#250f50',
     surface: '#DDEDFF'
   },
