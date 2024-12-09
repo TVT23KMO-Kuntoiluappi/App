@@ -189,7 +189,7 @@ export default function WorkoutBank() {
               style={{ marginRight: "20%" }}
               name={expanded[workout.id] ? "chevron-up" : "chevron-down"}
               size={36}
-              color={"#555"}
+              color={colors?.text}
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handlePressHeart(workout.id, workout)}>
@@ -224,14 +224,14 @@ export default function WorkoutBank() {
               onChangeText={(text) => setSearchWorkout(text)}
               value={searchWorkout}
               placeholder="Hae valmiita treenejä"
-              color="black"
-              placeholderTextColor={"black"}
+              color={colors?.text}
+              placeholderTextColor={"grey"}
             />
             <FAB
               style={styles({ colors, spacing }).fab}
               icon="magnify"
               size="small"
-              color={"black"}
+              color={colors?.text}
             />
           </View>
           {filteredWorkouts.map(renderWorkout)}
@@ -294,6 +294,7 @@ const styles = ({ colors, spacing }) =>
     },
     workoutBoxMainText: {
       fontSize: spacing.large,
+      color: colors?.text
     },
     workoutContent: {
       width: "100%",
@@ -306,8 +307,9 @@ const styles = ({ colors, spacing }) =>
       margin: 10,
       fontWeight: "bold",
       borderBottomWidth: 0.25,
-      borderBottomColor: "black",
+      borderBottomColor: colors?.text,
       paddingBottom: "1%",
+      color: colors?.text
     },
     fab: {
       backgroundColor: "none",

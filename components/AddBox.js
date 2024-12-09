@@ -25,21 +25,21 @@ export default function AddBox({ movementName, setData, movement }) {
 
   const addRow = () => {
     setData((prevData) =>
-      prevData.map((item) =>
-        item.id === movement.id
-          ? {
+      prevData.map((item) => {
+        if (item.id === movement.id) {
+          const lastSet = item.sets[item.sets.length - 1] || {};
+          const newSet = {
+            id: item.sets.length + 1,
+            weight: lastSet.weight || "",
+            reps: lastSet.reps || "",
+          };
+          return {
             ...item,
-            sets: [
-              ...item.sets,
-              {
-                id: item.sets.length + 1,
-                weight: "",
-                reps: "",
-              },
-            ],
-          }
-          : item
-      )
+            sets: [...item.sets, newSet],
+          };
+        }
+        return item;
+      })
     );
   };
 
@@ -102,7 +102,7 @@ export default function AddBox({ movementName, setData, movement }) {
               style={styles({ colors, spacing }).addNewSet}
               icon="plus"
               size="small"
-              color="white"
+              color={colors?.text}
               onPress={() => addRow(movement.id)}
             />
             <Text style={styles({ colors, spacing }).text}>Lisää uusi sarja</Text>
@@ -220,7 +220,7 @@ const styles = ({ colors, spacing }) =>
       alignItems: "center",
       marginRight: spacing?.small,
       borderColor: "black",
-      backgroundColor: "#353536",
+      backgroundColor: colors?.background,
       borderWidth: 1,
       borderRadius: 0,
     },

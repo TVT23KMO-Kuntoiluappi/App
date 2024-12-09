@@ -17,15 +17,9 @@ import {
 } from "@env"
 
 export default function MovementList() {
-  const [movements, setMovements] = useState([
-    { id: "1", name: "Kyykky", favorite: false },
-    { id: "2", name: "Penkki", favorite: false },
-    { id: "3", name: "Mave", favorite: false },
-  ]);
-
-  const [aja, setAja] = useState(0)
   const [bodyPartList, setBodyPartList] = useState(
     [
+      { "label": "", "value": "Haku lihasryhmittäin"},
       { "label": "back", "value": "Selkä" },
       { "label": "cardio", "value": "Kardio" },
       { "label": "chest", "value": "Rinta" },
@@ -40,8 +34,23 @@ export default function MovementList() {
   )
   const [selectedBody, setSelectedBody] = useState()
   const [itemsToFlatList, setItemsToFlatList] = useState([])
+  const [filteredMovements, setFilteredMovements] = useState([])
   const [expand, setExpand] = useState()
+  const [searchQuery, setSearchQuery] = useState("");
   const { colors, spacing } = useTheme()
+
+  useEffect(() => {
+    if (!Array.isArray(itemsToFlatList)) {
+      setFilteredMovements([]);
+      return;
+    }
+    const filtered = itemsToFlatList.filter((movement) => {
+      if (!movement?.name) return false;
+      if (!searchQuery.trim()) return true;
+      return movement.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+    setFilteredMovements(filtered);
+  }, [searchQuery, itemsToFlatList]);
 
   /*
   async function fetchByTarget(target) {
@@ -69,7 +78,7 @@ export default function MovementList() {
   }*/
 
   async function fetchByBodyPart(bodypart) {
-    console.log("param body: ", bodypart)
+    //console.log("param body: ", bodypart)
     const url = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodypart}?limit=0`;
     const options = {
       method: 'GET',
@@ -85,8 +94,8 @@ export default function MovementList() {
       const parsedResult = JSON.parse(result);
       const malli = parsedResult
       setItemsToFlatList(malli)
-      console.log("Bodyparttien mukaan: ", parsedResult.length)
-      console.log("bodypartmalli: ", malli[0])
+      //console.log("Bodyparttien mukaan: ", parsedResult.length)
+      //console.log("bodypartmalli: ", malli[0])
     } catch (error) {
       console.error("Error:", error)
     }
@@ -96,35 +105,22 @@ export default function MovementList() {
     fetchByBodyPart(selectedBody)
   }, [selectedBody])
 
-  const [searchQuery, setSearchQuery] = useState("");
 
-  // Suodata liikkeet hakusanan perusteella
-  const filteredMovements = movements.filter((movement) =>
-    movement.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
-  // Suosikkien lisääminen tai poistaminen
-  const toggleFavorite = (id) => {
-    setMovements((prevMovements) =>
-      prevMovements.map((movement) =>
-        movement.id === id
-          ? { ...movement, favorite: !movement.favorite }
-          : movement
-      )
-    );
-  };
 
   return (
-    <View style={styles({ colors, spacing }).container}>
+    <View style={[styles({ colors, spacing }).container]}>
       {/* Hakupalkki */}
       <View style={styles({ colors, spacing }).searchContainer}>
         <TextInput
           style={styles({ colors, spacing }).searchInput}
           placeholder="Hae liikettä"
+          placeholderTextColor={colors?.text}
           value={searchQuery}
-          onChangeText={setSearchQuery}
+          onChangeText={(txt) => setSearchQuery(txt)}
+          color={colors?.text}
         />
-        <FontAwesome name="search" size={24} color="#777" />
+        <FontAwesome name="search" size={24} color={colors?.text}/>
       </View>
       <View style={styles({ colors, spacing }).dropDowns}>
         <View style={styles({ colors, spacing }).dropdownWrapper}>
@@ -133,51 +129,65 @@ export default function MovementList() {
             onValueChange={(itemValue) => setSelectedBody(itemValue)}
             style={styles({ colors, spacing }).picker}
           >
-            {bodyPartList && bodyPartList.length > 0 ?
+            {bodyPartList && bodyPartList.length > 0 ? (
               bodyPartList.map((item, index) => (
-                <Picker.Item key={index} label={item.value} value={item.label} />
-              )) : (
-                <Picker.Item label="No data" value="0" />
-              )}
-
+                <Picker.Item
+                  key={index}
+                  label={item.value}
+                  value={item.label}
+                  color={colors?.text}
+                />
+              ))
+            ) : (
+              <Picker.Item label="No data" value="0" />
+            )}
           </Picker>
-
         </View>
       </View>
 
       {/* Liikelista */}
       <FlatList
-        data={itemsToFlatList}
+        data={filteredMovements}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
-          <View style={[styles({ colors, spacing }).movementItem, { height: expand === index ? 500 : 100 }]}>
+          <View
+            style={[
+              styles({ colors, spacing }).movementItem,
+              { height: expand === index ? 500 : 100 },
+            ]}
+          >
             <View style={styles({ colors, spacing }).movementHeadline}>
-              <Text style={styles({ colors, spacing }).movementText}>{item.name}</Text>
-              <View>
-                <View style={styles({ colors, spacing }).iconsContainer}>
-                  {/* Lisätietojen nuoli */}
-                  <View style={styles({ colors, spacing }).workoutSave}>
-                    <TouchableOpacity onPress={() => setExpand(expand === index ? null : index)}>
-                      <FontAwesome
-                        style={{ marginRight: "20%" }}
-                        name={expand ? "chevron-up" : "chevron-down"}
-                        size={36}
-                        color={"#555"}
-                      />
-                    </TouchableOpacity>
-                  </View>
+              <View style={styles({ colors, spacing }).movementTextContainer}>
+                <Text style={styles({ colors, spacing }).movementText}>
+                  {item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()}
+                </Text>
+              </View>
+              <View style={styles({ colors, spacing }).iconsContainer}>
+                {/* Lisätietojen nuoli */}
+                <View style={styles({ colors, spacing }).workoutSave}>
+                  <TouchableOpacity
+                    onPress={() => setExpand(expand === index ? null : index)}
+                  >
+                    <FontAwesome
+                      style={{ marginRight: "20%" }}
+                      name={expand ? "chevron-up" : "chevron-down"}
+                      size={36}
+                      color={colors?.text}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
-            {expand === index &&
-              <View style={styles({ colors, spacing }).gifUrl}>
-                <Image
-                  source={{ uri: item.gifUrl }}
-                  style={{ width: 150, height: 150 }}
-                />
-              </View> }
-            <View>
-              {expand === index && <Text>{item.instructions}</Text> }
+            <View style={styles({ colors, spacing }).infoContainer}>
+              {expand === index && (
+                <View style={styles({ colors, spacing }).gifUrl}>
+                  <Image
+                    source={{ uri: item.gifUrl }}
+                    style={{ width: 150, height: 150 }}
+                  />
+                </View>
+              )}
+              <View>{expand === index && <Text style={styles({ colors, spacing }).instructions}>{item.instructions}</Text>}</View>
             </View>
           </View>
         )}
@@ -189,16 +199,17 @@ export default function MovementList() {
 const styles = ({ colors, spacing }) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    width: '100%'
+    backgroundColor: colors?.background,
+    width: '100%',
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors?.card,
     padding: 10,
     borderRadius: 8,
     marginBottom: 16,
+    marginTop: 20,
   },
   searchInput: {
     flex: 1,
@@ -224,43 +235,60 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
   gifUrl: {
     margin: spacing.medium
   },
+  movementTextContainer:{
+    width: '85%'
+  },
   movementText: {
     fontSize: 18,
-    color: "#333",
+    color: colors?.text,
   },
   iconsContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 16,
+    width: '15%'
   },
   dropdownWrapper: {
     flex: 1,
-    marginHorizontal: 5,
   },
   dropdown: {
     width: '100%',
-    borderColor: '#cccccc',
-    zIndex: 5000
+    //zIndex: 5000,
+    backgroundColor: colors?.card
   },
   dropdownContainer: {
     width: '100%',
-    zIndex: 5000
+    //zIndex: 5000
   },
   dropDowns: {
     flexDirection: 'row',
-    width: "90%",
+    width: "100%",
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   picker: {
-    backgroundColor: colors.background,
+    backgroundColor: colors?.card,
     color: colors.text,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: colors.text,
+    borderRadius: 8,
+    marginBottom: 15,
+    maxHeight: 140,
+    justifyContent: 'center',
+    overflow: 'scroll',
   },
   dropdownStyle: {
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.text,
+  },
+  instructions: {
+    letterSpacing: 1,
+    textAlign: 'left',
+    color: colors?.text
+  },
+  infoContainer: {
+    alignItems: 'center',
+    padding: 10
   },
 });

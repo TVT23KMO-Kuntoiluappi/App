@@ -60,6 +60,7 @@ export default function Login({ setLogged, navigation }) {
           value={password}
           placeholder="Salasana"
           secureTextEntry={true}
+          color={colors?.text}
         />
       </View>
       <TouchableOpacity
@@ -117,7 +118,7 @@ const styles = ({ colors, spacing }) =>
   },
   buttonText: {
     fontSize: 20,
-    color: 'white'
+    color: colors?.text
   },
   logo: {
     width: "60%",

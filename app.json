@@ -9,7 +9,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": null,
-      "backgroundColor": "#EFF5D5"
+      "backgroundColor": "'#F4F4FB'"
     },
     "ios": {
       "supportsTablet": true,

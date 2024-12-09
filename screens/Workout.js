@@ -177,20 +177,19 @@ export default function Workout({route}) {
         <View style={styles({ colors, spacing }).addBox}>
           <FAB
             style={{
-              backgroundColor: colors?.button || 'white',
+              backgroundColor: colors?.navbar || 'white',
               borderWidth: 1,
-              borderColor: "black",
-              
+              borderColor: colors?.text,
             }}
             icon="plus"
             size="medium"
             onPress={addBox}
-            color='white'
+            color={colors?.text}
           />
         </View>
         
         <TouchableOpacity style={styles({ colors, spacing }).saveButton} onPress={handleSave}>
-          <Icon name = "content-save" size = {24} color = "white" />
+          <Icon name = "content-save" size = {24} color ={colors?.text} />
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
@@ -223,6 +222,7 @@ const styles = ({ colors, spacing }) =>
       fontSize: 26,
       width: "80%",
       textAlign: "center",
+      color: colors?.text
     },
     fab: {
       backgroundColor: "none",
@@ -253,17 +253,18 @@ const styles = ({ colors, spacing }) =>
       alignSelf: 'center',
       position: 'absolute',
       bottom: '4%',
-      right: '7%'
+      right: '7%',
     },
     saveButton: {
       position: "absolute",
       bottom: '4%',
       right: '25%',
       borderWidth: 1,
-      borderColor: "black",
+      borderColor: colors?.text,
       padding: spacing.medium,
       borderRadius: 15,
-      backgroundColor: colors?.button || 'white',
+      backgroundColor: colors?.navbar || 'white',
+      color: colors?.text
     },
     saveButtonText: {
       fontSize: 20,
