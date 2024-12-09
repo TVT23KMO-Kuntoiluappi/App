@@ -53,7 +53,6 @@ function AppContent({ setLogged, logged }) {
   const theme = useMemo(() => (isDark ? DarkTheme : LightTheme), [isDark]);
 
   return (
-    <PaperProvider theme={theme}>
       <NavigationContainer theme={theme}>
         {logged ? (
           <MyTabs />
