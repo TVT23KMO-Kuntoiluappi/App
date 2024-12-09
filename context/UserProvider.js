@@ -143,7 +143,7 @@ export default function UserProvider({ children }) {
         ...doc.data()
       }))
       setUsersSavedWorkOuts(savedTemplates)
-      console.log("Treenipohjat: ", savedTemplates)
+      //console.log("Treenipohjat: ", savedTemplates)
     } catch(error) {
       console.error("Virhe tallennettujen treenien hakemisessa")
     }

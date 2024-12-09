@@ -22,13 +22,15 @@ export default function UserPage({ navigation }) {
 
   return (
     <SafeAreaView style={styles({ colors, spacing }).container}>
-      <FlatList
-        data={profileData} 
-        renderItem={({ item }) => <View>{item.component}</View>} 
-        keyExtractor={(item) => item.key}
-        style={styles({ colors, spacing }).flatlist}
-        contentContainerStyle={styles({ colors, spacing }).containerScroll} 
-      />
+      <View style={styles({colors,spacing}).flatlistwrapper}>
+        <FlatList
+          data={profileData} 
+          renderItem={({ item }) => <View>{item.component}</View>} 
+          keyExtractor={(item) => item.key}
+          style={styles({ colors, spacing }).flatlist}
+          contentContainerStyle={styles({ colors, spacing }).containerScroll} 
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -64,5 +66,12 @@ const styles = ({ colors, spacing }) =>
     },
     flatlist: {
       backgroundColor: colors.background
-    }
+    },
+    flatlistwrapper: {
+      flex: 1,
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      backgroundColor: colors.background
+    },
   });
