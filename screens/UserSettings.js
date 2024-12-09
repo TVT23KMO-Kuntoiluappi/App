@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useTheme, FAB, IconButton, Switch } from "react-native-paper";
+import { useTheme, FAB, IconButton } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import {
   uploadUserPicture,
@@ -57,9 +57,9 @@ export default function UserSettings() {
     setIsDark,
   } = useUser();
 
-  const { colors, spacing } = useTheme()
+  const { colors, spacing } = useTheme();
   const [edit, setEdit] = useState(false);
-  const [cameraOrLoad, setCameraOrLoad] = useState(true);
+  const [cameraOrLoad, setCameraOrLoad] = useState(false);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [fnameEditable, setFnameEditable] = useState(false);
@@ -73,6 +73,7 @@ export default function UserSettings() {
   const [liike, setLiike] = useState("");
   const [massa, setMassa] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [showFabs, setShowFabs] = useState(false);
 
   useEffect(() => {
     if (profilePic) {
@@ -132,12 +133,13 @@ export default function UserSettings() {
         await uploadUserPicture(uri);
         const newPic = await getUserPicture();
         setProfilePic(newPic);
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
+      } else {
+        setTimeout(() => setLoading(false), 1000);
       }
     } catch (error) {
       console.error("Upload failed:", error);
+    } finally {
+      setShowFabs(false);
       setLoading(false);
     }
   };
@@ -161,12 +163,11 @@ export default function UserSettings() {
         await uploadUserPicture(uri);
         const newPic = await getUserPicture();
         setProfilePic(newPic);
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
       }
     } catch (error) {
       console.error("Camera capture failed:", error);
+    } finally {
+      setShowFabs(false);
       setLoading(false);
     }
   };
@@ -255,7 +256,7 @@ export default function UserSettings() {
   };
 
   const userUpdate = () => {
-    console.log("userUpdate")
+    console.log("userUpdate");
     try {
       updateUserData({
         firstName: fname,
@@ -265,11 +266,27 @@ export default function UserSettings() {
         weight: weight,
       });
       updateUserDetails(username, email);
-      console.log("userUpdate")
+      console.log("userUpdate");
     } catch (error) {
       console.log("Virhe tietojen lisäämisessä Firestoreen:", error);
       throw new Error("Tietojen lisääminen epäonnistui.");
     }
+  };
+
+  const handleChangeProfilePic = async () => {
+    if (tempProfilePic) {
+      try {
+        await uploadUserPicture(tempProfilePic);
+        const newPic = await getUserPicture();
+        setProfilePic(newPic);
+        setTempProfilePic(null);
+      } catch (error) {
+        console.error("Profile picture update failed:", error);
+      }
+    } else {
+      Alert.alert("Ei kuvaa valittu", "Vaihda ensin kuva", [{ text: "OK" }]);
+    }
+    setLoading(false);
   };
 
   return (
@@ -290,36 +307,36 @@ export default function UserSettings() {
             {loading && <Loading />}
           </View>
 
-          {cameraOrLoad ? (
+          {!showFabs ? (
             <TouchableOpacity
               style={styles({ colors, spacing }).button}
-              onPress={() => setCameraOrLoad(!cameraOrLoad)}
+              onPress={() => setShowFabs(true)}
             >
-              <Text style={styles({colors,spacing}).textComp}>Vaihda profiilikuva</Text>
+              <Text style={{ color: colors.buttonText }}>
+                Vaihda profiilikuva
+              </Text>
             </TouchableOpacity>
           ) : (
-            <>
-              <View style={styles({ colors, spacing }).fabContainer}>
-                <FAB
-                  icon="camera"
-                  style={styles({ colors, spacing }).fab}
-                  onPress={() => {
-                    setCameraOrLoad(!cameraOrLoad);
-                    handleTakePhoto();
-                  }}
-                  theme={{ colors: { primary: colors.primary } }}
-                />
-                <FAB
-                  icon="image-plus"
-                  style={styles({ colors, spacing }).fab}
-                  onPress={() => {
-                    setCameraOrLoad(!cameraOrLoad);
-                    handlePickImage();
-                  }}
-                  theme={{ colors: { primary: colors.primary } }}
-                />
-              </View>
-            </>
+            <View style={styles({ colors, spacing }).fabContainer}>
+              <FAB
+                icon="camera"
+                style={[
+                  styles({ colors, spacing }).fab,
+                  { backgroundColor: colors.button },
+                ]}
+                onPress={handleTakePhoto}
+                color={colors.buttonText}
+              />
+              <FAB
+                icon="image"
+                style={[
+                  styles({ colors, spacing }).fab,
+                  { backgroundColor: colors.button },
+                ]}
+                onPress={handlePickImage}
+                color={colors.buttonText}
+              />
+            </View>
           )}
         </View>
         <TouchableOpacity
@@ -354,7 +371,7 @@ export default function UserSettings() {
                 onPress={() => setFnameEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Etunimi</Text>
-                <Text style={styles({colors,spacing}).textComp}>
+                <Text style={styles({ colors, spacing }).textComp}>
                   {fname || "etunimi"}
                 </Text>
               </TouchableOpacity>
@@ -379,7 +396,7 @@ export default function UserSettings() {
                 onPress={() => setLnameEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Sukunimi</Text>
-                <Text style={styles({colors,spacing}).textComp}>
+                <Text style={styles({ colors, spacing }).textComp}>
                   {lname || "sukunimi"}
                 </Text>
               </TouchableOpacity>
@@ -408,7 +425,7 @@ export default function UserSettings() {
                 <Text style={styles({ colors, spacing }).label}>
                   Käyttäjätunnus
                 </Text>
-                <Text style={styles({colors,spacing}).textComp}>
+                <Text style={styles({ colors, spacing }).textComp}>
                   {username || "Käyttäjätunnus"}
                 </Text>
               </TouchableOpacity>
@@ -435,7 +452,7 @@ export default function UserSettings() {
                 <Text style={styles({ colors, spacing }).label}>
                   Sähköposti
                 </Text>
-                <Text style={styles({colors,spacing}).textComp}>
+                <Text style={styles({ colors, spacing }).textComp}>
                   {email || "Sähköposti"}
                 </Text>
               </TouchableOpacity>
@@ -462,7 +479,7 @@ export default function UserSettings() {
                 onPress={() => setWeightEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Paino</Text>
-                <Text style={styles({colors,spacing}).textComp}>
+                <Text style={styles({ colors, spacing }).textComp}>
                   {weight || "100 kg"}
                 </Text>
               </TouchableOpacity>
@@ -487,19 +504,30 @@ export default function UserSettings() {
                 onPress={() => setHeightEditable(true)}
               >
                 <Text style={styles({ colors, spacing }).label}>Pituus</Text>
-                <Text style={styles({colors,spacing}).textComp}>
+                <Text style={styles({ colors, spacing }).textComp}>
                   {height || "180 cm"}
                 </Text>
               </TouchableOpacity>
             )}
           </View>
           <View style={styles({ colors, spacing }).info}>
-            <Text style={styles({ colors, spacing }).label}>Tumma teema</Text>
-            <Switch
-              value={isDark}
-              onValueChange={() => setIsDark(!isDark)}
-              color={colors.primary}
-            />
+            <Text style={styles({ colors, spacing }).label}>Teema</Text>
+            <TouchableOpacity
+              style={[
+                styles({ colors, spacing }).button,
+                { padding: 8, width: "33%" },
+              ]}
+              onPress={() => setIsDark(!isDark)}
+            >
+              <Text
+                style={[
+                  styles({ colors, spacing }).textComp,
+                  { color: colors.buttonText },
+                ]}
+              >
+                {isDark ? "Vaalea" : "Tumma"}
+              </Text>
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
         {(fnameEditable ||
@@ -512,18 +540,27 @@ export default function UserSettings() {
             style={styles({ colors, spacing }).button}
             onPress={() => userUpdate()}
           >
-            <Text style={styles({colors,spacing}).textComp}>Päivitä tiedot</Text>
+            <Text
+              style={[
+                styles({ colors, spacing }).textComp,
+                { color: colors.buttonText },
+              ]}
+            >
+              Päivitä tiedot
+            </Text>
           </TouchableOpacity>
         )}
         <View style={styles({ colors, spacing }).addOneRepMax}>
           <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
-            <Text style={styles({colors,spacing}).textComp}>Lisää "One rep Max"</Text>
+            <Text style={styles({ colors, spacing }).textComp}>
+              Lisää "One rep Max"
+            </Text>
             <TouchableOpacity>
               <Icon
                 name="help-circle"
                 size={24}
                 onPress={() => setModalVisible(true)}
-                style={styles({colors,spacing}).textComp}
+                style={styles({ colors, spacing }).textComp}
               />
             </TouchableOpacity>
           </View>
@@ -531,30 +568,41 @@ export default function UserSettings() {
             oneRepMax.map((item, index) => (
               <View key={index} style={styles({ colors, spacing }).oneRepMaxs}>
                 <TouchableOpacity onPress={() => deleteMaxRep(index)}>
-                  <Ionicons 
-                    style={styles({colors,spacing}).textComp}
-                    name="trash" 
-                    size={24} 
+                  <Ionicons
+                    style={styles({ colors, spacing }).textComp}
+                    name="trash"
+                    size={24}
                   />
                 </TouchableOpacity>
-                <Text style={styles({colors,spacing}).textComp}>{item.move}</Text>
-                <View style = {{flexDirection: "row", width: "50%", justifyContent: "space-between"}}>
-                <TouchableOpacity
-                  onPress={() => changeKilos(index, "subtract")}
+                <Text style={styles({ colors, spacing }).textComp}>
+                  {item.move}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: "50%",
+                    justifyContent: "space-between",
+                  }}
                 >
-                  <Icon 
-                    style={styles({colors,spacing}).textComp} 
-                    name="minus" size={24} 
-                  />
-                </TouchableOpacity>
-                <Text style={styles({colors,spacing}).textComp}>{item.mass} kg</Text>
-                <TouchableOpacity onPress={() => changeKilos(index, "add")}>
-                  <Icon 
-                    style={styles({colors,spacing}).textComp} 
-                    name="plus" 
-                    size={24} 
-                  />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => changeKilos(index, "subtract")}
+                  >
+                    <Icon
+                      style={styles({ colors, spacing }).textComp}
+                      name="minus"
+                      size={24}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles({ colors, spacing }).textComp}>
+                    {item.mass} kg
+                  </Text>
+                  <TouchableOpacity onPress={() => changeKilos(index, "add")}>
+                    <Icon
+                      style={styles({ colors, spacing }).textComp}
+                      name="plus"
+                      size={24}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             ))}
@@ -590,36 +638,50 @@ export default function UserSettings() {
           <View style={styles({ colors, spacing }).oneRepMaxHeadline}>
             <TouchableOpacity onLongPress={() => addMaxRep()}>
               {!showRep ? (
-                <TouchableOpacity 
-                  onPress={() => setShowRep(!showRep)}
-                >
-                <Icon 
-                                    style={[styles({colors,spacing}).textComp, {borderWidth: 2, borderColor: colors.text, backgroundColor: colors.background}]}
-                  name="plus" 
-                  size={32} 
-                />
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowRep(!showRep)}>
+                  <Icon
+                    style={[
+                      styles({ colors, spacing }).textComp,
+                      {
+                        borderWidth: 2,
+                        borderColor: colors.text,
+                        backgroundColor: colors.background,
+                      },
+                    ]}
+                    name="plus"
+                    size={32}
+                  />
+                </TouchableOpacity>
               ) : (
-                <TouchableOpacity 
-                  onPress={() => setShowRep(!showRep)}
-                >
-                <Icon 
-                  style={[styles({colors,spacing}).textComp, {borderWidth: 2, borderColor: colors.text, backgroundColor: colors.background}]} 
-                  name="minus" 
-                  size={32} 
-                />
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowRep(!showRep)}>
+                  <Icon
+                    style={[
+                      styles({ colors, spacing }).textComp,
+                      {
+                        borderWidth: 2,
+                        borderColor: colors.text,
+                        backgroundColor: colors.background,
+                      },
+                    ]}
+                    name="minus"
+                    size={32}
+                  />
+                </TouchableOpacity>
               )}
             </TouchableOpacity>
-            {showRep && <TouchableOpacity
-              style={[
-                styles({ colors, spacing }).button,
-                { padding: 8, width: "33%" },
-              ]}
-              onPress={() => addMaxRep()}
-            > 
-              <Text style={styles({colors,spacing}).textComp}>Lisää liike</Text>
-            </TouchableOpacity>}
+            {showRep && (
+              <TouchableOpacity
+                style={[
+                  styles({ colors, spacing }).button,
+                  { padding: 8, width: "33%" },
+                ]}
+                onPress={() => addMaxRep()}
+              >
+                <Text style={styles({ colors, spacing }).textComp}>
+                  Lisää liike
+                </Text>
+              </TouchableOpacity>
+            )}
             {updateMaxList && (
               <TouchableOpacity
                 style={[
@@ -716,7 +778,7 @@ const styles = ({ colors, spacing }) =>
       padding: 5,
       textAlign: "center",
       color: colors?.text || "white",
-      borderColor: colors?.text || "white"
+      borderColor: colors?.text || "white",
     },
     text: {
       alignItems: "center",
@@ -730,7 +792,7 @@ const styles = ({ colors, spacing }) =>
       height: 50,
     },
     textComp: {
-      color: colors?.text || "white"
+      color: colors?.text || "white",
     },
     profileDetails: {
       width: "100%",
@@ -777,10 +839,11 @@ const styles = ({ colors, spacing }) =>
       gap: spacing.medium,
       paddingVertical: spacing.medium,
       width: "50%",
-      margin: 7,
     },
     fab: {
-      elevation: 2,
+      elevation: 1,
+      borderWidth: 1,
+      borderColor: colors.text,
     },
     oneRepMaxs: {
       flexDirection: "row",
