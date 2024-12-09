@@ -150,13 +150,14 @@ export default function WorkOutData() {
                         </View>
                     )}
                 />
+                {workOutDataReverse && 
                 <WorkOutDataModal
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}
                     workOutDataReverse={workOutDataReverse}
                     index={index}
                     formatTimestamp={formatTimestamp}
-                />
+                /> }
             </View>
 
         </>

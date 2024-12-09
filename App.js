@@ -56,7 +56,7 @@ function AppContent({ setLogged, logged }) {
     <PaperProvider theme={theme}>
       <NavigationContainer theme={theme}>
         {logged ? (
-          <MyTabs />
+          <MyTabs setLogged = {setLogged}/>
         ) : (
           <Stack.Navigator>
             <Stack.Screen name="Login">

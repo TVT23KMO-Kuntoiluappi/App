@@ -62,7 +62,6 @@ export default function UserProvider({ children }) {
   // tein tämän useEffectin, jos haluaa ympäri sovellusta päivittää datan
   // Jos haluaa ajaa tämän, niin tekee esim. setUpdateContent(prevdata=>(prevdata+1))
   useEffect(() => {
-    const removeAuthListener = onAuthStateChanged(auth, (user) => {
       setUser(user);
       if (user) {
         getUserData(user.uid);
@@ -71,9 +70,6 @@ export default function UserProvider({ children }) {
         getWorkOutFirebaseData(user.uid)
       }
       setLoading(false);
-    });
-    console.log(updateContent)
-    return () => removeAuthListener();
   }, [updateContent]);
 
   useEffect(() => {

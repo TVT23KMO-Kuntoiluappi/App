@@ -12,6 +12,7 @@ export default function WorkOutDataModal({ modalVisible, setModalVisible, workOu
 
     return (
         <View style={styles({ colors, spacing }).container}>
+            {data && 
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -44,7 +45,7 @@ export default function WorkOutDataModal({ modalVisible, setModalVisible, workOu
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> }
         </View>
     );
 }

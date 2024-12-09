@@ -52,8 +52,8 @@ function MyTabBar({ state, descriptors, navigation }) {
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
         // tarvitaan siihen, että reagoi tapBraButton = null, jotta Asetukset ei näy
         if (options.tabBarButton) {
@@ -136,11 +136,11 @@ function MyTabBar({ state, descriptors, navigation }) {
               />
             )}
             <Text
-              style={({color: isFocused ? 'grey' : colors.text})}
+              style={({ color: isFocused ? 'grey' : colors.text })}
             >
               {route.name === "Userpage" && username.length < 11 ? username :
                 route.name === "Userpage" && fname.length < 11 ? fname
-                          : label}
+                  : label}
             </Text>
           </PlatformPressable>
         );
@@ -149,7 +149,7 @@ function MyTabBar({ state, descriptors, navigation }) {
   );
 }
 
-function MyTabs() {
+function MyTabs({ setLogged }) {
   return (
     <Tab.Navigator
       tabBar={(props) => <MyTabBar {...props} />}
@@ -164,7 +164,16 @@ function MyTabs() {
       <Tab.Screen name="Userpage" component={UserPage} />
       <Tab.Screen
         name="Asetukset"
-        component={UserSettings}
+        options={{ headerShown: true, tabBarButton: () => null }}
+      >
+        {() => <UserSettings setLogged={setLogged} />}
+      </Tab.Screen>
+
+      {/* Tämä on täällä, jotta sinne voi navigoida poistaessa tilin. Ehkä tarvii myös Logoutissa. */}
+      <Tab.Screen
+        name="Login"
+        component={Login}
+        setLogged={setLogged}
         options={{ headerShown: true, tabBarButton: () => null }}
       />
     </Tab.Navigator>
@@ -173,23 +182,23 @@ function MyTabs() {
 
 const styles = ({ colors, spacing }) =>
   StyleSheet.create({
-  bottomNav: {
-    flexDirection: "row",
-    paddingBottom: 5,
-    backgroundColor: colors?.navbar || 'black',
-  },
-  navButton: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 8,
-    backgroundColor: colors?.navbar || 'black',
-    borderTopColor: colors?.text || 'black',
-    borderTopWidth: 1
-  },
-  navButtonText: {
-    
-  },
-});
+    bottomNav: {
+      flexDirection: "row",
+      paddingBottom: 5,
+      backgroundColor: colors?.navbar || 'black',
+    },
+    navButton: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 8,
+      backgroundColor: colors?.navbar || 'black',
+      borderTopColor: colors?.text || 'black',
+      borderTopWidth: 1
+    },
+    navButtonText: {
+
+    },
+  });
 
 export default MyTabs;

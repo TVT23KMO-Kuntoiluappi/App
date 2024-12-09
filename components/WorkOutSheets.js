@@ -244,6 +244,7 @@ export default function WorkOutSheets({name, fromAddBox}) {
 
     return (
         <>
+            <View style={styles({colors,spacing}).sheetWrapper}>
             <View style={styles({ colors, spacing }).headLine}>
                 <Icon
                     name={"chart-areaspline"}
@@ -346,6 +347,7 @@ export default function WorkOutSheets({name, fromAddBox}) {
                 modal2Visible={modal2Visible}
                 setModal2Visible={setModal2Visible}
             />
+            </View>
         </>
     );
 }
@@ -402,5 +404,9 @@ const styles = ({ colors, spacing }) =>
         },
         text: {
             color: colors.text
+        },
+        sheetWrapper: {
+            flex: 1,
+            backgroundColor: colors.background
         }
     });
