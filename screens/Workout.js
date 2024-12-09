@@ -49,11 +49,6 @@ export default function Workout({route}) {
     }
   }, [route.params?.workoutName]);
   
-  
-
-  useEffect(()=> {
-    console.log("data: ", data)
-  }, [data])
 
   const suomenAika = moment()
     .tz("Europe/Helsinki")
@@ -159,10 +154,10 @@ export default function Workout({route}) {
             maxLength={40}
             onChangeText={(text) => setWorkoutName(text)}
             value={workoutName}
-            placeholder="Treeni 1"
+            placeholder="Treeni 1..."
             placeholderTextColor={'grey'}
           />
-          <FAB style={styles({ colors, spacing }).fab} icon="pencil" size="small" color={'grey'} />
+          {/*<FAB style={styles({ colors, spacing }).fab} icon="pencil" size="small" color={'grey'} />*/ }
         </View>
         <FlatList
           ref={flatListRef}
