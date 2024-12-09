@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Platform } from "react-native";
 import {
   StyleSheet,
   Text,
@@ -50,7 +51,7 @@ export default function MovementList() {
       return movement.name.toLowerCase().includes(searchQuery.toLowerCase());
     });
     setFilteredMovements(filtered);
-  }, [searchQuery, itemsToFlatList]);
+  }, [searchQuery, itemsToFlatList, selectedBody]);
 
   /*
   async function fetchByTarget(target) {
@@ -103,6 +104,7 @@ export default function MovementList() {
 
   useEffect(() => {
     fetchByBodyPart(selectedBody)
+    console.log("selectedBody: ", selectedBody)
   }, [selectedBody])
 
 
@@ -209,7 +211,7 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     marginBottom: 16,
-    marginTop: 20,
+    marginTop: Platform.OS === 'android' ? 2 : 15,
   },
   searchInput: {
     flex: 1,
@@ -284,7 +286,7 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
   },
   instructions: {
     letterSpacing: 1,
-    textAlign: 'left',
+    textAlign: 'justify',
     color: colors?.text
   },
   infoContainer: {

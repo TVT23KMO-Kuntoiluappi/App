@@ -213,7 +213,7 @@ const styles = ({ colors, spacing }) =>
     alignItems: 'center',
   },
   header: {
-    fontSize: 42,
+    fontSize: 26,
     marginTop: 20,
     marginBottom: 0
   },
@@ -232,7 +232,7 @@ const styles = ({ colors, spacing }) =>
     height: 55,
   },
   button: {
-    backgroundColor: colors?.card || 'black',
+    backgroundColor: colors?.button || 'black',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -244,6 +244,6 @@ const styles = ({ colors, spacing }) =>
   },
   buttonText: {
     fontSize: 20,
-    color: colors.text
+    color: colors.buttonText
   }
 });

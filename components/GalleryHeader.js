@@ -28,17 +28,25 @@ export default React.memo(
         <View style={styles({ colors, spacing }).fabContainer}>
           <FAB
             icon="camera"
-            style={styles({ colors, spacing }).fab}
+            style={[
+              styles({ colors, spacing }).fab,
+              { backgroundColor: colors.button },
+            ]}
             onPress={takePhoto}
+            color={colors.buttonText}
             loading={loading}
-            theme={{ colors: { primary: colors.primary } }}
+            theme={{ colors: { primary: colors.button } }}
           />
           <FAB
-            icon="image-plus"
-            style={styles({ colors, spacing }).fab}
+            icon="image"
+            style={[
+              styles({ colors, spacing }).fab,
+              { backgroundColor: colors.button },
+            ]}
             onPress={pickImage}
+            color={colors.buttonText}
             loading={loading}
-            theme={{ colors: { primary: colors.primary } }}
+            theme={{ colors: { primary: colors.button } }}
           />
         </View>
       </Animated.View>
@@ -79,6 +87,8 @@ const styles = ({ colors, spacing }) =>
       marginTop: 45,
     },
     fab: {
-      elevation: 2,
+      elevation: 1,
+      borderWidth: 1,
+      borderColor: colors.text,
     },
   });

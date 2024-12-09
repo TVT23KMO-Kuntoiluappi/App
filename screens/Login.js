@@ -118,7 +118,7 @@ const styles = ({ colors, spacing }) =>
   },
   buttonText: {
     fontSize: 20,
-    color: colors?.text
+    color: colors?.buttonText
   },
   logo: {
     width: "60%",
