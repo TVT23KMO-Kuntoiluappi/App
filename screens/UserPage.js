@@ -73,5 +73,12 @@ const styles = ({ colors, spacing }) =>
     },
     flatlist: {
       backgroundColor: colors.background
-    }
+    },
+    flatlistwrapper: {
+      flex: 1,
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      backgroundColor: colors.background
+    },
   });

@@ -27,12 +27,13 @@ export default function AddSet({
     )
   }
 
+
   return (
     <>
         <View key={set.id} style={styles({ spacing }).setBox}>
-          <Text style={{ width: "5%" }}>{set.id}.</Text>
+          <Text style={{ width: "5%", color: colors?.text }}>{set.id}.</Text>
           <TextInput
-            style={styles({ spacing }).setBoxTextInput}
+            style={styles({ colors, spacing }).setBoxTextInput}
             maxLength={20}
             placeholder="Esim 10"
             placeholderTextColor={'grey'}
@@ -54,7 +55,7 @@ export default function AddSet({
             }}
           />
           <TextInput
-            style={styles({ spacing }).setBoxTextInput}
+            style={styles({ colors, spacing }).setBoxTextInput}
             maxLength={20}
             value={set.reps}
             placeholder="Esim 10-15"
@@ -108,10 +109,11 @@ const styles = ({ colors, spacing }) => StyleSheet.create({
       width: "42%",
       borderColor: "black",
       borderWidth: 1,
-      backgroundColor: "white",
+      backgroundColor: colors?.background,
       padding: spacing.small,
       marginLeft: 5,
       marginRight: 5,
+      color: colors?.text
     },
     
   });
