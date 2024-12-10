@@ -12,6 +12,7 @@ export default function WorkOutDataModal({ modalVisible, setModalVisible, workOu
 
     return (
         <View style={styles({ colors, spacing }).container}>
+            {data && 
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -44,7 +45,7 @@ export default function WorkOutDataModal({ modalVisible, setModalVisible, workOu
                         </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+            </Modal> }
         </View>
     );
 }
@@ -98,6 +99,9 @@ const styles = ({ colors, spacing }) =>
             marginBottom: spacing.small,
             color: colors.text,
         },
+        movementContainer: {
+            width: "100%",
+        },
         setText: {
             fontSize: 16,
             color: colors.text,
@@ -122,7 +126,7 @@ const styles = ({ colors, spacing }) =>
             borderColor: colors.text,
         },
         buttonText: {
-            color: colors.text,
+            color: colors.buttonText,
             fontSize: 18,
             fontWeight: 'bold',
             textAlign: 'center',
