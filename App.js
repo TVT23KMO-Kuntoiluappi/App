@@ -54,6 +54,10 @@ function AppContent({ setLogged, logged }) {
 
   return (
     <PaperProvider theme={theme}>
+      <StatusBar
+        style={isDark ? "light" : "dark"}
+        backgroundColor={isDark ? theme.colors.navbar : theme.colors.primary}
+      />
       <NavigationContainer theme={theme}>
         {logged ? (
           <MyTabs />
@@ -70,12 +74,12 @@ function AppContent({ setLogged, logged }) {
                 <Login setLogged={setLogged} navigation={navigation} />
               )}
             </Stack.Screen>
-            <Stack.Screen 
-            name="Register"
-            options={{
-              title: "Rekisteröidy",
-              headerTitleAlign: "center"
-            }}
+            <Stack.Screen
+              name="Register"
+              options={{
+                title: "Rekisteröidy",
+                headerTitleAlign: "center",
+              }}
             >
               {(props) => <Register {...props} setLogged={setLogged} />}
             </Stack.Screen>

@@ -7,19 +7,26 @@
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
+    "androidStatusBar": {
+      "backgroundColor": "#000000",
+      "translucent": false,
+      "barStyle": "light-content"
+    },
     "splash": {
-      "image": null,
-      "backgroundColor": "'#F4F4FB'"
+      "image": "./assets/logo.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
+      "icon": "./assets/textlessBlueSimplyGymnotes.png",
       "splash": {
         "image": null
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/textlessBlueSimplyGymnotes.png",
         "backgroundColor": "white"
       },
       "splash": {
