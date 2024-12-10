@@ -1,6 +1,6 @@
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import { Text, PlatformPressable } from "@react-navigation/elements";
+import { Text } from "@react-navigation/elements";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Login from "../screens/Login";
@@ -192,6 +192,7 @@ const styles = ({ colors, spacing, isFocused }) =>
       backgroundColor: colors?.navbar || "black",
       borderTopWidth: 1,
       borderTopColor: colors?.text + "20",
+      paddingBottom: Platform.OS === 'android' ? 0 : 10,
     },
     navButton: {
       flex: 1,

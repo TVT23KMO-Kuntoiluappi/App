@@ -217,6 +217,7 @@ const styles = ({ colors, spacing }) =>
       textAlign: "center",
       padding: 5,
       width: "95%",
+      marginTop: Platform.OS === 'android' ? 0 : 10,
     },
     text: {
       fontSize: 26,

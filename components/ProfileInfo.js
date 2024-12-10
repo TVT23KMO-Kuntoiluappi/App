@@ -75,7 +75,8 @@ const styles = ({ colors, spacing }) =>
       alignItems: "center",
       alignContent: "center",
       marginTop: spacing.medium,
-      marginLeft: spacing.small
+      marginLeft: spacing.small,
+      marginBottom: spacing.small
     },
     profileInfo: {
       width: Dimensions.get('window').width - 40,
