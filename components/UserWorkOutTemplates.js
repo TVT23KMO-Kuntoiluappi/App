@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Dimensions, Alert } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions, Alert, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { useTheme } from 'react-native-paper'
 import { useUser } from '../context/UseUser';
@@ -166,7 +166,7 @@ const styles = ({ colors, spacing }) =>
             flexDirection: "row",
             alignItems: "center",
             alignContent: "center",
-            marginTop: spacing.medium,
+            marginTop: Platform.OS === 'anrdoid' ? spacing.medium : spacing.large,
             marginLeft: spacing.medium
         },
         text: {

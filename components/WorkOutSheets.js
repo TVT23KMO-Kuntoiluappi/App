@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useUser } from '../context/UseUser'
 import { LineChart } from 'react-native-chart-kit';
@@ -361,7 +361,7 @@ const styles = ({ colors, spacing }) =>
             width: "100%",
             flexDirection: "row",
             alignContent: "center",
-            marginTop: spacing.medium,
+            marginTop: Platform.OS === 'anrdoid' ? spacing.medium : spacing.large,
             marginLeft: spacing.small
         },
         dropdownWrapper: {
@@ -388,6 +388,10 @@ const styles = ({ colors, spacing }) =>
             color: colors.text,            
             borderWidth: 1,
             borderColor: "black",
+            maxHeight: 120,
+            justifyContent: 'center',
+            overflow: 'scroll',
+            marginBottom: 10
         },
         dropdownStyle: {
             backgroundColor: colors.surface, // Valikon taustaväri
@@ -403,7 +407,7 @@ const styles = ({ colors, spacing }) =>
             backgroundColor: colors.card,
             alignItems: "center",
             justifyContent: "center",
-            marginBottom: 50
+            marginBottom: 50,
         },
         text: {
             color: colors.text
