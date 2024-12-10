@@ -22,7 +22,8 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   updateProfile,
-  updateEmail
+  updateEmail,
+  signOut
 } from "firebase/auth"
 import {
   getStorage,
@@ -170,4 +171,6 @@ export {
   updateProfile,
   updateDoc,
   updateEmail,
+  signOut,
+  app
 }

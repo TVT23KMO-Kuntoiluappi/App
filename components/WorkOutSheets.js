@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity, Alert, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useUser } from '../context/UseUser'
 import { LineChart } from 'react-native-chart-kit';
@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import WorkOutSheetsModal from './WorkOutSheetsModal';
+
 
 export default function WorkOutSheets({name, fromAddBox}) {
     const { colors, spacing } = useTheme()
@@ -40,9 +41,17 @@ export default function WorkOutSheets({name, fromAddBox}) {
     
     useEffect(() => {
         if (fromAddBox) {
-            const normalizedName = typeof name === "string" ? name.toUpperCase() : ""; 
-            setPickedWorkOut(normalizedName);
-            console.log("Picked WorkOut updated:", normalizedName);
+            const normalizedName = typeof name === "string" ? name.toUpperCase() : "";
+            if (!normalizedName) {
+                Alert.alert(
+                    "Liike puuttuu",
+                    "Tästä liikkeestä ei ole dataa, mutta voit tutkia toisia liikkeitä.",
+                    [{ text: "OK" }] 
+                );
+            } else {
+                setPickedWorkOut(normalizedName);
+                console.log("Picked WorkOut updated:", normalizedName);
+            }
         }
     }, [fromAddBox, name]); 
     
@@ -91,11 +100,6 @@ export default function WorkOutSheets({name, fromAddBox}) {
         const movement = workOutData[pickedName];
         if (!movement) {
             console.log(`No data found for movement: ${pickedName}`);
-            Alert.alert(
-                "Liike puuttuu",
-                "Tästä liikkeestä ei ole dataa, mutta voit tutkia toisia liikkeitä.",
-                [{ text: "OK" }] 
-            );
             return;
         }
         const dates = Object.keys(movement);
@@ -241,7 +245,6 @@ export default function WorkOutSheets({name, fromAddBox}) {
         return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     }
 
-
     return (
         <>
         <View style={styles({colors,spacing}).sheetWrapper}>
@@ -358,7 +361,7 @@ const styles = ({ colors, spacing }) =>
             width: "100%",
             flexDirection: "row",
             alignContent: "center",
-            marginTop: spacing.medium,
+            marginTop: Platform.OS === 'anrdoid' ? spacing.medium : spacing.large,
             marginLeft: spacing.small
         },
         dropdownWrapper: {
@@ -385,6 +388,10 @@ const styles = ({ colors, spacing }) =>
             color: colors.text,            
             borderWidth: 1,
             borderColor: "black",
+            maxHeight: 120,
+            justifyContent: 'center',
+            overflow: 'scroll',
+            marginBottom: 10
         },
         dropdownStyle: {
             backgroundColor: colors.surface, // Valikon taustaväri
@@ -400,9 +407,13 @@ const styles = ({ colors, spacing }) =>
             backgroundColor: colors.card,
             alignItems: "center",
             justifyContent: "center",
-            marginBottom: 50
+            marginBottom: 50,
         },
         text: {
             color: colors.text
+        },
+        sheetWrapper: {
+            flex: 1,
+            backgroundColor: colors.background
         }
     });

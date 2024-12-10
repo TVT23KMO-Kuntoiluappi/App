@@ -60,7 +60,7 @@ function AppContent({ setLogged, logged }) {
       />
       <NavigationContainer theme={theme}>
         {logged ? (
-          <MyTabs />
+          <MyTabs setLogged = {setLogged}/>
         ) : (
           <Stack.Navigator>
             <Stack.Screen

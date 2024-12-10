@@ -7,17 +7,15 @@ import WorkOutData from '../components/WorkOutData';
 import ProfileInfo from '../components/ProfileInfo';
 import UserWorkOutTemplates from '../components/UserWorkOutTemplates';
 
-export default function UserPage({ navigation }) {
+export default function UserPage({ navigation, setLogged }) {
   const { colors, spacing } = useTheme();
 
   // Profiilitiedot - Näytetään ensimmäisenä
   const profileData = [
-    { key: 'profile', component: <ProfileInfo navigation={navigation} />},
+    { key: 'profile', component: <ProfileInfo navigation={navigation} setLogged={setLogged} />},
     { key: 'templates', component: <UserWorkOutTemplates navigation={navigation} />},
     { key: 'data', component: <WorkOutData />},
     { key: 'workouts', component: <WorkOutSheets /> },
-    
-    
   ];
 
   return (
@@ -42,6 +40,13 @@ const styles = ({ colors, spacing }) =>
       width: "100%",
       height: "100%",
       flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      backgroundColor: colors.background
+    },
+    flatlistwrapper: {
+      flex: 1,
+      width: "100%",
       alignItems: "center",
       justifyContent: "flex-start",
       backgroundColor: colors.background

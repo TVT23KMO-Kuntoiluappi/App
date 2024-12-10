@@ -32,8 +32,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import OneRepMaxInfo from "../components/OneRepMaxInfo";
 import { useUser } from "../context/UseUser";
 import Loading from "../components/Loading";
+import { deleteUser } from "../firebase/DeleteUserComponent";
 
-export default function UserSettings() {
+export default function UserSettings({navigation, setLogged}) {
   const {
     fname,
     setFname,
@@ -288,6 +289,35 @@ export default function UserSettings() {
     }
     setLoading(false);
   };
+
+  const deleteAllUserData = async () => {
+    const userId = auth.currentUser.uid;
+  
+    Alert.alert(
+      "Vahvistus", 
+      "Haluatko varmasti poistaa kaikki käyttäjätietosi? Tätä toimintoa ei voi peruuttaa.", 
+      [
+        {
+          text: "Peruuta",
+          style: "cancel", 
+        },
+        {
+          text: "Poista",
+          style: "destructive", 
+          onPress: async () => {
+            try {
+              await deleteUser(userId)
+              Alert.alert("Valmista!", "Kaikki tietosi on poistettu onnistuneesti.");
+              setLogged(false)
+            } catch (error) {
+              Alert.alert("Virhe", "Tietojen poistamisessa tapahtui virhe.");
+              console.error("Virhe tietojen poistossa:", error);
+            }
+          },
+        },
+      ]
+    );
+  }
 
   return (
     <SafeAreaView style={styles({ colors, spacing }).container}>
@@ -695,6 +725,12 @@ export default function UserSettings() {
             )}
           </View>
         </View>
+          <TouchableOpacity 
+            style = {styles({colors,spacing}).button}
+            onPress={()=>deleteAllUserData()}
+          >
+            <Text style = {[styles({colors,spacing}).textComp, {color: colors.buttonText}]}>Poista käyttäjä</Text>
+          </TouchableOpacity>
       </ScrollView>
       <OneRepMaxInfo
         modalVisible={modalVisible}
