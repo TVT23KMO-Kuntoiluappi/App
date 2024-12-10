@@ -52,8 +52,8 @@ function MyTabBar({ state, descriptors, navigation }) {
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
         // tarvitaan siihen, että reagoi tapBraButton = null, jotta Asetukset ei näy
         if (options.tabBarButton) {
@@ -145,7 +145,7 @@ function MyTabBar({ state, descriptors, navigation }) {
   );
 }
 
-function MyTabs() {
+function MyTabs({ setLogged }) {
   return (
     <Tab.Navigator
       tabBar={(props) => <MyTabBar {...props} />}
@@ -157,10 +157,27 @@ function MyTabs() {
       <Tab.Screen name="Liikkeet" component={MovementBank} />
       <Tab.Screen name="Treenit" component={WorkoutBank} />
       <Tab.Screen name="Galleria" component={Gallery} />
-      <Tab.Screen name="Userpage" component={UserPage} />
+      <Tab.Screen 
+        name="Userpage"  
+      >
+        {() => <UserPage setLogged={setLogged} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Asetukset"
-        component={UserSettings}
+        options={{ 
+          headerShown: true, 
+          tabBarButton: () => null,
+        headerTitleAlign: "center"
+        }}
+      >
+        {() => <UserSettings setLogged={setLogged} />}
+      </Tab.Screen>
+
+      {/* Tämä on täällä, jotta sinne voi navigoida poistaessa tilin. Ehkä tarvii myös Logoutissa. */}
+      <Tab.Screen
+        name="Login"
+        component={Login}
+        setLogged={setLogged}
         options={{ headerShown: true, tabBarButton: () => null }}
       />
     </Tab.Navigator>

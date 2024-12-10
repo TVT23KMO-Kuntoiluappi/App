@@ -16,16 +16,20 @@ export default function DataModal({ modalVisible, setModalVisible, name, fromAdd
             >
                 <View style={styles({ colors, spacing }).modalContainer}>
                     <View style={styles({ colors, spacing }).modalContent}>
-                        <WorkOutSheets 
-                            name={name}
-                            fromAddBox={fromAddBox}
-                        />
-                        <TouchableOpacity
-                            style={[styles({ colors, spacing }).closeButton, { backgroundColor: colors.card }]}
-                            onPress={() => {setModalVisible(false); setFromAddBox(false)}}
-                        >
-                            <Text style={styles({ colors, spacing }).buttonText}>Sulje</Text>
-                        </TouchableOpacity>
+                        <View style={styles({ colors, spacing }).modalWorkOutsheets}>
+                            <WorkOutSheets 
+                                name={name}
+                                fromAddBox={fromAddBox}
+                            />
+                        </View>
+                        <View style={styles({ colors, spacing }).modalButton}>
+                            <TouchableOpacity
+                                style={[styles({ colors, spacing }).closeButton, { backgroundColor: colors.button }]}
+                                onPress={() => {setModalVisible(false); setFromAddBox(false)}}
+                            >
+                                <Text style={styles({ colors, spacing }).buttonText}>Sulje</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </Modal>
@@ -48,16 +52,30 @@ const styles = ({ colors, spacing }) =>
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
         },
         modalContent: {
-            width: '90%',
+            width: '100%',
+            height: "70%",
             padding: spacing.large,
-            backgroundColor: colors.surface,
+            backgroundColor: colors.background,
             borderRadius: spacing.medium,
+            flexDirection: "column",
+            justifyContent: "space-between",
             alignItems: 'center',
             elevation: 5,
             maxHeight: '95%',
         },
+        modalWorkOutsheets:{
+            width: "95%",
+            height: "50%",
+            alignItems: "center",
+        },
+        modalButton: {
+             width: "95%",
+             height: "50%",
+             alignItems: "center",
+             justifyContent: "flex-end",
+        }, 
         closeButton: {
-            backgroundColor: colors.card,
+            backgroundColor: colors.button,
             padding: spacing.medium,
             borderRadius: spacing.medium,
             marginTop: spacing.large,
@@ -68,7 +86,7 @@ const styles = ({ colors, spacing }) =>
             borderColor: colors.text,
         },
         buttonText: {
-            color: colors.text,
+            color: colors.buttonText,
             fontSize: 18,
             fontWeight: 'bold',
             textAlign: 'center',

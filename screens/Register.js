@@ -160,6 +160,7 @@ export default function Register({setLogged}) {
           onChangeText={(text) => setFname(text)}
           value={fname}
           placeholder="Etunimi"
+          placeholderTextColor={colors.text}
         />
         <TextInput
           style={styles({ colors, spacing }).textInput}
@@ -167,6 +168,7 @@ export default function Register({setLogged}) {
           onChangeText={(text) => setLname(text)}
           value={lname}
           placeholder="Sukunimi"
+          placeholderTextColor={colors.text}
         />
         <TextInput
           style={styles({ colors, spacing }).textInput}
@@ -174,6 +176,7 @@ export default function Register({setLogged}) {
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Käyttäjätunnus"
+          placeholderTextColor={colors.text}
         />
         <TextInput
           style={styles({ colors, spacing }).textInput}
@@ -181,6 +184,7 @@ export default function Register({setLogged}) {
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="Sähköposti"
+          placeholderTextColor={colors.text}
         />    
         {checkPassword(firstPassword)}    
         <TextInput
@@ -190,6 +194,7 @@ export default function Register({setLogged}) {
           value={firstPassword}
           placeholder="Salasana"
           secureTextEntry={true}
+          placeholderTextColor={colors.text}
         />
         <TextInput
           style={styles({ colors, spacing }).textInput}
@@ -198,6 +203,7 @@ export default function Register({setLogged}) {
           value={password}
           placeholder="Salasana uudelleen"
           secureTextEntry={true}
+          placeholderTextColor={colors.text}
         />
       </ScrollView>
       <TouchableOpacity style={styles({ colors, spacing }).button} onPress={handleRegister}>
@@ -215,7 +221,8 @@ const styles = ({ colors, spacing }) =>
   header: {
     fontSize: 26,
     marginTop: 20,
-    marginBottom: 0
+    marginBottom: 0,
+    color: colors.text
   },
   textInputContainer: {
     marginBottom: 20,
@@ -230,6 +237,7 @@ const styles = ({ colors, spacing }) =>
     borderRadius: 20,
     width: 0.9*screenWidth,
     height: 55,
+    color: colors.text
   },
   button: {
     backgroundColor: colors?.button || 'black',

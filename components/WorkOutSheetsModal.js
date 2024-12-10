@@ -56,7 +56,7 @@ export default function WorkOutSheetsModal({ modal2Visible, setModal2Visible }) 
                             </Text>
                         </ScrollView>
                         <TouchableOpacity
-                            style={[styles({ colors, spacing }).closeButton, { backgroundColor: colors.card }]}
+                            style={[styles({ colors, spacing }).closeButton, { backgroundColor: colors.button }]}
                             onPress={() => setModal2Visible(false)}
                         >
                             <Text style={styles({ colors, spacing }).buttonText}>Sulje</Text>
@@ -85,7 +85,7 @@ const styles = ({ colors, spacing }) =>
         modalContent: {
             width: '90%',
             padding: spacing.large,
-            backgroundColor: colors.surface,
+            backgroundColor: colors.background,
             borderRadius: spacing.medium,
             elevation: 5,
             maxHeight: '95%',
@@ -124,7 +124,7 @@ const styles = ({ colors, spacing }) =>
             borderColor: colors.text,
         },
         buttonText: {
-            color: colors.text,
+            color: colors.buttonText,
             fontSize: 18,
             fontWeight: 'bold',
             textAlign: 'center',
