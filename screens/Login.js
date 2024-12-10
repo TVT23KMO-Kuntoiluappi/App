@@ -51,7 +51,9 @@ export default function Login({ setLogged, navigation }) {
           maxLength={40}
           onChangeText={(text) => setUsername(text)}
           value={username}
+          color={colors?.text}
           placeholder="Käyttäjätunnus"
+          placeholderTextColor={colors?.text}
         />
         <TextInput
           style={styles({ colors, spacing }).textInput}
@@ -61,6 +63,7 @@ export default function Login({ setLogged, navigation }) {
           placeholder="Salasana"
           secureTextEntry={true}
           color={colors?.text}
+          placeholderTextColor={colors?.text}
         />
       </View>
       <TouchableOpacity
