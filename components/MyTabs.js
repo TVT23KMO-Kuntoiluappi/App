@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { Text } from "@react-navigation/elements";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -52,8 +52,8 @@ function MyTabBar({ state, descriptors, navigation }) {
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-              ? options.title
-              : route.name;
+            ? options.title
+            : route.name;
 
         // tarvitaan siihen, että reagoi tapBraButton = null, jotta Asetukset ei näy
         if (options.tabBarButton) {
@@ -149,7 +149,9 @@ function MyTabs({ setLogged }) {
   return (
     <Tab.Navigator
       tabBar={(props) => <MyTabBar {...props} />}
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+      }}
     >
       {/*  <Tab.Screen name="Login" component={Login} />
       <Tab.Screen name="Register" component={Register} />*/}
@@ -157,17 +159,15 @@ function MyTabs({ setLogged }) {
       <Tab.Screen name="Liikkeet" component={MovementBank} />
       <Tab.Screen name="Treenit" component={WorkoutBank} />
       <Tab.Screen name="Galleria" component={Gallery} />
-      <Tab.Screen 
-        name="Userpage"  
-      >
+      <Tab.Screen name="Userpage">
         {() => <UserPage setLogged={setLogged} />}
       </Tab.Screen>
       <Tab.Screen
         name="Asetukset"
-        options={{ 
-          headerShown: true, 
+        options={{
+          headerShown: true,
           tabBarButton: () => null,
-        headerTitleAlign: "center"
+          headerTitleAlign: "center",
         }}
       >
         {() => <UserSettings setLogged={setLogged} />}
@@ -192,7 +192,7 @@ const styles = ({ colors, spacing, isFocused }) =>
       backgroundColor: colors?.navbar || "black",
       borderTopWidth: 1,
       borderTopColor: colors?.text + "20",
-      paddingBottom: Platform.OS === 'android' ? 0 : 10,
+      paddingBottom: Platform.OS === "android" ? 0 : 10,
     },
     navButton: {
       flex: 1,

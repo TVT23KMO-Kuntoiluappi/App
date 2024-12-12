@@ -166,7 +166,7 @@ const styles = ({ colors, spacing }) =>
             flexDirection: "row",
             alignItems: "center",
             alignContent: "center",
-            marginTop: Platform.OS === 'anrdoid' ? spacing.medium : spacing.large,
+            marginTop: Platform.OS === 'android' ? spacing.medium : spacing.large,
             marginLeft: spacing.medium
         },
         text: {
