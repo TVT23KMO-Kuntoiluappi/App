@@ -8,7 +8,6 @@
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "androidStatusBar": {
-      "backgroundColor": "#000000",
       "translucent": false,
       "barStyle": "light-content"
     },
@@ -19,19 +18,16 @@
     },
     "ios": {
       "supportsTablet": true,
-      "icon": "./assets/textlessBlueSimplyGymnotes.png",
-      "splash": {
-        "image": null
-      }
+      "icon": "./assets/appSimplyGymnotes.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/textlessBlueSimplyGymnotes.png",
-        "backgroundColor": "white"
+        "foregroundImage": "./assets/appSimplyGymnotes.png"
       },
       "splash": {
         "image": null
-      }
+      },
+      "package": "com.anonymous.SimplyGymnotes"
     },
     "web": {
       "favicon": "./assets/favicon.png"

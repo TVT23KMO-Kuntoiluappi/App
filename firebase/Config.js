@@ -41,15 +41,17 @@ import {
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
   APP_ID,
+  ANDROID_APP_ID,
+  IOS_APP_ID
 } from "@env"
 
 const firebaseConfig = {
-  apiKey: /*process.env.*/API_KEY,
+  apiKey: API_KEY,
   authDomain: AUTH_DOMAIN,
   projectId: PROJECT_ID,
   storageBucket: STORAGE_BUCKET,
   messagingSenderId: MESSAGING_SENDER_ID,
-  appId: Platform.OS === 'android' ? process.env.ANDROID_APP_ID : process.env.IOS_APP_ID,
+  appId: Platform.OS === 'android' ? ANDROID_APP_ID : IOS_APP_ID,
 }
 
 const app = initializeApp(firebaseConfig);
