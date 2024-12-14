@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { useTheme, FAB } from "react-native-paper";
@@ -20,8 +20,8 @@ import DataModal from "./DataModal";
 
 export default function AddBox({ movementName, setData, movement }) {
   const { colors, spacing } = useTheme();
-  const [modalVisible, setModalVisible] = useState(false)
-  const [fromAddBox, setFromAddBox]= useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [fromAddBox, setFromAddBox] = useState(false);
 
   const addRow = () => {
     setData((prevData) =>
@@ -48,12 +48,16 @@ export default function AddBox({ movementName, setData, movement }) {
       prevdata
         .filter((movement) => movement.id !== movementId)
         .map((movement, index) => ({ ...movement, id: index + 1 }))
-    )
-  }
+    );
+  };
 
   return (
     <>
-      <KeyboardAvoidingView behavior="padding" style={styles({ colors, spacing }).container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={styles({ colors, spacing }).container}
+      enabled={Platform.OS === "ios"}
+    >
         <View style={styles({ colors, spacing }).workoutMovementBox}>
           <View style={styles({ colors, spacing }).workoutMovementName}>
             <TextInput
@@ -73,21 +77,23 @@ export default function AddBox({ movementName, setData, movement }) {
               fontSize={20}
               placeholderTextColor={"grey"}
             />
-            <TouchableOpacity onPress={() => {
-              console.log("Opening modal");
-              setModalVisible(true);
-              setFromAddBox(true)
-            }}>
-              <Icon
-                name={"chart-areaspline"}
-                size={32}
-                color={colors.text}
-              />
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Opening modal");
+                setModalVisible(true);
+                setFromAddBox(true);
+              }}
+            >
+              <Icon name={"chart-areaspline"} size={32} color={colors.text} />
             </TouchableOpacity>
           </View>
           <View style={styles({ colors, spacing }).setBoxInfo}>
-            <Text style={styles({ colors, spacing }).setBoxInfoText}>Sarjapaino (kg)</Text>
-            <Text style={styles({ colors, spacing }).setBoxInfoText}>Toistomäärä</Text>
+            <Text style={styles({ colors, spacing }).setBoxInfoText}>
+              Sarjapaino (kg)
+            </Text>
+            <Text style={styles({ colors, spacing }).setBoxInfoText}>
+              Toistomäärä
+            </Text>
           </View>
           <FlatList
             data={movement.sets}
@@ -105,14 +111,16 @@ export default function AddBox({ movementName, setData, movement }) {
               color={colors?.text}
               onPress={() => addRow(movement.id)}
             />
-            <Text style={styles({ colors, spacing }).text}>Lisää uusi sarja</Text>
+            <Text style={styles({ colors, spacing }).text}>
+              Lisää uusi sarja
+            </Text>
           </View>
           <Pressable
             style={styles({ colors, spacing }).removeBox}
             onPress={() => removeBox(movement.id)}
           >
             <Ionicons name="trash" size={24} color={"white"} />
-            <Text style={{ color: 'white' }}>Poista liike</Text>
+            <Text style={{ color: "white" }}>Poista liike</Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -139,7 +147,7 @@ const styles = ({ colors, spacing }) =>
       fontSize: 26,
       width: "80%",
       textAlign: "center",
-      color: colors?.text || 'white'
+      color: colors?.text || "white",
     },
     fab: {
       backgroundColor: "#353536",
@@ -147,7 +155,7 @@ const styles = ({ colors, spacing }) =>
     workoutMovementBox: {
       width: "97%",
       padding: 15,
-      backgroundColor: colors?.card || 'white',
+      backgroundColor: colors?.card || "white",
       borderColor: "black",
       //borderWidth: 0.5,
       //borderRadius: 5,
@@ -156,7 +164,7 @@ const styles = ({ colors, spacing }) =>
       width: "100%",
       flexDirection: "row",
       justifyContent: "space-between",
-      borderBottomColor: colors?.text || 'white',
+      borderBottomColor: colors?.text || "white",
       borderBottomWidth: 0.5,
       padding: 2,
     },
@@ -177,22 +185,22 @@ const styles = ({ colors, spacing }) =>
       width: "50%",
       marginLeft: 5,
       marginRight: 5,
-      color: colors?.text || 'white'
+      color: colors?.text || "white",
     },
     addBox: {
       marginTop: 35,
     },
     removeBox: {
-      width: '35%',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      flexDirection: 'row',
+      width: "35%",
+      alignItems: "center",
+      justifyContent: "space-around",
+      flexDirection: "row",
       marginTop: 20,
       padding: 3,
-      backgroundColor: '#a1020f',
-      borderColor: 'black',
+      backgroundColor: "#a1020f",
+      borderColor: "black",
       borderWidth: 1,
-      borderRadius: 5
+      borderRadius: 5,
     },
     saveButton: {
       position: "absolute",
@@ -225,6 +233,6 @@ const styles = ({ colors, spacing }) =>
       borderRadius: 0,
     },
     text: {
-      color: colors?.text
-    }
+      color: colors?.text,
+    },
   });
