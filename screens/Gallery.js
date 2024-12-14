@@ -113,21 +113,22 @@ export default function Gallery() {
   };
 
   const loadImages = async (userId) => {
-    const imagesRef = ref(storage, `users/${userId}/images`)
+    const imagesRef = ref(storage, `users/${userId}/images`);
     try {
-      const result = await listAll(imagesRef)
-      if (result.items.length === 0) return []
+      const result = await listAll(imagesRef);
+      if (result.items.length === 0) return [];
 
       const urls = await Promise.all(
         result.items.map(async (imageRef) => {
           try {
-            const url = await getDownloadURL(imageRef)
-            const metadata = await getMetadata(imageRef)
+            const url = await getDownloadURL(imageRef);
+            const metadata = await getMetadata(imageRef);
             return {
               url,
               path: imageRef.fullPath,
               filename: imageRef.name,
-              timestamp: metadata.customMetadata?.timestamp || metadata.timeCreated,
+              timestamp:
+                metadata.customMetadata?.timestamp || metadata.timeCreated,
             };
           } catch (error) {
             return null;
@@ -135,9 +136,9 @@ export default function Gallery() {
         })
       );
 
-      return urls.filter(Boolean)
+      return urls.filter(Boolean);
     } catch (error) {
-      console.error("Error listing images:", error)
+      console.error("Error listing images:", error);
       return [];
     }
   };
@@ -335,9 +336,19 @@ export default function Gallery() {
           initialNumToRender={6}
           maxToRenderPerBatch={6}
           windowSize={5}
+          ListEmptyComponent={loading ? <Loading /> : null}
         />
       ),
-    [loading, images, sortedImages, renderItem, scrollY, colors, spacing, gridSize]
+    [
+      loading,
+      images,
+      sortedImages,
+      renderItem,
+      scrollY,
+      colors,
+      spacing,
+      gridSize,
+    ]
   );
 
   const handleGridSizeChange = (size) => {
@@ -520,7 +531,6 @@ export default function Gallery() {
         isDeleting={isDeleting}
       />
       {actionBar}
-      {loading && <Loading />}
     </SafeAreaView>
   );
 }
