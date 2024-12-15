@@ -22,6 +22,9 @@ export default function AddBox({ movementName, setData, movement }) {
   const { colors, spacing } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const [fromAddBox, setFromAddBox] = useState(false);
+  const [localMovementName, setLocalMovementName] = useState(
+    movement.movementName
+  );
 
   const addRow = () => {
     setData((prevData) =>
@@ -51,31 +54,44 @@ export default function AddBox({ movementName, setData, movement }) {
     );
   };
 
+  const handleBlur = () => {
+    setData((prevData) =>
+      prevData.map((item) =>
+        item.id === movement.id
+          ? { ...item, movementName: localMovementName }
+          : item
+      )
+    );
+  };
+
   return (
     <>
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={styles({ colors, spacing }).container}
-      enabled={Platform.OS === "ios"}
-    >
+      <View style={styles({ colors, spacing }).container}>
         <View style={styles({ colors, spacing }).workoutMovementBox}>
           <View style={styles({ colors, spacing }).workoutMovementName}>
             <TextInput
-              style={styles({ colors, spacing }).text}
+              style={[
+                {
+                  fontSize: 20,
+                  width: "80%",
+                  textAlign: "center",
+                  color: colors?.text || "white",
+                  backgroundColor: colors.card,
+                  minHeight: 40,
+                  maxHeight: 40,
+                  paddingVertical: 5,
+                },
+              ]}
+              numberOfLines={1}
               maxLength={40}
-              onChangeText={(text) =>
-                setData((prevData) =>
-                  prevData.map((item) =>
-                    item.id === movement.id
-                      ? { ...item, movementName: text }
-                      : item
-                  )
-                )
-              }
-              value={movement.movementName}
+              onChangeText={setLocalMovementName}
+              value={localMovementName}
+              onBlur={handleBlur}
               placeholder="Liikkeen nimi"
               fontSize={20}
               placeholderTextColor={"grey"}
+              autoCorrect={false}
+              spellCheck={false}
             />
             <TouchableOpacity
               onPress={() => {
@@ -123,7 +139,7 @@ export default function AddBox({ movementName, setData, movement }) {
             <Text style={{ color: "white" }}>Poista liike</Text>
           </Pressable>
         </View>
-      </KeyboardAvoidingView>
+      </View>
       <DataModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}

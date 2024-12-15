@@ -162,6 +162,11 @@ export default function Workout({route}) {
         <FlatList
           ref={flatListRef}
           data={data}
+          getItemLayout={(data, index) => ({
+            length: 200, 
+            offset: 200 * index,
+            index,
+          })}
           keyExtractor={(item) => item.id.toString()}
           extraData={data}
           renderItem={({ item }) => (
