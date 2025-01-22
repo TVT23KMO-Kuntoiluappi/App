@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View, Button } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "react-native-paper";
-import UserTest from "../components/UserTest";
-import MovementList from "../components/MovementList"; // Uusi komponentti
+import MovementList from "../components/MovementList";
 
 export default function MovementBank() {
   const { colors, spacing } = useTheme();

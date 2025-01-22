@@ -41,8 +41,6 @@ import {
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
   APP_ID,
-  ANDROID_APP_ID,
-  IOS_APP_ID
 } from "@env"
 
 const firebaseConfig = {
@@ -51,7 +49,7 @@ const firebaseConfig = {
   projectId: PROJECT_ID,
   storageBucket: STORAGE_BUCKET,
   messagingSenderId: MESSAGING_SENDER_ID,
-  appId: Platform.OS === 'android' ? ANDROID_APP_ID : IOS_APP_ID,
+  appId: APP_ID,
 }
 
 const app = initializeApp(firebaseConfig);
